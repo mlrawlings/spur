@@ -5,6 +5,8 @@
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
     "mocha": "^2.2.5",
-    "mongoose": "~3.6.13"
+    "mockgoose": "^2.0.3",
+    "mongoose": "~3.6.13",
+    "superagent": "^1.2.0"
   }
 }

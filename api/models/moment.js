@@ -3,7 +3,7 @@ var mongoose = require('mongoose')
 
 var MomentSchema = new Schema({
     title: String,
-    time: Date,
+    datetime: Date,
     location: {
     	lat: Number,
     	lng: Number,
