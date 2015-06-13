@@ -4,12 +4,17 @@
 	box-sizing:border-box;
 }
 
-html, body {
+html {
+	height: 100%;
+}
+
+body {
 	font-family: 'Open Sans', sans-serif;
 	background:#f2f2f2;
+	color:#444;
 	display:flex;
 	flex-direction:column;
-	height:100%;
+	min-height:100%;
 	margin:0;
 }
 
@@ -26,12 +31,16 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: 300;
 	padding:0;
 	margin:0;
-	line-height: 1.25em;
+	line-height: 1.1em;
 }
 
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
-	height:1.25em;
+	height:1.1em;
 	vertical-align: top;
+}
+
+input, textarea {
+	font-family: 'Open Sans', sans-serif;
 }
 
 button {
@@ -82,6 +91,10 @@ header.main {
 	border-bottom:1px solid #;
 }
 
+header.main a:active .logo {
+	opacity:0.8;
+}
+
 header.main .logo {
 	float:left;
 	height:2.5em;
@@ -101,12 +114,23 @@ header.main nav a {
 	text-decoration: none;
 }
 
-header.main nav a:hover {
-	text-decoration: underline;
+header.main nav a:active {
+	opacity:0.8;
 }
 
-header.main nav a:active {
-	color:#000;
+header.main nav a span {
+	border-bottom:2px solid transparent;
+	margin-bottom: -2px;
+}
+
+header.main nav a:hover span {
+	border-bottom-color: #eee;
+}
+
+header.main nav a.selected span {
+	cursor:default;
+	color:#555;
+	border-bottom-color: #eee;
 }
 
 button.facebook {
@@ -133,11 +157,10 @@ button.facebook:active {
 /* FOOTER */
 
 footer.main {
-	background: #e5e5e5;
+	background: #e8e8e8;
 	padding:1em 0;
 	text-align: center;
-	color:#888;
-	border-top:1px solid #ddd;
+	color:#999;
 }
 
 footer.main .text {

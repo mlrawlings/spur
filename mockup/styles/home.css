@@ -1,3 +1,5 @@
+/* HERO */
+
 .hero {
 	background:#555;
 	color:#fff;
@@ -31,6 +33,7 @@
 	font-size:1.3em;
 	outline: none;
 	padding-right:2.5em;
+	color:#444;
 }
 
 .hero .search button[type=submit] {
@@ -38,4 +41,19 @@
 	padding:0.5em 0.65em;
 	top:0.2em;
 	right:0.2em;
+}
+
+/* ABOUT */
+
+.about {
+	background:#fff;
+	padding:2em 0;
+}
+
+.about h3 {
+	font-size: 2em;
+}
+
+.about p {
+	margin-bottom: 0;
 }

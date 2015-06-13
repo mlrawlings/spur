@@ -1,0 +1,136 @@
+/* EVENTS SEARCH */
+
+.events-search {
+	padding:2em 0;
+	background-color:#444;
+}
+
+
+/* EVENTS LIST */
+
+.events-list {
+	padding:2em 0;
+}
+
+.events-list h3 {
+	font-weight: 600;
+	text-transform:uppercase;
+	color:#aaa;
+	font-size:0.75em;
+}
+
+.events-list h3:not(:first-child) {
+	margin-top: 2.5em;
+}
+
+/* EVENT ITEM */
+
+.event-item {
+	background:#fff;
+	position: relative;
+	display: block;
+	margin-top:1em;
+	cursor:pointer;
+	transition: box-shadow 0.05s, transform 0.05s;
+}
+
+.event-item:hover {
+	box-shadow:-0.1em 0.3em 0.4em #e5e5e5;
+	transform: translate(0.05em, -0.1em);
+}
+
+.event-item:active {
+	opacity:0.8;
+}
+
+.event-item .info {
+	padding:1em;
+	padding-right:18em;
+}
+
+.event-item .info .name {
+	font-size:1.8em;
+	font-weight: 300;
+	display:block;
+	position: relative;
+	line-height: 1.1em;
+	top: -0.1em;
+}
+
+.event-item .info .time-location {
+	font-size: 0.9em;
+	color:#888;
+}
+
+.event-item .info .time-location:before {
+	content:'@ ';
+}
+
+.event-item .category {
+	position: absolute;
+	top:0; right:0;
+	width:17em;
+	height:100%;
+	color:#fff;
+}
+
+.event-item .category .name,
+.event-item .category .glance {
+	font-size: 0.9em;
+	height:50%;
+	text-align: center;
+	display: flex;
+	align-items:center;
+	justify-content:center;
+}
+
+
+/* CATEGORY COLORS */
+
+.volunteer {
+	background-color:#ff5e97; 
+}
+
+.volunteer .glance {
+	background-color:#d14278;
+}
+
+.games {
+	background-color:#0278ba; 
+}
+
+.games .glance {
+	background-color:#0154a1;
+}
+
+.food {
+	background-color:#5300a6; 
+}
+
+.food .glance {
+	background-color:#420083;
+}
+
+.travel {
+	background-color:#00b464; 
+}
+
+.travel .glance {
+	background-color:#008d46;
+}
+
+.sports {
+	background-color:#fe8413; 
+}
+
+.sports .glance {
+	background-color:#e06c0d;
+}
+
+.other {
+	background-color:#7f7f7f; 
+}
+
+.other .glance {
+	background-color:#595959;
+}
