@@ -76,12 +76,24 @@
 
 .event-item .category .name,
 .event-item .category .glance {
-	font-size: 0.9em;
+	font-size: 0.8em;
 	height:50%;
 	text-align: center;
 	display: flex;
 	align-items:center;
 	justify-content:center;
+}
+
+.event-item .category .glance > span {
+	display: inline-block;
+	width:33%;
+	text-align: center;
+}
+
+
+.event-item .category .glance img {
+	height:0.9em;
+	vertical-align: baseline;
 }
 
 
