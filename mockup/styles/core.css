@@ -39,6 +39,10 @@ h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
 	vertical-align: top;
 }
 
+a img {
+	border:0;
+}
+
 input, textarea {
 	font-family: 'Open Sans', sans-serif;
 }
@@ -54,7 +58,7 @@ button {
 
 	border: 0;
 	background: #04beca;
-	border-bottom: 0.2em solid #04a5b4;
+	border-bottom: 0.2em solid rgba(0,0,0,0.2);
 	border-radius: 0.25em;
 	cursor:pointer;
 	font-size:1em;
@@ -71,7 +75,7 @@ button img + span {
 }
 
 button:hover {
-	outline:none;
+	opacity:0.95;
 }
 
 button:active {
@@ -98,7 +102,6 @@ header.main a:active .logo {
 header.main .logo {
 	float:left;
 	height:2.5em;
-	border:0;
 }
 
 header.main nav {
@@ -137,7 +140,6 @@ header.main nav a.selected span {
 button.facebook {
 	width:110px;
 	background-color:#3a579d;
-	border-bottom-color:#283c6c;
 
 	float:right;
 	margin-left:1.5em;
