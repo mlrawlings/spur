@@ -3,13 +3,21 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , port = process.env.PORT || 8080
   , router = express.Router()
-  , mongoose = require('mongoose')
+  , r = require('rethinkdb')
   , config = require('./config')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-mongoose.connect(config.db)
+var rethink = r.connect(config.db)
+rethink.then(function(conn) {
+	app.db = conn
+})
+
+app.use(function(req, res, next) {
+	req.db = app.db
+	next()
+})
 
 app.use('/api', require('./router'))
 
