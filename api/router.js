@@ -17,8 +17,8 @@ router.get('/moments', function(req, res) {
 })
 
 // Get moment by id
-router.get('/moments/:eid', function(req, res) {
-	Moment.findById(req.params.eid, function(err, moment) {
+router.get('/moments/:id', function(req, res) {
+	Moment.findById(req.params.id, function(err, moment) {
 		if(err) throw new Error(err)
 
 		res.json(moment)
@@ -34,16 +34,7 @@ router.post('/moments', function(req, res) {
 	if(!req.body.location) throw new Error('location is required')
 	if(req.body.datetime <= now || req.body.datetime > TimeService.getEndOfTomorrow(now)) throw new Error('time outside of boundaries')
 
-	var moment = new Moment({
-		title: req.body.title,
-		datetime: req.body.datetime,
-		location: {
-			lat: req.body.location.lat,
-			lng: req.body.location.lng,
-			address: req.body.location.address,
-			name: req.body.location.name
-		}
-	})
+	var moment = new Moment(req.body)
 
 	moment.save(function(err, moment) {
 		if(err) throw new Error(err)
@@ -51,5 +42,14 @@ router.post('/moments', function(req, res) {
 		res.json(moment)
 	})
 })
+
+// Create a post on a moment
+router.post('/moments/:id/posts')
+
+// I'm in
+router.post('/moments/:id/attendees')
+
+// I'm out
+router.delete('/moments/:id/attendees')
 
 module.exports = router
