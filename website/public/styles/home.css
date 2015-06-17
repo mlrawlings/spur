@@ -1,0 +1,59 @@
+/* HERO */
+
+.hero {
+	background:#555;
+	color:#fff;
+	text-align: center;
+	padding:4em 0;
+}
+
+.hero h1 {
+	font-size:4em;
+}
+
+.hero h2 {
+	font-size:2.5em; 
+}
+
+.hero .search {
+	position: relative;
+	border-radius: 0.25em;
+	background: #fff;
+	width:100%;
+	margin:auto;
+	margin-top: 1em;
+	max-width: 30em;
+}
+
+.hero .search input {
+	width:100%;
+	border:0;
+	padding:0.5em 1em;
+	background:transparent;
+	font-size:1.2em;
+	outline: none;
+	padding-right:3em;
+	color:#444;
+}
+
+.hero .search button[type=submit] {
+	position: absolute;
+	padding:0.5em 0.65em;
+	top:0.2em;
+	right:0.2em;
+}
+
+/* ABOUT */
+
+.about {
+	background:#fff;
+	padding:2em 0;
+}
+
+.about h3 {
+	font-size: 2em;
+}
+
+.about p {
+	margin-bottom: 0;
+}

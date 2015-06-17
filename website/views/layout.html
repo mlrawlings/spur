@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<title>Spur | Live in the Moment</title>
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" />
+	<link rel="stylesheet" href="/styles/core.css" />
+	<link rel="stylesheet" href="/styles/home.css" />
+	<link rel="stylesheet" href="/styles/events.css" />
+</head>
+<body>
+
+	<header class="main">
+		<div class="content">
+			<a href="/">
+				<img class="logo" src="/images/spur-logo.png" />
+			</a>
+			<button class="facebook icon">
+				<img src="/images/facebook-icon-white.png" />
+				<span>Log in</span>
+			</button>
+			<nav>
+				<a href="/events.html">
+					<span>Browse</span>
+				</a>
+				<a href="">
+					<span>Businesses</span>
+				</a>
+			</nav>
+		</div>
+	</header>
+
+	<div class="page">
+
+	{% block content %}{% endblock %}
+	
+	</div>
+
+	<footer class="main">
+		<div class="content">
+			<span class="text">Made with &hearts; by Embark in Roanoke, VA</span>
+		</div>
+	</footer>
+
+</body>
+
+<script src="//connect.facebook.net/en_US/sdk.js" async></script>
+<script src="/scripts/facebook.js"></script>
+
+
+</html>
