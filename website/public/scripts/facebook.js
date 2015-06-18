@@ -1,4 +1,8 @@
+var request = require('superagent')
+
 window.fbAsyncInit = function() {
+    console.log('fbAsyncInit')
+    
     var fbButton = document.querySelector('button.facebook')
       , userId = null
 
@@ -6,7 +10,6 @@ window.fbAsyncInit = function() {
         appId: '1455687261396384',
         xfbml: false,
         status: true,
-        cookie: true,
         version: 'v2.3'
     })
 
@@ -25,11 +28,19 @@ window.fbAsyncInit = function() {
             userId = response.authResponse.userID
             fbButton.querySelector('span').textContent = 'Log out'
             fbButton.querySelector('img').src = 'https://graph.facebook.com/v2.3/'+userId+'/picture'
-            console.log(response.authResponse)
+            console.log(response.authResponse.accessToken)
+            
+            request.post('/api/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
+                if(err) throw err
+            })
         } else {
             userId = null
             fbButton.querySelector('span').textContent = 'Log in'
             fbButton.querySelector('img').src = '/images/facebook-icon-white.png'
+
+            request.del('/api/auth').end(function(err, res){
+                if(err) throw err
+            })
         }
     }
 }

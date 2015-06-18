@@ -1,0 +1,15 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "session.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-redis": "^2.3.0",
+    "express-session": "^1.11.3"
+  }
+}

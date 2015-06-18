@@ -1,5 +1,5 @@
 var express = require('express')
-  , app = express()
+  , app = module.exports = express()
   , bodyParser = require('body-parser')
   , port = process.env.PORT || 8080
   , router = express.Router()
@@ -19,7 +19,15 @@ app.use(function(req, res, next) {
 	next()
 })
 
+app.use(function(req, res, next) {
+	res.set('Access-Control-Allow-Origin', '*')
+	res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE')
+	next()
+})
+
 app.use('/api', require('./router'))
 
-app.listen(port)
-console.log('Magic happens on port ' + port)
+if(require.main === module) {
+	app.listen(port)
+	console.log('Magic happens on port ' + port)
+}

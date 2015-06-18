@@ -4,11 +4,9 @@ var express = require('express')
   , request = require('superagent')
   , qs = require('qs')
   , r = require('rethinkdb')
-  , session = require('express-session')
+  , session = require('../common/session')
 
-router.use(session({
-	secret: 'SDFJK234789sdfjkl23789SDFKLJ!#$%&*('
-}))
+router.use(session)
 
 router.post('/auth'/*, session*/, function(req, res, next) {
 	request('https://graph.facebook.com/oauth/access_token').query({
@@ -24,12 +22,14 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 		request('https://graph.facebook.com/v2.3/me').query({
 			access_token:access_token
 		}).end(function(err, response) {
+			if(err) return next(err)
+
 			var user = JSON.parse(response.text)
 
 			req.session.fbid = user.id
 			req.session.token = access_token
 
-			res.json({ fbid:user.id, token:access_token, session:req.sessionID })
+			res.json({ fbid:user.id, token:access_token })
 		})
 	})
 })
@@ -44,7 +44,6 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 
 // Gets all moments, auto filter no past moments, none after tomorrow 3:45am
 router.get('/moments', function(req, res, next) {
-	console.log(req.session.fbid)
 	var now = new Date()
 	  , anHourAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()-1)
 	  , end = TimeService.getEndOfTomorrow(now)

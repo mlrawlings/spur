@@ -3,6 +3,7 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "~1.0.1",
+    "connect-redis": "^2.3.0",
     "express": "~4.0.0",
     "express-session": "^1.11.3",
     "mocha": "^2.2.5",
