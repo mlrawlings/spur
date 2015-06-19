@@ -5,6 +5,7 @@ var express = require('express')
   , webpack = require("webpack")
   , compiler = webpack(require('./webpack.config.js'))
   , session = require('../common/session')
+  , config = require('../config')
 
 nunjucks.configure(__dirname+'/views', {
     autoescape: true,
@@ -22,8 +23,11 @@ app.use(function(req, res, next) {
 	next()
 })
 
+app.use(require('./middleware/api'))
+
 app.use(require('./router'))
 
-if(require.main === module) {
-	app.listen(7787)
-}
+app.listen(config.webserver.port, function(err) {
+  if(err) throw err
+  console.log('webserver running on port', config.webserver.port)
+})

@@ -11,13 +11,3 @@ var session = module.exports = session({
 	},
 	store: new RedisStore(config.redis)
 })
-
-session.sign = function(value) {
-	var cookie = require('cookie-signature')
-	return cookie.sign(value, secret)
-}
-
-session.unsign = function(value) {
-	var cookie = require('cookie-signature')
-	return cookie.unsign(value, secret)
-}

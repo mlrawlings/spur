@@ -1,7 +1,6 @@
 var express = require('express')
   , app = module.exports = express()
   , bodyParser = require('body-parser')
-  , port = process.env.PORT || 8080
   , router = express.Router()
   , r = require('rethinkdb')
   , config = require('../config')
@@ -24,9 +23,9 @@ app.use(function(req, res, next) {
 	next()
 })
 
-app.use('/api', require('./router'))
+app.use(require('./router'))
 
-if(require.main === module) {
-	app.listen(port)
-	console.log('Magic happens on port ' + port)
-}
+app.listen(config.api.port, function(err) {
+  if(err) throw err
+  console.log('api server running on port', config.api.port)
+})

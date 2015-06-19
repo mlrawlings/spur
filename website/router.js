@@ -6,7 +6,7 @@ router.get('/', function (req, res) {
 })
 
 router.get('/events', function(req, res) {
-	res.render('events-list.html', {})
+	res.render('event-results.html', {})
 })
 
 router.get('/event/:id', function(req, res) {

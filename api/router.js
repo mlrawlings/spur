@@ -66,6 +66,8 @@ router.get('/moments/:id', function(req, res, next) {
 
 // Create moment
 router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
+	if(!req.session.fbid) return res.end(401)
+
 	var now = new Date()
 	req.body.datetime = new Date(req.body.datetime)
 
@@ -75,7 +77,7 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(req.body.datetime <= now || req.body.datetime > TimeService.getEndOfTomorrow(now)) throw new Error('time outside of boundaries')
 
 	r.table('moment').insert(req.body).run(req.db).then(function(moment) {
-		res.json(moment.generated_keys[0])
+		res.status(201).json(moment.generated_keys[0])
 	}).catch(next)
 })
 
