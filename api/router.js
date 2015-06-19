@@ -4,7 +4,7 @@ var express = require('express')
   , request = require('superagent')
   , qs = require('qs')
   , r = require('rethinkdb')
-  , session = require('../common/session')
+  , session = require('../common/middleware/session')
 
 router.use(session)
 

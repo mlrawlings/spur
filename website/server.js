@@ -4,8 +4,8 @@ var express = require('express')
   , webpackDevMiddleware = require("webpack-dev-middleware")
   , webpack = require("webpack")
   , compiler = webpack(require('./webpack.config.js'))
-  , session = require('../common/session')
-  , config = require('../config')
+  , session = require('../common/middleware/session')
+  , config = require('../common/config')
 
 nunjucks.configure(__dirname+'/views', {
     autoescape: true,

@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "connect-redis": "^2.3.0",
+    "deep-defaults": "^1.0.3",
     "express-session": "^1.11.3"
   }
 }

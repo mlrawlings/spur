@@ -1,7 +1,7 @@
 var url = require('url')
   , request = require('superagent')
   , methods = require('methods')
-  , config = require('../../config')
+  , config = require('../../common/config')
   , apiRoot = config.api.protocol+'://'+config.api.host+':'+config.api.port
   , api = {}
 

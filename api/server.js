@@ -3,7 +3,7 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , router = express.Router()
   , r = require('rethinkdb')
-  , config = require('../config')
+  , config = require('../common/config')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
