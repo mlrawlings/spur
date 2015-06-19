@@ -16,10 +16,17 @@
 			<a href="/">
 				<img class="logo" src="/images/spur-logo.png" />
 			</a>
+			{% if fbid %}
+			<button class="facebook icon">
+				<img src="https://graph.facebook.com/v2.3/{{fbid}}/picture" />
+				<span>Log out</span>
+			</button>
+			{% else %}
 			<button class="facebook icon">
 				<img src="/images/facebook-icon-white.png" />
 				<span>Log in</span>
 			</button>
+			{% endif %}
 			<nav>
 				<a href="/events.html">
 					<span>Browse</span>

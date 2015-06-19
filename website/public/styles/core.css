@@ -68,6 +68,7 @@ button {
 button img {
 	float:left;
 	height:1.25em;
+	width:1.25em;
 }
 
 button img + span {

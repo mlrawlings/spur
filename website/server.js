@@ -17,6 +17,11 @@ app.use(webpackDevMiddleware(compiler))
 
 app.use(session)
 
+app.use(function(req, res, next) {
+	res.locals.fbid = req.session.fbid
+	next()
+})
+
 app.use(require('./router'))
 
 if(require.main === module) {
