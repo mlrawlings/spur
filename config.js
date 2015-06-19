@@ -1,9 +1,29 @@
-if(process.env.NODE_ENV != 'production') { 
-	//DEVELOPMENT CONFIG
-	
+var merge = require('deep-defaults')
+  , defaultConfig
+  , localConfig
+
+try {
+	localConfig = require('./config.local.js')
+} catch(e) {
+	localConfig = {}
 }
 
 if(process.env.NODE_ENV == 'production') {
-	//PRODUCTION CONFIG
-	
+	/* PRODUCTION */
+	defaultConfig = {}
+} else {
+	/* DEVELOPMENT */
+	defaultConfig = {
+		rethink: {
+			host:'localhost',
+			port: 28015,
+			db: 'spur'
+		},
+		redis: {
+			host: 'localhost',
+			port: 6379
+		}
+	}
 }
+
+module.exports = merge(localConfig, defaultConfig)
