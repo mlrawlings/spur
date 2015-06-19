@@ -4,13 +4,12 @@ var express = require('express')
   , port = process.env.PORT || 8080
   , router = express.Router()
   , r = require('rethinkdb')
-  , config = require('./config')
+  , config = require('../config')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-var rethink = r.connect(config.db)
-rethink.then(function(conn) {
+r.connect(config.rethink).then(function(conn) {
 	app.db = conn
 })
 
