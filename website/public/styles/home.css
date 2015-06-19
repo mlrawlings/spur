@@ -1,7 +1,9 @@
 /* HERO */
 
 .hero {
-	background:#555;
+	background:#555 url('/images/slackline.jpg');
+	background-size: cover;
+	background-position: center center;
 	color:#fff;
 	text-align: center;
 	padding:4em 0;
