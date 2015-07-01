@@ -5,6 +5,49 @@
 	background-color:#444;
 }
 
+.events-search .container {
+	width: 100%;
+	padding: 0 2em;
+	max-width: 50em;
+	margin: auto;
+}
+
+.events-search .search {
+	position: relative;
+	border-radius: 0.25em;
+	background: #fff;
+	width:100%;
+	margin: 0;
+	max-width: 28em;
+	display: inline-block;
+}
+
+.events-search .search input {
+	width:100%;
+	border:0;
+	padding:0.5em 1em;
+	background:transparent;
+	font-size:1.2em;
+	outline: none;
+	padding-right:3em;
+	color:#444;
+}
+
+.events-search .search button[type=submit] {
+	position: absolute;
+	padding:0.5em 0.65em;
+	top:0.2em;
+	right:0.2em;
+}
+
+.events-search .create {
+	display: inline-block;
+	font-size: 1.25em;
+	float: right;
+	background-color: #04A5B4;
+}
+
+
 
 /* EVENTS LIST */
 

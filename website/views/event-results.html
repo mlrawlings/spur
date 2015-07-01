@@ -4,6 +4,17 @@
 
 <div class="page">
 	<section class="events-search">
+		<div class="container">
+			<form action="/events" class="search">
+				<input name="q" type="text" placeholder="what do you want to do?" />
+				<button type="submit">
+					<img src="/images/search-white.png" />
+				</button>
+			</form>
+			<a href="/create/event" class="button create">
+				<span>Create Event +</span>
+			</a>
+		</div>
 	</section>
 
 	{% include "event-list.html" %}
