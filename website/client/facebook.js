@@ -1,4 +1,6 @@
 var request = require('superagent')
+  , config = require('../../common/config')
+  , host = config.api.protocol + '://' + config.api.host + ':' + config.api.port
 
 window.fbAsyncInit = function() {
     console.log('fbAsyncInit')
@@ -30,7 +32,7 @@ window.fbAsyncInit = function() {
             fbButton.querySelector('img').src = 'https://graph.facebook.com/v2.3/'+userId+'/picture'
             console.log(response.authResponse.accessToken)
             
-            request.post('/api/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
+            request.post(host+'/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
                 if(err) throw err
             })
         } else {
@@ -38,7 +40,7 @@ window.fbAsyncInit = function() {
             fbButton.querySelector('span').textContent = 'Log in'
             fbButton.querySelector('img').src = '/images/facebook-icon-white.png'
 
-            request.del('/api/auth').end(function(err, res){
+            request.del(host+'/auth').end(function(err, res){
                 if(err) throw err
             })
         }

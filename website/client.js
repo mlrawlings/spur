@@ -1,1 +1,1 @@
-require('./public/scripts/facebook')
+require('./client/facebook')
