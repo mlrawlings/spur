@@ -13,4 +13,8 @@ router.get('/event/:id', function(req, res) {
 	res.render('event-page.html', {})
 })
 
+router.get('/create/event', function(req, res) {
+	res.render('create-event.html', {})
+})
+
 module.exports = router

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="page">
+	<section class="events-search"></section>
+	<form class="createEvent">
+		<div class="field">
+			<label required>Event Name</label>
+			<input name="name" type="text" required />
+		</div>
+		<div class="field">
+			<label required>Time</label>
+			<input type="time" name="time" required>
+		</div>
+		<div class="field">
+			<label required>Location</label>
+			<input name="location" type="text" required />
+			<div class="mapContainer">
+				<div id="mapCover"></div>
+				<div id="map">
+					<noscript>
+					<!-- http://code.google.com/apis/maps/documentation/staticmaps/ -->
+					<img src="http://maps.google.com/maps/api/staticmap?center=1%20infinite%20loop%20cupertino%20ca%2095014&amp;zoom=16&amp;size=512x512&amp;maptype=roadmap&amp;sensor=false" />
+					</noscript>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+{% endblock %}

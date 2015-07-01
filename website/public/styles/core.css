@@ -160,6 +160,19 @@ button.facebook:active {
 	flex:1;
 }
 
+/* FORM FIELDS */
+
+.field label {
+	display: block;
+}
+.field input, .field textarea {
+	width: 100%;
+	padding: 0.5em;
+	border-radius: 0.5em;
+	border: 1px solid #aaa;
+	font-size: 1.25em;
+}
+
 /* FOOTER */
 
 footer.main {
