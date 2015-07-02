@@ -7,6 +7,7 @@ var express = require('express')
   , session = require('../common/middleware/session')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
+  , api = require('../api/client')
 
 nunjucks.configure(__dirname+'/views', {
     autoescape: true,
@@ -26,7 +27,10 @@ app.use(function(req, res, next) {
 	next()
 })
 
-app.use(require('./middleware/api'))
+app.use(function(req, res, next) {
+  req.api = api.createInstance(req.get('cookies'))
+  next()
+})
 
 app.use(require('./router'))
 

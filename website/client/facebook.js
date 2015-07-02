@@ -1,5 +1,5 @@
 var request = require('superagent')
-  , api = require('./api')
+  , api = require('../../api/client')
 
 window.fbAsyncInit = function() {
     console.log('fbAsyncInit')
