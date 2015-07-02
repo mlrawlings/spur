@@ -6,6 +6,7 @@ var express = require('express')
   , compiler = webpack(require('./webpack.config.js'))
   , session = require('../common/middleware/session')
   , config = require('../common/config')
+  , bodyParser = require('body-parser')
 
 nunjucks.configure(__dirname+'/views', {
     autoescape: true,
@@ -17,6 +18,8 @@ app.use(express.static(__dirname+'/public'))
 app.use(webpackDevMiddleware(compiler))
 
 app.use(session)
+
+app.use(bodyParser.urlencoded({}))
 
 app.use(function(req, res, next) {
 	res.locals.fbid = req.session.fbid
