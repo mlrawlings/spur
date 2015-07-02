@@ -1,3 +1,5 @@
 node_modules
 dist
 config.local.js
+npm-debug.log
+rethinkdb_data
