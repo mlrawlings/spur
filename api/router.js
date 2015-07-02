@@ -49,10 +49,11 @@ router.get('/moments', function(req, res, next) {
 	  , end = TimeService.getEndOfTomorrow(now)
 
 	r.table('moment').filter(
-		r.row('datetime').gt(anHourAgo).and(r.row('datetime').lt(end))
+		r.row('datetime').gt(anHourAgo)
 	).run(req.db).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
+
 		res.json(moments)
 	}).catch(next)
 })
@@ -66,11 +67,12 @@ router.get('/moments/:id', function(req, res, next) {
 
 // Create moment
 router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
-	if(!req.session.fbid) return res.end(401)
-
+	if(!req.session.fbid) {
+		return res.status(401).end('Not Logged In')
+	}
+	
 	var now = new Date()
-	req.body.datetime = new Date(req.body.datetime)
-
+	
 	if(!req.body.title) throw new Error('title is required')
 	if(!req.body.datetime) throw new Error('time is required')
 	if(!req.body.location) throw new Error('location is required')
