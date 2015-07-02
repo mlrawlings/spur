@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
 })
 
 app.use(function(req, res, next) {
-	res.set('Access-Control-Allow-Headers', '*')
+	res.set('Access-Control-Allow-Headers', 'Content-Type')
 	res.set('Access-Control-Allow-Credentials', 'true')
 	res.set('Access-Control-Allow-Origin', config.webserver.protocol + '://' + config.webserver.host + ':' + config.webserver.port)
 	res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE')
