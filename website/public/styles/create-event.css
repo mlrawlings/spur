@@ -1,9 +1,14 @@
 form.createEvent {
 	max-width: 50em;
 	margin: auto;
-	border: 1px solid black;
 	padding: 1em 2em;
 	margin-top: 1em;
+}
+
+.createEvent [type="submit"] {
+	margin-top: 1em;
+	float: right;
+	margin-bottom: 2em;
 }
 
 .mapContainer {

@@ -3,6 +3,8 @@ var locationInput = document.querySelector('[name="location"]')
   , mapCover = document.getElementById('mapCover')
 
 function getLatLong(e) {
+	if(!e.target.value) return
+
 	var geocoder = new google.maps.Geocoder()
 	  , location = []
 

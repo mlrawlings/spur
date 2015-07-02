@@ -23,10 +23,10 @@
 		<div class="content">
 			<div class="basic-info">
 				<div class="name">
-					Serving at the Food Bank
+					{{event.title}}
 				</div>
 				<div class="when">
-					<time>2:30pm</time>
+					<time>{{event.datetime}}</time>
 					<span class="period">This Afternoon</span>
 				</div>
 				<div class="share">
@@ -35,7 +35,7 @@
 			</div>
 			<div class="location">
 				<strong>River's Edge Sports Complex</strong>
-				<address>302 Wiley Dr SW, <br /> Roanoke, VA 24014</address>
+				<address>{{event.location}}</address>
 				<button>I'm in!</button>
 			</div>
 		</div>

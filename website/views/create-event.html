@@ -4,14 +4,14 @@
 
 <div class="page">
 	<section class="events-search"></section>
-	<form class="createEvent">
+	<form method="POST" action="/create/event" class="createEvent">
 		<div class="field">
-			<label required>Event Name</label>
-			<input name="name" type="text" required />
+			<label required>Event Title</label>
+			<input name="title" type="text" required />
 		</div>
 		<div class="field">
 			<label required>Time</label>
-			<input type="time" name="time" required>
+			<input name="datetime" type="time" required>
 		</div>
 		<div class="field">
 			<label required>Location</label>
@@ -26,6 +26,8 @@
 				</div>
 			</div>
 		</div>
+
+		<button type="submit">Create Event</button>
 	</form>
 </div>
 
