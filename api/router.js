@@ -1,12 +1,15 @@
 var express = require('express')
-  , router = express()
+  , router = express.Router()
   , TimeService = require('./services/time')
   , request = require('superagent')
   , qs = require('qs')
   , r = require('rethinkdb')
-  , session = require('../common/middleware/session')
+  , config = require('../common/config')
+  , connection
 
-router.use(session)
+r.connect(config.rethink).then(function(conn) {
+	connection = conn
+})
 
 router.post('/auth'/*, session*/, function(req, res, next) {
 	request('https://graph.facebook.com/oauth/access_token').query({
@@ -50,7 +53,7 @@ router.get('/moments', function(req, res, next) {
 
 	r.table('moment').filter(
 		r.row('datetime').gt(anHourAgo)
-	).run(req.db).then(function(moments) {
+	).run(connection).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
 
@@ -60,7 +63,7 @@ router.get('/moments', function(req, res, next) {
 
 // Get moment by id
 router.get('/moments/:id', function(req, res, next) {
-	r.table('moment').get(req.params.id).run(req.db).then(function(moment) {
+	r.table('moment').get(req.params.id).run(connection).then(function(moment) {
 		res.json(moment)
 	}).catch(next)
 })
@@ -78,7 +81,7 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(!req.body.location) throw new Error('location is required')
 	if(req.body.datetime <= now || req.body.datetime > TimeService.getEndOfTomorrow(now)) throw new Error('time outside of boundaries')
 
-	r.table('moment').insert(req.body).run(req.db).then(function(moment) {
+	r.table('moment').insert(req.body).run(connection).then(function(moment) {
 		res.status(201).json(moment.generated_keys[0])
 	}).catch(next)
 })
