@@ -18,7 +18,9 @@ app.use(function(req, res, next) {
 })
 
 app.use(function(req, res, next) {
-	res.set('Access-Control-Allow-Origin', '*')
+	res.set('Access-Control-Allow-Headers', '*')
+	res.set('Access-Control-Allow-Credentials', 'true')
+	res.set('Access-Control-Allow-Origin', config.webserver.protocol + '://' + config.webserver.host + ':' + config.webserver.port)
 	res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE')
 	next()
 })
@@ -26,6 +28,6 @@ app.use(function(req, res, next) {
 app.use(require('./router'))
 
 app.listen(config.api.port, function(err) {
-  if(err) throw err
-  console.log('api server running on port', config.api.port)
+	if(err) throw err
+	console.log('api server running on port', config.api.port)
 })
