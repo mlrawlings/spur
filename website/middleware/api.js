@@ -11,7 +11,9 @@ module.exports = function(req, res, next) {
 		req.api[method] = function(path) {
 			path = url.resolve(apiRoot, path)
 			console.log(path)
-			return request[method](path).set('Cookie', req.get('cookie'))
+
+			if(method == 'delete') method = 'del'
+			return request[method](path).set('Cookie', req.get('cookie')).set('Content-Type', 'application/json')
 		}
 	})
 	req.api.del = req.api.delete

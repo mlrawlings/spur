@@ -9,7 +9,9 @@ methods.forEach(function(method) {
 	api[method] = function(path) {
 		path = url.resolve(apiRoot, path)
 		console.log(path)
-		return request[method](path).withCredentials()
+		
+		if(method == 'delete') method = 'del'
+		return request[method](path).withCredentials().set('Content-Type', 'application/json')
 	}
 })
 api.del = api.delete
