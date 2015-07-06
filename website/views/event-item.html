@@ -4,7 +4,8 @@
 			{{event.title}}
 		</span>
 		<span class="when">
-			{{event.datetime}} - {{event.location}}
+			<span>{{event.datetime}}</span>
+			<div>{{event.location}}</div>
 		</span>
 	</div>
 	<div class="summary volunteer">
@@ -13,7 +14,7 @@
 		</div>
 		<div class="info">
 			<span class="people"><img class="icon" src="/images/person-white.png" /> 1 going</span>
-			<span class="time"><img class="icon" src="/images/clock-white.png" /> in 26m</span>
+			<span class="time"><img class="icon" src="/images/clock-white.png" /> {{event.relativeTime}}</span>
 			<span class="location"><img class="icon" src="/images/white-pin.png" /> 6.1 mi</span>
 		</div>
 	</div>
