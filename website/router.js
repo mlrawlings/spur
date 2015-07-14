@@ -36,11 +36,14 @@ router.get('/create/event', function(req, res) {
 
 router.post('/create/event', function(req, res) {
 	var now = new Date()
+
+	// If stored hours and minutes are before current add a day
+
 	req.body.datetime = req.body.datetime.split(':')
 	req.body.datetime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), req.body.datetime[0], req.body.datetime[1])
 
 	req.api.post('/moments').send(req.body).end(function(err, response) {
-		if(err) return
+		if(err) return console.log(err)
 
 		res.redirect('/event/'+response.body)
 	})

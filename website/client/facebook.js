@@ -29,7 +29,6 @@ window.fbAsyncInit = function() {
             userId = response.authResponse.userID
             fbButton.querySelector('span').textContent = 'Log out'
             fbButton.querySelector('img').src = 'https://graph.facebook.com/v2.3/'+userId+'/picture'
-            console.log(response.authResponse.accessToken)
             
             api.post('/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
                 if(err) throw err
