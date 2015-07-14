@@ -56,7 +56,6 @@ router.get('/moments', function(req, res, next) {
 	).run(connection).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
-
 		res.json(moments)
 	}).catch(next)
 })
@@ -75,6 +74,8 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	}
 	
 	var now = new Date()
+
+	req.body.datetime = new Date(req.body.datetime)
 	
 	if(!req.body.title) throw new Error('title is required')
 	if(!req.body.datetime) throw new Error('time is required')
