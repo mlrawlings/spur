@@ -8,9 +8,17 @@
 			<div>{{event.location}}</div>
 		</span>
 	</div>
-	<div class="summary {{event.category}}">
-		<div class="category">
+	<div class="summary {% if event.category %}
 			{{event.category}}
+		{% else %}
+			other
+		{% endif %}">
+		<div class="category">
+		{% if event.category %}
+			{{event.category}}
+		{% else %}
+			other
+		{% endif %}
 		</div>
 		<div class="info">
 			<span class="people"><img class="icon" src="/images/person-white.png" /> 1 going</span>
