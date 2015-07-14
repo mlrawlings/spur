@@ -1,5 +1,6 @@
 var Router = require('express').Router
   , router = new Router()
+  , moment = require('moment')
 
 router.get('/', function (req, res) {
 	res.render('home.html', { title: 'My Site' })
@@ -8,6 +9,11 @@ router.get('/', function (req, res) {
 router.get('/events', function(req, res, next) {
 	req.api.get('/moments').end(function(err, response) {
 		if(err) return next(err)
+
+		response.body.forEach(function(event, i) {
+			event.relativeTime = moment(event.datetime).fromNow()
+			event.datetime = moment(event.datetime).format('h:mm a M/D')
+		})
 		res.render('event-results.html', { events: response.body })
 	})
 })
@@ -15,7 +21,12 @@ router.get('/events', function(req, res, next) {
 router.get('/event/:id', function(req, res, next) {
 	req.api.get('/moments/'+req.params.id).end(function(err, response) {
 		if(err) return next(err)
-		res.render('event-page.html', { event: response.body })
+
+		var event = response.body
+		event.relativeTime = moment(event.datetime).fromNow()
+		event.datetime = moment(event.datetime).format('h:mm a M/D')
+
+		res.render('event-page.html', { event: event })
 	})
 })
 
