@@ -162,15 +162,21 @@ button.facebook:active {
 
 /* FORM FIELDS */
 
+.field {
+	margin-top:1em;
+}
 .field label {
 	display: block;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 0.7em;
 }
 .field input, .field textarea {
 	width: 100%;
 	padding: 0.5em;
-	border-radius: 0.5em;
+	border-radius: 0.25em;
 	border: 1px solid #aaa;
-	font-size: 1.25em;
+	font-size: 1em;
 }
 
 /* FOOTER */
