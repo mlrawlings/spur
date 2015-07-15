@@ -11,13 +11,18 @@ form.createEvent {
 	margin-bottom: 2em;
 }
 
+.field.location input {
+	border-radius: 0.25em 0.25em 0 0;
+}
+
 .mapContainer {
 	position: relative;
-	height: 20em;
+	height: 15em;
 	width: 100%;
-	margin-top: 1em;
-	border-radius: 0.25em;
+	border-radius: 0 0 0.25em 0.25em;
 	overflow: hidden;
+	border: 1px solid #aaa;
+	border-top: 0;
 }
 
 #map {
