@@ -1,6 +1,7 @@
 var Router = require('express').Router
   , router = new Router()
   , moment = require('moment')
+  , Categories = require('./client/categories')
 
 router.get('/', function (req, res) {
 	res.render('home.html', { title: 'My Site' })
@@ -11,8 +12,7 @@ router.get('/events', function(req, res, next) {
 		if(err) return next(err)
 
 		response.body.forEach(function(event, i) {
-			event.relativeTime = moment(event.datetime).fromNow()
-			event.datetime = moment(event.datetime).format('h:mm a M/D')
+			event = convertEvent(event)
 		})
 		res.render('event-results.html', { events: response.body })
 	})
@@ -23,8 +23,7 @@ router.get('/event/:id', function(req, res, next) {
 		if(err) return next(err)
 
 		var event = response.body
-		event.relativeTime = moment(event.datetime).fromNow()
-		event.datetime = moment(event.datetime).format('h:mm a M/D')
+		event = convertEvent(event)
 
 		res.render('event-page.html', { event: event })
 	})
@@ -52,5 +51,17 @@ router.post('/create/event', function(req, res) {
 		res.redirect('/event/'+response.body)
 	})
 })
+
+
+function convertEvent(event) {
+	event.relativeTime = moment(event.datetime).fromNow()
+	event.casualTime = moment(event.datetime).calendar()
+	event.datetime = moment(event.datetime).format('h:mm a M/D')
+
+	event.categoryDisplay = event.category ? Categories[event.category] : 'Other'
+	event.category = event.category ? event.category : 'other'
+
+	return event
+}
 
 module.exports = router

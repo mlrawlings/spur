@@ -6,10 +6,10 @@
 	<section class="map">
 	</section>
 
-	<div class="summary volunteer">
+	<div class="summary {{event.category}}">
 		<div class="content">
 			<div class="category">
-				volunteer &amp; community
+				{{event.categoryDisplay}}
 			</div>
 			<div class="info">
 				<span class="people"><img class="icon" src="/images/person-white.png" /> 1 going</span>
@@ -25,9 +25,8 @@
 				<div class="name">
 					{{event.title}}
 				</div>
-				<div class="when">
-					<time>{{event.datetime}}</time>
-					<span class="period">This Afternoon</span>
+				<div class="">
+					<time>{{event.casualTime}}</time>
 				</div>
 				<div class="share">
 					<div class="addthis_sharing_toolbox"></div>

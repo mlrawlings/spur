@@ -3,22 +3,14 @@
 		<span class="name">
 			{{event.title}}
 		</span>
-		<span class="when">
-			<span>{{event.datetime}}</span>
+		<span class="">
+			<span>{{event.casualTime}}</span>
 			<div>{{event.location}}</div>
 		</span>
 	</div>
-	<div class="summary {% if event.category %}
-			{{event.category}}
-		{% else %}
-			other
-		{% endif %}">
+	<div class="summary {{event.category}}">
 		<div class="category">
-		{% if event.category %}
-			{{event.category}}
-		{% else %}
-			other
-		{% endif %}
+			{{event.categoryDisplay}}
 		</div>
 		<div class="info">
 			<span class="people"><img class="icon" src="/images/person-white.png" /> 1 going</span>
