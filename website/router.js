@@ -3,7 +3,15 @@ var Router = require('express').Router
   , moment = require('moment')
 
 router.get('/', function (req, res) {
-	res.render('home.html', { title: 'My Site' })
+	req.api.get('/moments').end(function(err, response) {
+		if(err) return next(err)
+
+		response.body.forEach(function(event, i) {
+			event.relativeTime = moment(event.datetime).fromNow()
+			event.datetime = moment(event.datetime).format('h:mm a M/D')
+		})
+		res.render('home', { title: 'Live in the Past', events: response.body })
+	})	
 })
 
 router.get('/events', function(req, res, next) {

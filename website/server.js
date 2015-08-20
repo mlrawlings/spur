@@ -1,6 +1,5 @@
 var express = require('express')
   , app = module.exports = express()
-  , nunjucks = require('nunjucks')
   , webpackDevMiddleware = require("webpack-dev-middleware")
   , webpack = require("webpack")
   , compiler = webpack(require('./webpack.config.js'))
@@ -8,11 +7,17 @@ var express = require('express')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
   , api = require('../api/client')
+  , reactView = require('express-iso-react-views').init({ 
+      root:__dirname+'\\components',
+      layout: 'layout',
+      mountNode:'#app'
+    })
 
-nunjucks.configure(__dirname+'/views', {
-    autoescape: true,
-    express: app
-})
+app.set('views', __dirname + '/components');
+app.set('view engine', 'js');
+app.engine('js', reactView.engine);
+
+app.use(reactView.middleware)
 
 app.use(express.static(__dirname+'/public'))
 
