@@ -2,7 +2,7 @@ var Router = require('express').Router
   , router = new Router()
   , moment = require('moment')
 
-router.get('/', function (req, res) {
+router.get('/', function (req, res, next) {
 	req.api.get('/moments').end(function(err, response) {
 		if(err) return next(err)
 
@@ -10,8 +10,8 @@ router.get('/', function (req, res) {
 			event.relativeTime = moment(event.datetime).fromNow()
 			event.datetime = moment(event.datetime).format('h:mm a M/D')
 		})
-		res.render('home', { title: 'Live in the Past', events: response.body })
-	})	
+		res.render('home', { title: 'Live in the Moment', events: response.body })
+	})
 })
 
 router.get('/events', function(req, res, next) {
@@ -22,7 +22,7 @@ router.get('/events', function(req, res, next) {
 			event.relativeTime = moment(event.datetime).fromNow()
 			event.datetime = moment(event.datetime).format('h:mm a M/D')
 		})
-		res.render('event-results.html', { events: response.body })
+		res.render('event-results', { events: response.body })
 	})
 })
 
@@ -39,7 +39,7 @@ router.get('/event/:id', function(req, res, next) {
 })
 
 router.get('/create/event', function(req, res) {
-	res.render('create-event.html', {})
+	res.render('create-event', {})
 })
 
 router.post('/create/event', function(req, res) {

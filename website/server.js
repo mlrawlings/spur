@@ -9,7 +9,7 @@ var express = require('express')
   , api = require('../api/client')
   , reactView = require('express-iso-react-views').init({ 
       root:__dirname+'\\components',
-      layout: 'layout',
+      layout: 'html',
       mountNode:'#app'
     })
 
@@ -21,7 +21,7 @@ app.use(reactView.middleware)
 
 app.use(express.static(__dirname+'/public'))
 
-app.use(webpackDevMiddleware(compiler))
+/*app.use(webpackDevMiddleware(compiler))*/
 
 app.use(session)
 
