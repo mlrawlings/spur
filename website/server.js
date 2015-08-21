@@ -7,21 +7,25 @@ var express = require('express')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
   , api = require('../api/client')
-  , reactView = require('express-iso-react-views').init({ 
-      root:__dirname+'\\components',
-      layout: 'html',
-      mountNode:'#app'
+  , reactView = require('express-iso-react-views').init({
+      styles: [
+        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
+        '/styles/core.css',
+        '/styles/home.css',
+        '/styles/events.css',
+        '/styles/create-event.css'
+      ],
+      scripts: [
+        '<script src="//connect.facebook.net/en_US/sdk.js" async></script>'
+      ]
     })
 
 app.set('views', __dirname + '/components');
 app.set('view engine', 'js');
 app.engine('js', reactView.engine);
-
 app.use(reactView.middleware)
 
 app.use(express.static(__dirname+'/public'))
-
-/*app.use(webpackDevMiddleware(compiler))*/
 
 app.use(session)
 

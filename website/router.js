@@ -34,12 +34,12 @@ router.get('/event/:id', function(req, res, next) {
 		event.relativeTime = moment(event.datetime).fromNow()
 		event.datetime = moment(event.datetime).format('h:mm a M/D')
 
-		res.render('event-page.html', { event: event })
+		res.render('event-page', { event: event })
 	})
 })
 
 router.get('/create/event', function(req, res) {
-	res.render('create-event', {})
+	res.render('create-event-form', {})
 })
 
 router.post('/create/event', function(req, res) {

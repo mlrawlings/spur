@@ -1,8 +1,8 @@
 var React = require('react')
   , FacebookLoginButton = require('./facebook-login-button')
 
-module.exports = React.createClass({
-	render: function() {
+class Layout extends React.Component {
+	render() {
 		return (
 			<div>
 				<header className="main">
@@ -34,4 +34,6 @@ module.exports = React.createClass({
 			</div>
 		)
 	}
-})
+}
+
+module.exports = Layout
