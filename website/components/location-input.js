@@ -63,7 +63,7 @@ class LocationInput extends React.Component {
 	render() {
 		return (
 			<div>
-				<input {...this.props.name} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
+				<input {...this.props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
 				<div style={style.googleMap}>
 					<GoogleMap center={this.state.location} zoom={this.state.zoom}>
 						<div lat={this.state.location[0]} lng={this.state.location[1]}>
