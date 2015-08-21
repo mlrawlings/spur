@@ -29,6 +29,6 @@ class EventResults extends React.Component {
 			</Layout>
 		)
 	}
-})
+}
 
 module.exports = EventResults

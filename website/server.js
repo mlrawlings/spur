@@ -16,7 +16,8 @@ var express = require('express')
         '/styles/create-event.css'
       ],
       scripts: [
-        '<script src="//connect.facebook.net/en_US/sdk.js" async></script>'
+        '<script src="//connect.facebook.net/en_US/sdk.js" async></script>',
+        'http://maps.google.com/maps/api/js?sensor=false'
       ]
     })
 

@@ -1,6 +1,7 @@
 var React = require('react')
   , Layout = require('./layout')
   , EventList = require('./event-list')
+  , LocationInput = require('./location-input')
 
 class CreateEventForm extends React.Component {
 	render() {
@@ -19,12 +20,7 @@ class CreateEventForm extends React.Component {
 						</div>
 						<div className="field location">
 							<label required>Location</label>
-							<input name="location" type="text" required />
-							<div className="mapContainer">
-								<div id="mapCover"></div>
-								<div id="map">
-								</div>
-							</div>
+							<LocationInput name="location" required={true} />
 						</div>
 						<div className="field">
 							<label required>Category</label>
