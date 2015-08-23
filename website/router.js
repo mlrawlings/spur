@@ -22,7 +22,7 @@ router.get('/events', function(req, res, next) {
 			event.relativeTime = moment(event.datetime).fromNow()
 			event.datetime = moment(event.datetime).format('h:mm a M/D')
 		})
-		res.render('event-results', { events: response.body })
+		res.render('event-results', { events: response.body, search:req.query.q })
 	})
 })
 

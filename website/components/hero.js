@@ -1,4 +1,5 @@
 var React = require('react')
+  , SearchInput = require('./inputs/search-input')
   , Section = require('./common/section')
   , Button = require('./common/button')
   , Image = require('./common/image')
@@ -27,9 +28,14 @@ styles.tagline = {
 	fontSize:40
 }
 
-styles.icon = {
-	width:20,
-	height:20
+styles.searchForm = {
+	width:'100%',
+	maxWidth:450,
+	marginTop:16
+}
+
+styles.searchInput = {
+	width:'100%'
 }
 
 class Hero extends React.Component {
@@ -38,11 +44,8 @@ class Hero extends React.Component {
 			<Section style={styles.hero}>
 				<Image style={styles.logo} src="/images/spur-text-white.png" alt="spur" />
 				<Text style={styles.tagline}>live in the moment</Text>
-				<form action="/events" className="search">
-					<input name="q" type="text" placeholder="what do you want to do?" />
-					<Button type="submit">
-						<Image style={styles.icon} src="/images/search-white.png" />
-					</Button>
+				<form action="/events" style={styles.searchForm}>
+					<SearchInput name="q" style={styles.searchInput} />
 				</form>
 			</Section>
 		)

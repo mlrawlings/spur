@@ -1,6 +1,7 @@
 var React = require('react')
   , Layout = require('./layout')
   , EventList = require('./event-list')
+  , SearchInput = require('./inputs/search-input')
   , Section = require('./common/section')
   , Button = require('./common/button')
   , Image = require('./common/image')
@@ -8,21 +9,13 @@ var React = require('react')
 
 var styles = {}
 
-styles.icon = {
-	width:20,
-	height:20
-}
-
 class EventResults extends React.Component {
 	render() {
 		return (
 			<Layout fbid={this.props.fbid}>
 				<Section>
 					<form action="/events">
-						<input name="q" type="text" placeholder="what do you want to do?" />
-						<Button type="submit">
-							<Image style={styles.icon} src="/images/search-white.png" />
-						</Button>
+						<SearchInput name="q" defaultValue={this.props.search} />
 					</form>
 					<Button href="/create/event">
 						<Text>Create Event +</Text>
