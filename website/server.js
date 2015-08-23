@@ -10,10 +10,7 @@ var express = require('express')
   , reactView = require('express-iso-react-views').init({
       styles: [
         'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
-        '/styles/core.css',
-        '/styles/home.css',
-        '/styles/events.css',
-        '/styles/create-event.css'
+        '/styles/core.css'
       ],
       scripts: [
         '<script src="//connect.facebook.net/en_US/sdk.js" async></script>',

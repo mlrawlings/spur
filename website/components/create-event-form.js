@@ -1,42 +1,38 @@
 var React = require('react')
   , Layout = require('./layout')
-  , EventList = require('./event-list')
-  , LocationInput = require('./location-input')
+  , LocationInput = require('./inputs/location-input')
+  , CategoryInput = require('./inputs/category-input')
+  , Section = require('./common/section')
+  , Button = require('./common/button')
+  , Label = require('./common/label')
+  , View = require('./common/view')
 
 class CreateEventForm extends React.Component {
 	render() {
 		return (
 			<Layout fbid={this.props.fbid}>
-				<div className="page">
-					<section className="events-search"></section>
+				<Section>
 					<form method="POST" action="/create/event" className="createEvent">
-						<div className="field">
-							<label required>Event Title</label>
-							<input name="title" type="text" required />
-						</div>
-						<div className="field">
-							<label required>Time</label>
-							<input name="datetime" type="time" required />
-						</div>
-						<div className="field location">
-							<label required>Location</label>
+						<View>
+							<Label required={true}>Event Title</Label>
+							<input name="title" type="text" required={true} />
+						</View>
+						<View>
+							<Label required={true}>Time</Label>
+							<input name="datetime" type="time" required={true} />
+						</View>
+						<View>
+							<Label required={true}>Category</Label>
+							<CategoryInput name="category" required={true} />
+						</View>
+						<View>
+							<Label required={true}>Location</Label>
 							<LocationInput name="location" required={true} />
-						</div>
-						<div className="field">
-							<label required>Category</label>
-							<select name="category" required>
-								<option value="outdoors">travel & outdoors</option>
-								<option value="food">food & leisure</option>
-								<option value="sports">sports & fitness</option>
-								<option value="games">games & hobbies</option>
-								<option value="volunteer">volunteer & community</option>
-								<option value="">other</option>
-							</select>
-						</div>
+						</View>
 
-						<button type="submit">Create Event</button>
+						<Button type="submit">Create Event</Button>
 					</form>
-				</div>
+				</Section>
 			</Layout>
 		)
 	}

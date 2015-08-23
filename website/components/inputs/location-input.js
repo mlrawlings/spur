@@ -1,7 +1,8 @@
 var React = require('react')
   , GeoPoint = require('geopoint')
   , GoogleMap = require('google-map-react')
-  , locationUtil = require('../util/location')
+  , View = require('../common/view')
+  , locationUtil = require('../../util/location')
 
 var style = {}
 
@@ -62,16 +63,16 @@ class LocationInput extends React.Component {
 	}
 	render() {
 		return (
-			<div>
+			<View>
 				<input {...this.props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
-				<div style={style.googleMap}>
+				<View style={style.googleMap}>
 					<GoogleMap center={this.state.location} zoom={this.state.zoom}>
-						<div lat={this.state.location[0]} lng={this.state.location[1]}>
+						<View lat={this.state.location[0]} lng={this.state.location[1]}>
 							Text
-						</div>
+						</View>
 					</GoogleMap>
-				</div>
-			</div>
+				</View>
+			</View>
 		)
 	}
 }

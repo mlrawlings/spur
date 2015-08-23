@@ -1,5 +1,26 @@
 var React = require('react')
-  , api = require('../../api/client')
+  , Button = require('../common/button')
+  , Image = require('../common/image')
+  , Text = require('../common/text')
+  , api = require('../../../api/client')
+
+var styles = {}
+
+styles.facebookButton = {
+	width:110,
+	backgroundColor:'#3a579d',
+	flexDirection:'row'
+}
+
+styles.image = {
+	width:20,
+	height:20,
+	marginRight:8
+}
+
+styles.text = {
+	flex:1
+}
 
 class FacebookLoginButton extends React.Component {
 	constructor(props) {
@@ -47,10 +68,10 @@ class FacebookLoginButton extends React.Component {
 	}
 	render() {
 		return (
-			<button className="facebook icon" onClick={this.click.bind(this)}>
-				<img src={this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png" } />
-				<span>{this.state.userId ? 'Log Out' : 'Log In' }</span>
-			</button>
+			<Button style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
+				<Image style={styles.image} src={this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png" } />
+				<Text style={styles.text}>{this.state.userId ? 'Log out' : 'Log in' }</Text>
+			</Button>
 		)
 	}
 }

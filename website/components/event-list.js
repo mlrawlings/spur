@@ -1,17 +1,17 @@
 var React = require('react')
   , EventItem = require('./event-item')
+  , Section = require('./common/section')
+  , Heading = require('./common/heading')
 
 class EventList extends React.Component {
 	render() {
 		return (
-			<section className="events-list">
-				<div className="content">
-					<h3>Happening Soon</h3>
-					{this.props.events.map(function(event) {
-						return <EventItem event={event} />
-					})}
-				</div>
-			</section>
+			<Section>
+				<Heading>Happening Soon</Heading>
+				{this.props.events.map(function(event) {
+					return <EventItem event={event} key={event.id} />
+				})}
+			</Section>
 		)
 	}
 }
