@@ -1,6 +1,7 @@
 var React = require('react')
   , GeoPoint = require('geopoint')
   , GoogleMap = require('google-map-react')
+  , Image = require('../common/image')
   , View = require('../common/view')
   , locationUtil = require('../../util/location')
 
@@ -11,8 +12,11 @@ style.googleMap = {
 	width: '100%'
 }
 
-style.input = {
-
+style.pin = {
+	width:30,
+	height:38,
+	marginTop:-38,
+	marginLeft:-15
 }
 
 class LocationInput extends React.Component {
@@ -62,13 +66,14 @@ class LocationInput extends React.Component {
 		this.setState({ address: e.target.value })
 	}
 	render() {
+		var location = this.state.location
 		return (
 			<View>
 				<input {...this.props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
 				<View style={style.googleMap}>
-					<GoogleMap center={this.state.location} zoom={this.state.zoom}>
-						<View lat={this.state.location[0]} lng={this.state.location[1]}>
-							Text
+					<GoogleMap center={location} zoom={this.state.zoom}>
+						<View lat={location[0]} lng={location[1]}>
+							<Image style={style.pin} src="/images/spur-pin.png" />
 						</View>
 					</GoogleMap>
 				</View>
