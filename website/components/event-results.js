@@ -9,14 +9,21 @@ var React = require('react')
 
 var styles = {}
 
+styles.search = {
+	backgroundColor:'#444'
+}
+
 class EventResults extends React.Component {
 	render() {
 		return (
 			<Layout fbid={this.props.fbid}>
-				<Section>
+				<Section style={styles.search}>
 					<form action="/events">
 						<SearchInput name="q" defaultValue={this.props.search} />
 					</form>
+				</Section>
+
+				<Section>
 					<Button href="/create/event">
 						<Text>Create Event +</Text>
 					</Button>
