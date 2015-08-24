@@ -1,4 +1,4 @@
-module.exports = {
+var categories = {
 	volunteer: {
 		name:'Volunteer & Service',
 		color:'#ff5e97'
@@ -32,3 +32,5 @@ module.exports = {
 		color:'#909999'
 	}
 }
+
+module.exports = categories

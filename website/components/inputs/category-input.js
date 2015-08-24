@@ -1,4 +1,6 @@
 var React = require('react')
+  , Color = require('color')
+  , Image = require('../common/image')
   , View = require('../common/view')
   , Text = require('../common/text')
   , categories = require('../../data/categories')
@@ -15,7 +17,8 @@ styles.block = {
 	height:80,
 	padding:15,
 	cursor:'pointer',
-	justifyContent:'flex-end'
+	justifyContent:'center',
+	alignItems:'center'
 }
 
 styles.input = {
@@ -23,7 +26,11 @@ styles.input = {
 }
 
 styles.label = {
-	color:'#ffffff'
+	color:'#ffffff',
+	textTransform:'uppercase',
+	fontWeight:600,
+	fontSize:14,
+	textAlign:'center'
 }
 
 styles.selected = {
@@ -32,7 +39,12 @@ styles.selected = {
 	left:0,
 	right:0,
 	bottom:0,
-	backgroundColor:'rgba(0,0,0,0.1)'
+	justifyContent:'center',
+	alignItems:'center'
+}
+
+styles.check = {
+	height:30
 }
 
 class CategoryInput extends React.Component {
@@ -42,6 +54,15 @@ class CategoryInput extends React.Component {
 	}
 	selectCategory(value) {
 		this.setState({ value })
+	}
+	renderSelection(category) {
+		var backgroundColor = Color(category.color).alpha(0.6).rgbString()
+
+		return (
+			<View style={{ ...styles.selected, backgroundColor }}>
+				<Image style={styles.check} src="/images/check.png" />
+			</View>
+		)
 	}
 	render() {
 		return (
@@ -53,7 +74,7 @@ class CategoryInput extends React.Component {
 					return (
 						<View key={key} style={{ ...styles.block, backgroundColor:category.color }} onClick={this.selectCategory.bind(this, key)}>
 							<Text style={styles.label}>{category.name}</Text>
-							{selected && <View style={styles.selected}></View>}
+							{selected && this.renderSelection(category)}
 						</View>
 					)
 				})}
