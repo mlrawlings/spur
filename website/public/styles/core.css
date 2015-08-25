@@ -29,6 +29,12 @@ div, span, a, button {
 	border: 0 solid black;
 	margin: 0;
 	padding: 0;
+
+	color:#444;
+}
+
+span span, a span, span a, button span {
+	color:inherit;
 }
 
 #app {

@@ -4,6 +4,8 @@ var url = require('url')
   , config = require('../common/config')
   , apiRoot = config.api.protocol+'://'+config.api.host+':'+config.api.port
 
+require('../common/util/json-date-parse')
+
 function createInstance(cookies) {
 	var api = {}
 

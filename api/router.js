@@ -1,6 +1,6 @@
 var express = require('express')
   , router = express.Router()
-  , TimeService = require('./services/time')
+  , timeUtil = require('./util/time')
   , request = require('superagent')
   , qs = require('qs')
   , r = require('rethinkdb')
@@ -45,14 +45,14 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 	})
 })
 
-// Gets all moments, auto filter no past moments, none after tomorrow 3:45am
+// Gets all moments, auto filter no past moments, none after tomorrow
 router.get('/moments', function(req, res, next) {
 	var now = new Date()
 	  , anHourAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()-1)
-	  , end = TimeService.getEndOfTomorrow(now)
+	  , end = timeUtil.getEndOfTomorrow(now)
 
 	r.table('moment').filter(
-		r.row('datetime').gt(anHourAgo)
+		r.row('time').gt(anHourAgo)
 	).run(connection).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
@@ -69,22 +69,42 @@ router.get('/moments/:id', function(req, res, next) {
 
 // Create moment
 router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
-	if(!req.session.fbid) {
+	if(!req.session.fbid)
 		return res.status(401).end('Not Logged In')
-	}
 	
 	var now = new Date()
+	  , moment = req.body
 
-	req.body.datetime = new Date(req.body.datetime)
-	
-	if(!req.body.title) throw new Error('title is required')
-	if(!req.body.datetime) throw new Error('time is required')
-	if(!req.body.location) throw new Error('location is required')
-	if(req.body.datetime <= now || req.body.datetime > TimeService.getEndOfTomorrow(now)) throw new Error('time outside of boundaries')
+	if(!moment.name) throw new Error('name is required')
+	if(!moment.time) throw new Error('time is required')
+	if(!moment.location) throw new Error('location is required')
+	if(!moment.location.name) throw new Error('location.name is required')
+	if(!moment.location.street) throw new Error('location.street is required')
+	if(!moment.location.citystatezip) throw new Error('location.citystatezip is required')
+	if(!moment.location.coords) throw new Error('location.coords is required')
 
-	r.table('moment').insert(req.body).run(connection).then(function(moment) {
+	if(moment.time <= now) throw new Error('time cannot be in the past')
+	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
+
+	r.table('moment').insert(moment).run(connection).then(function(moment) {
 		res.status(201).json(moment.generated_keys[0])
 	}).catch(next)
+
+	// {
+	// 	name: String required,
+	// 	category: String,
+	// 	time: DateTime required,
+	// 	location: {
+	// 		name: String required,
+	// 		street: String required,
+	// 		citystatezip: String required,
+	// 		coords: [Number] required
+	// 	},
+	// 	// owner: UserId
+	// 	// details: String,
+	// 	// attendees: [UserId],
+	// 	// posts: [PostId]
+	// }
 })
 
 // Create a post on a moment

@@ -1,8 +1,14 @@
 var React = require('react')
 
+var styles = {}
+
+styles.text = {}
+
 class Text extends React.Component {
 	render() {
-		return <span {...this.props} />
+		var { style, ...props } = this.props
+
+		return <span {...this.props} style={{ ...styles.text, ...style }} />
 	}
 }
 

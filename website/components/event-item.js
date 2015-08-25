@@ -1,33 +1,55 @@
 var React = require('react')
+  , Color = require('color')
+  , EventBanner = require('./event-banner')
+  , Link = require('./common/link')
+  , View = require('./common/view')
+  , Text = require('./common/text')
+  , timeUtil = require('../util/time')
+  , categories = require('../data/categories')
+
+var styles = {}
+
+styles.item = {
+	flexDirection:'row',
+	textDecoration:'none',
+	width:'100%',
+	marginTop:8,
+	marginBottom:8
+}
+
+styles.summary = {
+	backgroundColor:'#fff',
+	flex:1,
+	padding:15
+}
+
+styles.name = {
+	fontSize: 28,
+	fontWeight: 300
+}
+
+styles.details = {
+	fontSize: 14,
+	color: '#888'
+}
 
 class EventItem extends React.Component {
 	render() {
 		var event = this.props.event
-		if(!event.category)
-			event.category = 'other'
+		  , category = categories[event.category || 'other']
 		
 		return (
-			<a className="event item" href={"/event/"+event.id}>
-				<div className="basic-info">
-					<span className="name">
-						{event.title}
-					</span>
-					<span className="when">
-						<span>{event.datetime}</span>
-						<div>{event.location}</div>
-					</span>
-				</div>
-				<div className={'summary ' + event.category}>
-					<div className="category">
-						{event.category}
-					</div>
-					<div className="info">
-						<span className="people"><img className="icon" src="/images/person-white.png" /> 1 going</span>
-						<span className="time"><img className="icon" src="/images/clock-white.png" /> {event.relativeTime}</span>
-						<span className="location"><img className="icon" src="/images/white-pin.png" /> 6.1 mi</span>
-					</div>
-				</div>
-			</a>
+			<Link style={styles.item} href={"/event/"+event.id}>
+				<View style={styles.summary}>
+					<Text style={styles.name}>
+						{event.name}
+					</Text>
+					<Text style={styles.details}>
+						{'@ ' + timeUtil.format(event.time) + ' - ' + event.location.name}
+					</Text>
+				</View>
+				<EventBanner event={event} />
+			</Link>
 		)
 	}
 }

@@ -1,63 +1,49 @@
 var React = require('react')
   , GeoPoint = require('geopoint')
-  , GoogleMap = require('google-map-react')
+  , SpurMap = require('../common/spur-map')
   , Image = require('../common/image')
   , View = require('../common/view')
   , locationUtil = require('../../util/location')
 
-var style = {}
-
-style.googleMap = {
-	height: '10em',
-	width: '100%'
-}
-
-style.pin = {
-	width:30,
-	height:38,
-	marginTop:-38,
-	marginLeft:-15
-}
+var styles = {}
 
 class LocationInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			location: [],
+			location: {
+				coords:[]
+			},
 			bounds: [],
 			zoom: 13
 		}
 	}
 	componentDidMount() {
-		locationUtil.getLocation().then((location) => {
-			var point = new GeoPoint(location[0], location[1])
-			  , coords = point.boundingCoordinates(50) 
+		locationUtil.getLocation().then((coords) => {
+			var point = new GeoPoint(coords[0], coords[1])
+			  , boundingCoords = point.boundingCoordinates(50) 
 
 			var bounds = new google.maps.LatLngBounds(
-				new google.maps.LatLng(coords[0].latitude(), coords[0].longitude()),
-				new google.maps.LatLng(coords[1].latitude(), coords[1].longitude())
+				new google.maps.LatLng(boundingCoords[0].latitude(), boundingCoords[0].longitude()),
+				new google.maps.LatLng(boundingCoords[1].latitude(), boundingCoords[1].longitude())
 			)
 
-			this.setState({ location, bounds })
+			this.setState({ location: { coords }, bounds })
 		})
 	}
 	changeLocation(e) {
-		if(!e.target.value) return locationUtil.getLocation().then((location) => {
-			this.setState({ location, zoom: 13 })
+		if(!e.target.value) return locationUtil.getLocation().then((coords) => {
+			this.setState({ location: { coords }, zoom: 13 })
 		})
 
 		var geocoder = new google.maps.Geocoder()
 		  , location = []
 
 		geocoder.geocode( { 'address': e.target.value, bounds: this.state.bounds }, (results, status) => {
-			if (status == google.maps.GeocoderStatus.OK)
-				location = results[0].geometry.location.toUrlValue().split(',').map(function(val) {
-					return parseFloat(val)
-				})
+			if(status == google.maps.GeocoderStatus.OK)
+				location = locationUtil.getAddressComponents(results[0])
 			else
-				location = []
-
-			console.log(location)
+				location = { coords:[] }
 
 			this.setState({ address: results[0].formatted_address, location, zoom: 17 })
 		})
@@ -67,16 +53,16 @@ class LocationInput extends React.Component {
 	}
 	render() {
 		var location = this.state.location
+		  , { name, ...props } = this.props
 		return (
 			<View>
-				<input {...this.props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
-				<View style={style.googleMap}>
-					<GoogleMap center={location} zoom={this.state.zoom}>
-						<View lat={location[0]} lng={location[1]}>
-							<Image style={style.pin} src="/images/spur-pin.png" />
-						</View>
-					</GoogleMap>
-				</View>
+				<input {...props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
+				<SpurMap coords={location.coords} zoom={this.state.zoom} />
+				<input type="hidden" name={name+'[name]'} value={location.name} />
+				<input type="hidden" name={name+'[street]'} value={location.street} />
+				<input type="hidden" name={name+'[citystatezip]'} value={location.citystatezip} />
+				<input type="hidden" name={name+'[coords][0]'} value={location.coords[0]}  />
+				<input type="hidden" name={name+'[coords][1]'} value={location.coords[1]}  />
 			</View>
 		)
 	}

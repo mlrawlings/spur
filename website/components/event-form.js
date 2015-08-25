@@ -2,6 +2,7 @@ var React = require('react')
   , Layout = require('./layout')
   , LocationInput = require('./inputs/location-input')
   , CategoryInput = require('./inputs/category-input')
+  , TimeInput = require('./inputs/time-input')
   , Section = require('./common/section')
   , Button = require('./common/button')
   , Label = require('./common/label')
@@ -21,11 +22,11 @@ class CreateEventForm extends React.Component {
 					<form method="POST" action="/create/event" className="createEvent">
 						<View style={styles.field}>
 							<Label required={true}>Event Title</Label>
-							<input name="title" type="text" required={true} />
+							<input name="name" type="text" required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Time</Label>
-							<input name="datetime" type="time" required={true} />
+							<TimeInput name="time" required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>

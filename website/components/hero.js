@@ -15,7 +15,6 @@ styles.hero = {
 	backgroundImage:'url(\'/images/slackline.jpg\')',
 	backgroundSize: 'cover',
 	backgroundPosition: 'center center',
-	color:'#fff',
 }
 
 styles.logo = {
@@ -25,7 +24,8 @@ styles.logo = {
 
 styles.tagline = {
 	fontWeight:300,
-	fontSize:40
+	fontSize:40,
+	color:'#fff'
 }
 
 styles.searchForm = {

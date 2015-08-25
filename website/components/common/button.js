@@ -25,8 +25,8 @@ styles.normal = {
 }
 
 styles.pressed = {
+	top:2,
 	opacity:0.8,
-	marginTop:2,
 	paddingBottom: 8,
 	borderBottomWidth: 0,
 	outline:'none'

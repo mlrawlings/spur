@@ -1,50 +1,134 @@
 var React = require('react')
-  , EventItem = require('./event-item')
+  , EventBanner = require('./event-banner')
   , Layout = require('./layout')
+  , SpurMap = require('./common/spur-map')
+  , Section = require('./common/section')
+  , Heading = require('./common/heading')
+  , Button = require('./common/button')
+  , View = require('./common/view')
+  , Text = require('./common/text')
+  , timeUtil = require('../util/time')
+  , categories = require('../data/categories')
+
+var styles = {}
+
+styles.banner = {
+	paddingTop:10,
+	paddingBottom:10
+}
+
+styles.summary = {
+	flexDirection:'row',
+	justifyContent:'space-between',
+	backgroundColor:'#fff'
+}
+
+styles.title = {
+	fontSize: 28,
+	fontWeight: 300
+}
+
+styles.time = {
+	fontSize: 16,
+	color: '#888',
+	textTransform:'lowercase'
+}
+
+styles.location = {
+	alignItems:'flex-end'
+}
+
+styles.locationName = {
+	fontWeight:600
+}
+
+styles.address = {
+	fontSize:14
+}
+
+styles.content = {
+	flexDirection:'row'
+}
+
+styles.leftColumn = {
+	flex:1
+}
+
+styles.details = {
+	paddingBottom:30
+}
+
+styles.detailsText = {
+	flexWrap:'wrap'
+}
+
+styles.attendees = {
+	width:150,
+	marginLeft:30,
+	alignItems:'flex-end'
+}
 
 class EventPage extends React.Component {
 	render() {
+		var event = this.props.event
+		  , category = categories[event.category || 'other']
+		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
+
 		return (
 			<Layout fbid={this.props.fbid}>
-				<div className="event page">
-					<section className="map">
-					</section>
+				
+				<SpurMap coords={event.location.coords} />
 
-					<div className="summary volunteer">
-						<div className="content">
-							<div className="category">
-								volunteer &amp; community
-							</div>
-							<div className="info">
-								<span className="people"><img className="icon" src="/images/person-white.png" /> 1 going</span>
-								<span className="time"><img className="icon" src="/images/clock-white.png" /> {this.props.event.relativeTime}</span>
-								<span className="location"><img className="icon" src="/images/white-pin.png" /> 6.1 mi</span>
-							</div>
-						</div>
-					</div>
+				<Section style={bannerStyles}>
+					<EventBanner horizontal={true} event={event} />
+				</Section>
 
-					<section className="header">
-						<div className="content">
-							<div className="basic-info">
-								<div className="name">
-									{this.props.event.title}
-								</div>
-								<div className="when">
-									<time>{this.props.event.datetime}</time>
-									<span className="period">This Afternoon</span>
-								</div>
-								<div className="share">
-									<div className="addthis_sharing_toolbox"></div>
-								</div>
-							</div>
-							<div className="location">
-								<strong>River's Edge Sports Complex</strong>
-								<address>{this.props.event.location}</address>
-								<button>I'm in!</button>
-							</div>
-						</div>
-					</section>
-				</div>
+				<Section style={styles.summary}>
+					<View>
+						<Text style={styles.title}>
+							{event.name}
+						</Text>
+						<Text style={styles.time}>
+							{'@ ' + timeUtil.format(event.time) + ' ' + timeUtil.getTimeClass(event.time)}
+						</Text>
+						<View>
+							
+						</View>
+					</View>
+					<View style={styles.location}>
+						<Text style={styles.locationName}>{event.location.name}</Text>
+						<Text style={styles.address}>{event.location.street}</Text>
+						<Text style={styles.address}>{event.location.citystatezip}</Text>
+					</View>
+				</Section>
+
+				<Section style={styles.content}>
+					<View style={styles.leftColumn}>
+						<View style={styles.details}>
+							<Heading>Details</Heading>
+							<Text style={styles.detailsText}>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+								Quisque urna lectus, sollicitudin eu tempor non, lacinia non felis. 
+								Etiam faucibus ut justo sed bibendum. 
+								Phasellus lorem nisl, consequat id blandit dignissim, volutpat a dui. 
+								In pretium elementum sem id.
+							</Text>
+						</View>
+						<View style={styles.discussion}>
+							<Heading>Discussion</Heading>
+							<Text style={styles.detailsText}>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+								Quisque urna lectus, sollicitudin eu tempor non, lacinia non felis. 
+								Etiam faucibus ut justo sed bibendum. 
+								Phasellus lorem nisl, consequat id blandit dignissim, volutpat a dui. 
+								In pretium elementum sem id.
+							</Text>
+						</View>
+					</View>
+					<View style={styles.attendees}>
+						<Heading>1 Going</Heading>
+					</View>
+				</Section>
 			</Layout>
 		)
 	}
