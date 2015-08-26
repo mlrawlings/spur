@@ -38,7 +38,8 @@ styles.overlay = {
 	right:0,
 	left:0,
 	bottom:0,
-	borderRadius:4
+	borderRadius:4,
+	pointerEvents:'none'
 }
 
 class Button extends React.Component {
@@ -63,7 +64,7 @@ class Button extends React.Component {
 		}
 
 		if(this.state.pressed) {
-			props.children = [props.children, <div style={styles.overlay} />]
+			//props.children = [props.children, <div style={styles.overlay} />]
 		}
 
 		if(this.props.href)
