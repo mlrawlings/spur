@@ -26,10 +26,19 @@ styles.normal = {
 
 styles.pressed = {
 	top:2,
-	opacity:0.8,
 	paddingBottom: 8,
 	borderBottomWidth: 0,
 	outline:'none'
+}
+
+styles.overlay = {
+	backgroundColor:'rgba(0,0,0,0.2)',
+	position:'absolute',
+	top:0,
+	right:0,
+	left:0,
+	bottom:0,
+	borderRadius:4
 }
 
 class Button extends React.Component {
@@ -51,6 +60,10 @@ class Button extends React.Component {
 
 		if(this.state.pressed) {
 			buttonStyle = { ...buttonStyle, ...styles.pressed }
+		}
+
+		if(this.state.pressed) {
+			props.children = [props.children, <div style={styles.overlay} />]
 		}
 
 		if(this.props.href)
