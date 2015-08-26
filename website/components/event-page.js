@@ -1,12 +1,14 @@
 var React = require('react')
   , EventBanner = require('./event-banner')
   , Layout = require('./layout')
+  , Attendees = require('./attendees')
   , SpurMap = require('./common/spur-map')
   , Section = require('./common/section')
   , Heading = require('./common/heading')
   , Button = require('./common/button')
   , View = require('./common/view')
   , Text = require('./common/text')
+  , Image = require('./common/image')
   , timeUtil = require('../util/time')
   , categories = require('../data/categories')
 
@@ -20,7 +22,7 @@ styles.banner = {
 styles.summary = {
 	flexDirection:'row',
 	justifyContent:'space-between',
-	backgroundColor:'#fff'
+	backgroundColor:'#fff',
 }
 
 styles.title = {
@@ -68,11 +70,19 @@ styles.attendees = {
 	alignItems:'flex-end'
 }
 
+styles.actions = {
+	backgroundColor:'#fff',
+	paddingTop:10,
+	paddingBottom:10,
+	alignItems:'center'
+}
+
 class EventPage extends React.Component {
 	render() {
 		var event = this.props.event
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
+		  , attending = event.attendees.indexOf(this.props.fbid) != -1
 
 		return (
 			<Layout fbid={this.props.fbid}>
@@ -82,6 +92,7 @@ class EventPage extends React.Component {
 				<Section style={bannerStyles}>
 					<EventBanner horizontal={true} event={event} />
 				</Section>
+
 
 				<Section style={styles.summary}>
 					<View>
@@ -126,7 +137,11 @@ class EventPage extends React.Component {
 						</View>
 					</View>
 					<View style={styles.attendees}>
-						<Heading>1 Going</Heading>
+						{!attending && <Button href={'/event/'+event.id+'/join'}>
+							+ Join
+						</Button>}
+						<Heading>{event.attendees.length + ' Going'}</Heading>
+						<Attendees event={event} />
 					</View>
 				</Section>
 			</Layout>

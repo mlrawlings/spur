@@ -22,7 +22,26 @@ router.get('/event/:id', function(req, res, next) {
 	req.api.get('/moments/'+req.params.id).end(function(err, response) {
 		if(err) return next(err)
 
-		res.render('event-page', { event: response.body })
+		var event = response.body
+
+		Promise.all(event.attendees.map(function(attendee, i) {
+			return new Promise(function(resolve, reject) {
+				req.fb.get('/'+attendee+'?fields=id,name,picture,link,age_range').end(function(err, response) {
+					if(err) return reject(err)
+					resolve(event.attendees[i] = JSON.parse(response.text))
+				})
+			})
+		})).then(function() {
+			res.render('event-page', { event:event })
+		})
+	})
+})
+
+router.get('/event/:id/join', function(req, res, next) {
+	req.api.post('/moments/'+req.params.id+'/attendees').end(function(err, response) {
+		if(err) return next(err)
+
+		res.redirect('/event/'+req.params.id)
 	})
 })
 
