@@ -21,6 +21,7 @@ class EventList extends React.Component {
 					if(previousTimeClass == timeClass) {
 						return <EventItem event={event} key={event.id} />
 					} else {
+						previousTimeClass = timeClass
 						return [
 							<Heading key={timeClass} style={!!index && styles.heading}>
 								{timeClass}
