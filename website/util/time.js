@@ -42,6 +42,29 @@ exports.getTimeClass = function(time) {
 	}
 }
 
-exports.anHourFromNow = function() {
+exports.anHourFromNow = function(roundToNearest15) {
+	var time = new Date()
 
+	time.setHours(time.getHours()+1)
+
+	if(roundToNearest15) {
+		time = exports.roundToNearest15(time)
+	}
+
+	return time
+}
+
+exports.roundToNearest15 = function(time) {
+	var originalMinutes = time.getMinutes()
+	  , difference = originalMinutes % 15
+
+	if(difference <= 7) {
+		time.setMinutes(originalMinutes-difference)
+	} else {
+		time.setMinutes(originalMinutes+difference)
+	}
+
+	time.setSeconds(0)
+
+	return time
 }

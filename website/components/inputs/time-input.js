@@ -3,20 +3,15 @@ var React = require('react')
   , GoogleMap = require('google-map-react')
   , Image = require('../common/image')
   , View = require('../common/view')
-  , locationUtil = require('../../util/location')
+  , timeUtil = require('../../util/time')
 
 var style = {}
-
-function anHourFromNow() {
-	var now = new Date()
-	return new Date()
-}
 
 class LocationInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			time: new Date()
+			time: timeUtil.anHourFromNow(true)
 		}
 	}
 	componentDidMount() {
