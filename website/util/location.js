@@ -1,9 +1,20 @@
+var GeoPoint = require('geopoint')
+  , userLocation = 
+
 exports.getLocation = function() {
 	return new Promise(function(resolve, reject) {
 		navigator.geolocation.getCurrentPosition(function(location) {
 			resolve([location.coords.latitude, location.coords.longitude])
 		}, reject)
 	})
+}
+
+exports.getDistanceBetween = function(coords1, coords2, inKilometers) {
+	var start = new GeoPoint(coords1[0], coords1[1])
+	  , end = new GeoPoint(coords2[0], coords2[1])
+	  , distance = start.distanceTo(end, inKilometers)
+
+	return distance.toFixed(1) + ' ' + (inKilometers ? 'km' : 'miles')
 }
 
 exports.getAddressComponents = function(data) {

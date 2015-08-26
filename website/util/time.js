@@ -42,6 +42,29 @@ exports.getTimeClass = function(time) {
 	}
 }
 
+exports.getRelativeTimeString = function(time) {
+	var diff = time.getTime() - Date.now()
+	  , hours = Math.floor(diff/(60*60*1000))
+	  , remaining = diff-hours*(60*60*1000)
+	  , minutes = Math.ceil(remaining/(60*1000))
+
+	if(diff <= 0) {
+		return 'started'
+	}
+
+	if(hours && minutes) {
+		return hours + 'h ' + minutes + 'm'
+	}
+
+	if(hours) {
+		return hours + ' hr'
+	}
+
+	if(minutes) {
+		return minutes + ' min'
+	}
+}
+
 exports.anHourFromNow = function(roundToNearest15) {
 	var time = new Date()
 
@@ -67,4 +90,8 @@ exports.roundToNearest15 = function(time) {
 	time.setSeconds(0)
 
 	return time
+}
+
+exports.getMsUntilNextMinute = function() {
+	return 60000 - Date.now() % 60000
 }

@@ -1,8 +1,11 @@
 var React = require('react')
   , Color = require('color')
+  , TimeUntil = require('./common/time-until')
   , Image = require('./common/image')
   , View = require('./common/view')
   , Text = require('./common/text')
+  , timeUtil = require('../util/time')
+  , locationUtil = require('../util/location')
   , categories = require('../data/categories')
 
 var styles = {}
@@ -77,6 +80,15 @@ styles.horizontal.details = () => ({
 })
 
 class EventBanner extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = { distance:'...'}
+	}
+	componentDidMount() {
+		locationUtil.getLocation().then((coords) => {
+			this.setState({ distance:locationUtil.getDistanceBetween(this.props.event.location.coords, coords) })
+		})
+	}
 	render() {
 		var event = this.props.event
 		  , category = categories[event.category || 'other']
@@ -91,15 +103,17 @@ class EventBanner extends React.Component {
 				<View style={styles[direction].details(color)}>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/person-white.png" />
-						<Text style={styles.detailText}>1 going</Text>
+						<Text style={styles.detailText}>{event.attendees.length + ' going'}</Text>
 					</View>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/clock-white.png" />
-						<Text style={styles.detailText}>1h 20m</Text>
+						<TimeUntil style={styles.detailText} time={event.time} />
 					</View>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/white-pin.png" />
-						<Text style={styles.detailText}>6.1 miles</Text>
+						<Text style={styles.detailText}>
+							{this.state.distance}
+						</Text>
 					</View>
 				</View>
 			</View>
