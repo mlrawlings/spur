@@ -56,7 +56,7 @@ class EventResults extends React.Component {
 							<Text style={styles.text}>within</Text>
 							<Link style={{ ...styles.text, ...styles.field }}>1 mile</Link>
 							<Text style={styles.text}>of</Text>
-							<Link style={{ ...styles.text, ...styles.field }}>Sanford Ave SW</Link>
+							<Link style={{ ...styles.text, ...styles.field }}>My Location</Link>
 						</View>
 					</form>
 				</Section>
