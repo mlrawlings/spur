@@ -13,7 +13,8 @@ styles.heading = {
 class Heading extends React.Component {
 	render() {
 		var { style, ...props } = this.props
-		return <Text style={{ ...styles.heading, ...style }} {...this.props} />
+		  , headingStyle = style ? { ...styles.heading, ...style } : styles.heading
+		return <Text {...this.props} style={headingStyle} />
 	}
 }
 

@@ -4,19 +4,25 @@ var React = require('react')
   , Heading = require('./common/heading')
   , time = require('../util/time')
 
+var styles = {}
+
+styles.heading = {
+	marginTop:20
+}
+
 class EventList extends React.Component {
 	render() {
 		var previousTimeClass
 		return (
 			<Section>
-				{this.props.events.map(function(event) {
+				{this.props.events.map(function(event, index) {
 					var timeClass = time.getTimeClass(event.time)
 
 					if(previousTimeClass == timeClass) {
 						return <EventItem event={event} key={event.id} />
 					} else {
 						return [
-							<Heading key={timeClass}>
+							<Heading key={timeClass} style={!!index && styles.heading}>
 								{timeClass}
 							</Heading>, 
 							<EventItem event={event} key={event.id} />
