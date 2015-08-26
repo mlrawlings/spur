@@ -5,6 +5,7 @@ var express = require('express')
   , qs = require('qs')
   , r = require('rethinkdb')
   , config = require('../common/config')
+  , fb = require('../common/util/facebook')
   , connection
 
 r.connect(config.rethink).then(function(conn) {
@@ -12,17 +13,8 @@ r.connect(config.rethink).then(function(conn) {
 })
 
 router.post('/auth'/*, session*/, function(req, res, next) {
-	request('https://graph.facebook.com/oauth/access_token').query({
-		grant_type:'fb_exchange_token',
-		client_id:'1455687261396384',
-		client_secret:'dd4dabdb7190bf9a91550729a39c7e34',
-		fb_exchange_token:req.query.access_token
-	}).end(function(err, response) {
-		if(err) return next(err)
-
-		var access_token = qs.parse(response.text).access_token
-		
-		request('https://graph.facebook.com/v2.3/me').query({
+	fb.exchangeToken(req.query.access_token, function(err, access_token) {
+		fb.get('/me').query({
 			access_token:access_token
 		}).end(function(err, response) {
 			if(err) return next(err)
@@ -53,6 +45,8 @@ router.get('/moments', function(req, res, next) {
 
 	r.table('moment').filter(
 		r.row('time').gt(anHourAgo)
+	).orderBy(
+		r.asc('time')
 	).run(connection).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
@@ -86,6 +80,8 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(moment.time <= now) throw new Error('time cannot be in the past')
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
+	moment.attendees = [req.session.fbid]
+
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
 		res.status(201).json(moment.generated_keys[0])
 	}).catch(next)
@@ -111,9 +107,20 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 // router.post('/moments/:id/posts', session, bodyParser, function(req, res, next){})
 
 // I'm in
-// router.post('/moments/:id/attendees', session, function(req, res, next){})
+router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
+	if(!req.session.fbid)
+		return res.status(401).end('Not Logged In')
+
+	r.table('moment').get(req.params.id).update({ 
+		attendees:r.row('attendees').setInsert(req.session.fbid) 
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(next)
+})
 
 // I'm out
-// router.delete('/moments/:id/attendees', session, function(req, res, next){})
+router.delete('/moments/:id/attendees'/*, session*/, function(req, res, next){
+
+})
 
 module.exports = router

@@ -7,6 +7,7 @@ var express = require('express')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
   , api = require('../api/client')
+  , fb = require('../common/util/facebook')
   , reactView = require('express-iso-react-views').init({
       styles: [
         'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
@@ -36,6 +37,11 @@ app.use(function(req, res, next) {
 
 app.use(function(req, res, next) {
   req.api = api.createInstance(req.get('cookie'))
+  next()
+})
+
+app.use(function(req, res, next) {
+  req.fb = fb.createInstance(req.session.token)
   next()
 })
 
