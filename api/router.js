@@ -40,11 +40,11 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 // Gets all moments, auto filter no past moments, none after tomorrow
 router.get('/moments', function(req, res, next) {
 	var now = new Date()
-	  , anHourAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()-1)
+	  , twentyMinutesAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()-20)
 	  , end = timeUtil.getEndOfTomorrow(now)
 
 	r.table('moment').filter(
-		r.row('time').gt(anHourAgo)
+		r.row('time').gt(twentyMinutesAgo)
 	).orderBy(
 		r.asc('time')
 	).run(connection).then(function(moments) {
