@@ -82,7 +82,7 @@ styles.horizontal.details = () => ({
 class EventBanner extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { distance:'...'}
+		this.state = { distance:'... miles'}
 	}
 	componentDidMount() {
 		locationUtil.getLocation().then((coords) => {
