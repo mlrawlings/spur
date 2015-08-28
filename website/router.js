@@ -47,6 +47,7 @@ router.get('/events', function(req, res, next) {
 router.get('/event/:id', function(req, res, next) {
 	req.api.get('/moments/'+req.params.id).end(function(err, response) {
 		if(err) return next(err)
+		if(!response.body) return res.status(404).end()
 
 		var event = response.body
 
