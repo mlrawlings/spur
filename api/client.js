@@ -2,8 +2,6 @@ var createApi = require('../common/util/create-api')
   , config = require('../common/config')
   , apiRoot = config.api.protocol+'://'+config.api.host+':'+config.api.port
 
-require('../common/util/json-date-parse')
-
 function createSpurClient(cookies) {
 	return createApi(apiRoot, function(request) {
 		request.set('Content-Type', 'application/json')

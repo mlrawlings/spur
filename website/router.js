@@ -1,12 +1,38 @@
-var Router = require('express').Router
+var Router = require('express/lib/router')
+  , Home = require('./components/home')
+  , EventResults = require('./components/event-results')
+  , EventPage = require('./components/event-page')
+  , EventForm = require('./components/event-form')
   , router = new Router()
-  , moment = require('moment')
+
+router.all('*', function(req, res, next) {
+	res.document.title = 'Spur | Live in the Moment'
+
+	res.document.scripts = [
+		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react.min.js',
+		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
+        'http://maps.google.com/maps/api/js?sensor=false',
+		'/dist/client.js'
+	]
+
+	res.document.styles = [
+		'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
+		'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
+		'/styles/core.css'
+	]
+
+	res.document.meta = [
+		{ name:'viewport', content:'width=device-width, initial-scale=1' }
+	]
+
+	next()
+})
 
 router.get('/', function (req, res, next) {
 	req.api.get('/moments').end(function(err, response) {
 		if(err) return next(err)
 
-		res.render('home', { title: 'Live in the Moment', events: response.body })
+		res.render(Home, { events: response.body })
 	})
 })
 
@@ -14,7 +40,7 @@ router.get('/events', function(req, res, next) {
 	req.api.get('/moments').end(function(err, response) {
 		if(err) return next(err)
 
-		res.render('event-results', { events: response.body, search:req.query.q })
+		res.render(EventResults, { events: response.body, search:req.query.q })
 	})
 })
 
@@ -24,16 +50,9 @@ router.get('/event/:id', function(req, res, next) {
 
 		var event = response.body
 
-		Promise.all(event.attendees.map(function(attendee, i) {
-			return new Promise(function(resolve, reject) {
-				req.fb.get('/'+attendee+'?fields=id,name,picture,link,age_range').end(function(err, response) {
-					if(err) return reject(err)
-					resolve(event.attendees[i] = JSON.parse(response.text))
-				})
-			})
-		})).then(function() {
-			res.render('event-page', { event:event })
-		})
+		res.document.title = event.name + ' | Spur'
+
+		res.render(EventPage, { event:event })
 	})
 })
 
@@ -46,7 +65,7 @@ router.get('/event/:id/join', function(req, res, next) {
 })
 
 router.get('/create/event', function(req, res) {
-	res.render('event-form', {})
+	res.render(EventForm, {})
 })
 
 router.post('/create/event', function(req, res) {

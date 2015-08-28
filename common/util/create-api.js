@@ -1,3 +1,5 @@
+require('./json-date-parse')
+
 var url = require('url')
   , methods = require('methods')
   , superagent = require('superagent')

@@ -1,6 +1,9 @@
+require('babel/register')()
+
 var express = require('express')
   , app = module.exports = express()
   , webpackDevMiddleware = require("webpack-dev-middleware")
+  , expressReact = require('express-react')
   , webpack = require("webpack")
   , compiler = webpack(require('./webpack.config.js'))
   , session = require('../common/middleware/session')
@@ -8,23 +11,11 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
-  , reactView = require('express-iso-react-views').init({
-      styles: [
-        'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
-        '/styles/core.css'
-      ],
-      scripts: [
-        '<script src="//connect.facebook.net/en_US/sdk.js" async></script>',
-        'http://maps.google.com/maps/api/js?sensor=false'
-      ]
-    })
 
-app.set('views', __dirname + '/components');
-app.set('view engine', 'js');
-app.engine('js', reactView.engine);
-app.use(reactView.middleware)
+app.use(expressReact())
 
 app.use(express.static(__dirname+'/public'))
+app.use('/dist', express.static(__dirname+'/dist'))
 
 app.use(session)
 

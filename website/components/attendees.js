@@ -13,8 +13,8 @@ class Attendees extends React.Component {
 			<View>
 				{this.props.event.attendees.map(function(attendee) {
 					return <View>
-						<Text>{attendee.name}</Text>
-						<Image src={attendee.picture.data.url} />
+						<Text>{attendee}</Text>
+						<Image src={'https://graph.facebook.com/'+attendee+'/picture'} />
 					</View>
 				})}
 			</View>

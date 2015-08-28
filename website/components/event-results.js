@@ -61,11 +61,11 @@ class EventResults extends React.Component {
 					</form>
 				</Section>
 
-				{/*<Section>
+				<Section>
 					<Button href="/create/event">
 						<Text>Create Event +</Text>
 					</Button>
-				</Section>*/}
+				</Section>
 
 				<EventList events={this.props.events} />
 			</Layout>
