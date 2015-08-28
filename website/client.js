@@ -10,6 +10,11 @@ require('../common/util/json-date-parse')
 app.use(expressReact())
 
 app.use(function(req, res, next) {
+	res.props.fbid = FB.getUserID()
+	next()
+})
+
+app.use(function(req, res, next) {
   req.api = api
   next()
 })

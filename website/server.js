@@ -1,4 +1,6 @@
-require('babel/register')()
+require('babel/register')({
+  ignore:false
+})
 
 var express = require('express')
   , app = module.exports = express()
@@ -22,7 +24,7 @@ app.use(session)
 app.use(bodyParser.urlencoded({}))
 
 app.use(function(req, res, next) {
-	res.locals.fbid = req.session.fbid
+	res.props.fbid = req.session.fbid
 	next()
 })
 
