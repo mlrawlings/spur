@@ -17,6 +17,7 @@
     "connect-redis": "^2.3.0",
     "deep-defaults": "^1.0.3",
     "express": "^4.13.3",
+    "express-client": "^1.0.1",
     "express-react": "^1.0.2",
     "express-session": "^1.11.3",
     "geopoint": "^1.0.1",
