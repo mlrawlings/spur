@@ -26,6 +26,8 @@
     "methods": "^1.1.1",
     "qs": "^5.0.0",
     "react": "^0.13.3",
+    "react-autosuggest": "^1.18.3",
+    "react-textarea-autosize": "^2.5.1",
     "rethinkdb": "^2.0.0-2",
     "superagent": "^1.2.0",
     "url": "^0.11.0"

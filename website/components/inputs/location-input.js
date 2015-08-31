@@ -1,5 +1,8 @@
 var React = require('react')
   , GeoPoint = require('geopoint')
+  , AutoSuggest = require('react-autosuggest')
+  , GoogleMap = require('../common/google-map')
+  , GoogleMapMarker = require('../common/google-map-marker')
   , SpurMap = require('../common/spur-map')
   , Image = require('../common/image')
   , View = require('../common/view')
@@ -19,6 +22,8 @@ class LocationInput extends React.Component {
 		}
 	}
 	componentDidMount() {
+		this.geocoder = new google.maps.Geocoder()
+
 		locationUtil.getLocation().then((coords) => {
 			var point = new GeoPoint(coords[0], coords[1])
 			  , boundingCoords = point.boundingCoordinates(50) 
@@ -31,34 +36,57 @@ class LocationInput extends React.Component {
 			this.setState({ location: { coords }, bounds })
 		})
 	}
-	changeLocation(e) {
-		if(!e.target.value) return locationUtil.getLocation().then((coords) => {
-			this.setState({ location: { coords }, zoom: 13 })
-		})
-
-		var geocoder = new google.maps.Geocoder()
-		  , location = []
-
-		geocoder.geocode( { 'address': e.target.value, bounds: this.state.bounds }, (results, status) => {
-			if(status == google.maps.GeocoderStatus.OK)
-				location = locationUtil.getAddressComponents(results[0])
-			else
-				location = { coords:[] }
-
-			this.setState({ address: results[0].formatted_address, location, zoom: 17 })
+	changeLocation(result) {
+		this.setState({ location:locationUtil.getAddressComponents(result), zoom: 17 })
+	}
+	getSuggestions(value, fn) {
+		this.geocoder.geocode( { 'address':value, bounds:this.state.bounds }, (results, status) => {
+			fn(null, (results || []))
 		})
 	}
-	changeInput(e) {
-		this.setState({ address: e.target.value })
+	getSuggestionValue(result) {
+		return result.formatted_address
+	}
+	setCoords(coords) {
+		this.state.location.coords = coords
+		this.setState({ location:this.state.location })
+		
+		this.geocoder.geocode({ location:new google.maps.LatLng(coords[0], coords[1]) }, (results, status) => {
+			if (status === google.maps.GeocoderStatus.OK) {
+				if (results[0]) {
+					var location = locationUtil.getAddressComponents(results[0])
+
+					location.coords = coords
+
+					this.setState({ location })
+					this.refs.autosuggest.setState({ value:results[0].formatted_address })
+				} else {
+					window.alert('No results found');
+				}
+			} else {
+				window.alert('Geocoder failed due to: ' + status);
+			}
+		});
 	}
 	render() {
 		var location = this.state.location
 		  , { name, ...props } = this.props
+		  , inputProps = { ...props, value:this.state.address }
+
 		return (
 			<View>
-				<input {...props} type="text" value={this.state.address} onChange={this.changeInput.bind(this)} onBlur={this.changeLocation.bind(this)} />
-				<SpurMap coords={location.coords} zoom={this.state.zoom} />
-				<input type="hidden" name={name+'[name]'} value={location.name} />
+				<AutoSuggest
+					ref="autosuggest"
+					inputAttributes={inputProps} 
+					suggestions={this.getSuggestions.bind(this)} 
+					suggestionValue={this.getSuggestionValue.bind(this)}
+					suggestionRenderer={this.getSuggestionValue.bind(this)}
+					onSuggestionSelected={this.changeLocation.bind(this)} />
+				<GoogleMap center={location.coords} zoom={this.state.zoom}>
+					{location.coords && location.coords.length && 
+						<GoogleMapMarker draggable={true} position={location.coords} onDragEnd={this.setCoords.bind(this)} />
+					}
+				</GoogleMap>
 				<input type="hidden" name={name+'[street]'} value={location.street} />
 				<input type="hidden" name={name+'[citystatezip]'} value={location.citystatezip} />
 				<input type="hidden" name={name+'[coords][0]'} value={location.coords[0]}  />

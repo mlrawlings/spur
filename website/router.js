@@ -9,7 +9,7 @@ router.all('*', function(req, res, next) {
 	res.document.title = 'Spur | Live in the Moment'
 
 	res.document.scripts = [
-		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react.min.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
         'http://maps.google.com/maps/api/js?sensor=false',
 		'/dist/client.js'

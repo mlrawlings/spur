@@ -118,11 +118,7 @@ class EventPage extends React.Component {
 						<View style={styles.details}>
 							<Heading>Details</Heading>
 							<Text style={styles.detailsText}>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-								Quisque urna lectus, sollicitudin eu tempor non, lacinia non felis. 
-								Etiam faucibus ut justo sed bibendum. 
-								Phasellus lorem nisl, consequat id blandit dignissim, volutpat a dui. 
-								In pretium elementum sem id.
+								{event.description}
 							</Text>
 						</View>
 						<View style={styles.discussion}>

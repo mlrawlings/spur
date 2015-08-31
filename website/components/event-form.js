@@ -1,4 +1,5 @@
 var React = require('react')
+  , TextArea = require('react-textarea-autosize')
   , Layout = require('./layout')
   , LocationInput = require('./inputs/location-input')
   , CategoryInput = require('./inputs/category-input')
@@ -33,8 +34,16 @@ class CreateEventForm extends React.Component {
 							<CategoryInput name="category" required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Location</Label>
+							<Label required={true}>Location Name</Label>
+							<input name="location[name]" type="text" />
+						</View>
+						<View style={styles.field}>
+							<Label required={true}>Location Address</Label>
 							<LocationInput name="location" required={true} />
+						</View>
+						<View style={styles.field}>
+							<Label required={true}>Description (optional)</Label>
+							<TextArea name="description" />
 						</View>
 
 						<Button type="submit">Create Event</Button>
