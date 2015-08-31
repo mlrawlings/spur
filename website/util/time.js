@@ -44,12 +44,16 @@ exports.getTimeClass = function(time) {
 
 exports.getRelativeTimeString = function(time) {
 	var diff = time.getTime() - Date.now()
-	  , hours = Math.floor(diff/(60*60*1000))
-	  , remaining = diff-hours*(60*60*1000)
-	  , minutes = Math.ceil(remaining/(60*1000))
+	  , days = Math.floor(diff/(24*60*60*1000))
+	  , hours = Math.floor(diff/(60*60*1000)) - days*24
+	  , minutes = Math.ceil(diff/(60*1000)) - (days*24 + hours)*60
 
 	if(diff <= 0) {
 		return 'started'
+	}
+
+	if(days) {
+		return days + ' day'
 	}
 
 	if(hours && minutes) {
