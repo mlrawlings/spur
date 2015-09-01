@@ -11,7 +11,7 @@ class Home extends React.Component {
 			<Layout fbid={this.props.fbid}>
 		    	<Hero />			
 				<About />
-				<EventList events={this.props.events} />
+				<EventList events={this.props.events} location={this.props.location} />
 			</Layout>
 		)
 	}

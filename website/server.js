@@ -11,6 +11,7 @@ var express = require('express')
   , session = require('../common/middleware/session')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
+  , locationUtil = require('./util/location')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
 
@@ -25,7 +26,17 @@ app.use(bodyParser.urlencoded({}))
 
 app.use(function(req, res, next) {
 	res.props.fbid = req.session.fbid
-	next()
+  locationUtil.getLocationFromIp(req.ip).then(function(location) {
+    if(!location.coords[0]) {
+      res.props.location = {
+        name:'Roanoke, VA',
+        coords:[37.253354,-79.9572075]
+      }
+    } else {
+      res.props.location = location
+    }
+    next()
+  }).catch(next)
 })
 
 app.use(function(req, res, next) {

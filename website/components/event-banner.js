@@ -80,18 +80,10 @@ styles.horizontal.details = () => ({
 })
 
 class EventBanner extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { distance:'... miles'}
-	}
-	componentDidMount() {
-		locationUtil.getLocation().then((coords) => {
-			this.setState({ distance:locationUtil.getDistanceBetween(this.props.event.location.coords, coords) })
-		})
-	}
 	render() {
 		var event = this.props.event
 		  , category = categories[event.category || 'other']
+		  , location = this.props.location
 		  , direction = this.props.horizontal ? 'horizontal' : 'vertical'
 		  , color = category.color
 
@@ -112,7 +104,7 @@ class EventBanner extends React.Component {
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/white-pin.png" />
 						<Text style={styles.detailText}>
-							{this.state.distance}
+							{locationUtil.getDistanceBetween(event.location.coords, location.coords)}
 						</Text>
 					</View>
 				</View>

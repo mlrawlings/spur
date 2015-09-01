@@ -15,7 +15,7 @@ class EventList extends React.Component {
 		var previousTimeClass
 		return (
 			<Section>
-				{this.props.events.map(function(event, index) {
+				{this.props.events.map((event, index) => {
 					var timeClass = time.getTimeClass(event.time)
 
 					if(previousTimeClass == timeClass) {
@@ -26,7 +26,7 @@ class EventList extends React.Component {
 							<Heading key={timeClass} style={!!index && styles.heading}>
 								{timeClass}
 							</Heading>, 
-							<EventItem event={event} key={event.id} />
+							<EventItem event={event} key={event.id} location={this.props.location} />
 						]
 					}
 				})}

@@ -29,7 +29,8 @@ router.all('*', function(req, res, next) {
 })
 
 router.get('/', function (req, res, next) {
-	req.api.get('/moments').end(function(err, response) {
+	var location = res.props.location.coords.join(',')
+	req.api.get('/moments').query({ location, radius:req.query.radius }).end(function(err, response) {
 		if(err) return next(err)
 
 		res.render(Home, { events: response.body })
@@ -37,10 +38,11 @@ router.get('/', function (req, res, next) {
 })
 
 router.get('/events', function(req, res, next) {
-	req.api.get('/moments').end(function(err, response) {
+	var location = res.props.location.coords.join(',')
+	req.api.get('/moments').query({ location, radius:req.query.radius }).end(function(err, response) {
 		if(err) return next(err)
 
-		res.render(EventResults, { events: response.body, search:req.query.q })
+		res.render(EventResults, { events: response.body, radius:req.query.radius, search:req.query.q })
 	})
 })
 

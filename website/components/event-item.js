@@ -48,7 +48,7 @@ class EventItem extends React.Component {
 						{'@ ' + timeUtil.format(event.time) + ' - ' + event.location.name}
 					</Text>
 				</View>
-				<EventBanner event={event} />
+				<EventBanner event={event} location={this.props.location} />
 			</Link>
 		)
 	}

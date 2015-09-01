@@ -42,11 +42,22 @@ router.get('/moments', function(req, res, next) {
 	var now = new Date()
 	  , twentyMinutesAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()-20)
 	  , end = timeUtil.getEndOfTomorrow(now)
+	  , location = (req.query.location || '').split(',').reverse().map(function(val) { return parseFloat(val) })
+	  , radius = parseFloat(req.query.radius) || 1
 
-	r.table('moment').filter(
+	if(location.length != 2 || isNaN(location[0]) || isNaN(location[1])) {
+		return next(new Error('you must define a location: "lat,lng"'))
+	}
+
+	r.table('moment').getIntersecting(
+		r.circle(location, radius, {unit: 'mi'}), 
+		{ index:'locationIndex' }
+	).filter(
 		r.row('time').gt(twentyMinutesAgo)
 	).orderBy(
 		r.asc('time')
+	).without(
+		'locationIndex'
 	).run(connection).then(function(moments) {
 		return moments.toArray()
 	}).then(function(moments) {
@@ -81,6 +92,7 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
 	moment.attendees = [req.session.fbid]
+	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
 
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
 		res.status(201).json(moment.generated_keys[0])

@@ -2,6 +2,7 @@ var express = require('express-client')
   , expressReact = require('express-react/client')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
+  , locationUtil = require('./util/location')
   , router = require('./router')
   , app = express()
 
@@ -11,7 +12,10 @@ app.use(expressReact())
 
 app.use(function(req, res, next) {
 	res.props.fbid = FB.getUserID()
-	next()
+  locationUtil.getLocation().then((location) => {
+    res.props.location = location
+    next()
+  }).catch(next)
 })
 
 app.use(function(req, res, next) {

@@ -39,7 +39,7 @@ class CreateEventForm extends React.Component {
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Location Address</Label>
-							<LocationInput name="location" required={true} />
+							<LocationInput name="location" location={this.props.location} required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Description (optional)</Label>

@@ -27,7 +27,7 @@ styles.searchField = {
 styles.where = {
 	flexDirection:'row',
 	justifyContent:'center',
-	marginTop:8
+	marginTop:15
 }
 
 styles.text = {
@@ -38,25 +38,37 @@ styles.text = {
 
 styles.field = {
 	color:'#fff',
+	borderWidth:0,
 	borderBottomStyle: 'dashed',
 	borderBottomWidth: 1,
 	borderBottomColor: '#999',
+	backgroundColor: '#444'
 }
 
 class EventResults extends React.Component {
+	submitForm() {
+		app.submit(React.findDOMNode(this.refs.form))
+	}
 	render() {
 		return (
 			<Layout fbid={this.props.fbid}>
 				<Section style={styles.search}>
-					<form action="/events">
+					<form ref="form" action="/events">
 						<View style={styles.searchWrapper}>
 							<SearchInput name="q" defaultValue={this.props.search} style={styles.searchField} />
 						</View>
 						<View style={styles.where}>
 							<Text style={styles.text}>within</Text>
-							<Link style={{ ...styles.text, ...styles.field }}>1 mile</Link>
+							<select  style={{ ...styles.text, ...styles.field }} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
+								<option value={1}>1 mile</option>
+								<option value={3}>3 miles</option>
+								<option value={5}>5 miles</option>
+								<option value={10}>10 miles</option>
+								<option value={25}>25 miles</option>
+								<option value={50}>50 miles</option>
+							</select>
 							<Text style={styles.text}>of</Text>
-							<Link style={{ ...styles.text, ...styles.field }}>My Location</Link>
+							<Link style={{ ...styles.text, ...styles.field }}>{this.props.location.name}</Link>
 						</View>
 					</form>
 				</Section>
@@ -67,7 +79,7 @@ class EventResults extends React.Component {
 					</Button>
 				</Section>
 
-				<EventList events={this.props.events} />
+				<EventList events={this.props.events} location={this.props.location} />
 			</Layout>
 		)
 	}

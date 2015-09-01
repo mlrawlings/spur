@@ -22,6 +22,7 @@ module.exports = {
 		root:path.join(__dirname, '../node_modules')
 	},
 	externals: {
-		react:'React'
+		react:'React',
+		'react/addons':'React'
 	}
 }

@@ -90,7 +90,7 @@ class EventPage extends React.Component {
 				<SpurMap coords={event.location.coords} />
 
 				<Section style={bannerStyles}>
-					<EventBanner horizontal={true} event={event} />
+					<EventBanner horizontal={true} event={event} location={this.props.location} />
 				</Section>
 
 
