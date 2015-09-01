@@ -42,11 +42,14 @@ exports.getTimeClass = function(time) {
 	}
 }
 
-exports.getRelativeTimeString = function(time) {
-	var diff = time.getTime() - Date.now()
+exports.getRelativeTimeString = function(time, current) {
+	var now = current || new Date()
+	  , diff = time.getTime() - now.getTime()
 	  , days = Math.floor(diff/(24*60*60*1000))
 	  , hours = Math.floor(diff/(60*60*1000)) - days*24
-	  , minutes = Math.ceil(diff/(60*1000)) - (days*24 + hours)*60
+	  , minutes = time.getMinutes() - now.getMinutes()
+
+	minutes = minutes < 0 ? minutes+60 : minutes
 
 	if(diff <= 0) {
 		return 'started'
