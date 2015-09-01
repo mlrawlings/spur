@@ -64,7 +64,6 @@ class EventResults extends React.Component {
 	}
 	render() {
 		var numEvents = this.props.events.length
-
 		return (
 			<Layout fbid={this.props.fbid}>
 				<Section style={styles.search}>

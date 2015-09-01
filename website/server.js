@@ -11,6 +11,7 @@ var express = require('express')
   , session = require('../common/middleware/session')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
+  , cookieParser = require('cookie-parser')
   , locationUtil = require('./util/location')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
@@ -24,8 +25,16 @@ app.use(session)
 
 app.use(bodyParser.urlencoded({}))
 
+app.use(cookieParser())
+
 app.use(function(req, res, next) {
 	res.props.fbid = req.session.fbid
+
+  if(req.cookies.location) {
+    res.props.location = JSON.parse(req.cookies.location)
+    return next()
+  }
+
   locationUtil.getLocationFromIp(req.ip).then(function(location) {
     if(!location.coords[0]) {
       res.props.location = {
@@ -35,6 +44,7 @@ app.use(function(req, res, next) {
     } else {
       res.props.location = location
     }
+    res.cookie('location', JSON.stringify(res.props.location))
     next()
   }).catch(next)
 })

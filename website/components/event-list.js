@@ -19,7 +19,7 @@ class EventList extends React.Component {
 					var timeClass = time.getTimeClass(event.time)
 
 					if(previousTimeClass == timeClass) {
-						return <EventItem event={event} key={event.id} />
+						return <EventItem event={event} key={event.id} location={this.props.location} />
 					} else {
 						previousTimeClass = timeClass
 						return [

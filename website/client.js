@@ -1,5 +1,6 @@
 var express = require('express-client')
   , expressReact = require('express-react/client')
+  , cookie = require('tiny-cookie')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
   , locationUtil = require('./util/location')
@@ -12,10 +13,8 @@ app.use(expressReact())
 
 app.use(function(req, res, next) {
 	res.props.fbid = FB.getUserID()
-  locationUtil.getLocation().then((location) => {
-    res.props.location = location
-    next()
-  }).catch(next)
+  res.props.location = JSON.parse(cookie.get('location'))
+  next()
 })
 
 app.use(function(req, res, next) {

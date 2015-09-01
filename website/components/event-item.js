@@ -37,7 +37,6 @@ class EventItem extends React.Component {
 	render() {
 		var event = this.props.event
 		  , category = categories[event.category || 'other']
-		
 		return (
 			<Link style={styles.item} href={"/event/"+event.id}>
 				<View style={styles.summary}>
