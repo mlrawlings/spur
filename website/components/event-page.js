@@ -2,7 +2,8 @@ var React = require('react')
   , EventBanner = require('./event-banner')
   , Layout = require('./layout')
   , Attendees = require('./attendees')
-  , SpurMap = require('./common/spur-map')
+  , GoogleMap = require('./common/google-map')
+  , GoogleMapMarker = require('./common/google-map-marker')
   , Section = require('./common/section')
   , Heading = require('./common/heading')
   , Button = require('./common/button')
@@ -87,7 +88,9 @@ class EventPage extends React.Component {
 		return (
 			<Layout fbid={this.props.fbid}>
 				
-				<SpurMap coords={event.location.coords} />
+				<GoogleMap center={event.location.coords} zoom={17}>
+					<GoogleMapMarker position={event.location.coords} />
+				</GoogleMap>
 
 				<Section style={bannerStyles}>
 					<EventBanner horizontal={true} event={event} location={this.props.location} />

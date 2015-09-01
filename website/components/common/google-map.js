@@ -23,9 +23,10 @@ class GoogleMap extends React.Component {
 		super(props)
 	}
 	init(props) {
-		if(!props.center || !props.center.length || this.map) return
+		if(!props.center) return
 
 		var mapNode = React.findDOMNode(this.refs.map)
+		
 		this.map = new google.maps.Map(mapNode, {
 			zoom: props.zoom,
 			streetViewControl: false,
@@ -36,6 +37,8 @@ class GoogleMap extends React.Component {
 			center: new google.maps.LatLng(props.center[0], props.center[1]),
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		})
+
+		this.forceUpdate()
 	}
 	componentDidMount() {
 		this.init(this.props)

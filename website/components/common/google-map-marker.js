@@ -10,7 +10,7 @@ class GoogleMapMarker extends React.Component {
 	}
 	init(props) {
 		if(!props.map) return
-		if(!props.position || !props.position.length) return
+		if(!props.position) return
 
 		this.marker = new google.maps.Marker({
 			map: props.map,
