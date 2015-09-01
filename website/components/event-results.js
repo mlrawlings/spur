@@ -45,11 +45,26 @@ styles.field = {
 	backgroundColor: '#444'
 }
 
+styles.results = {
+	flexDirection:'row',
+	justifyContent:'space-between',
+	alignItems:'center',
+	background:'#e5e5e5',
+	paddingTop:15,
+	paddingBottom:15
+}
+
+styles.resultText = {
+	flexDirection:'row'
+}
+
 class EventResults extends React.Component {
 	submitForm() {
 		app.submit(React.findDOMNode(this.refs.form))
 	}
 	render() {
+		var numEvents = this.props.events.length
+
 		return (
 			<Layout fbid={this.props.fbid}>
 				<Section style={styles.search}>
@@ -73,9 +88,10 @@ class EventResults extends React.Component {
 					</form>
 				</Section>
 
-				<Section>
+				<Section style={styles.results}>
+					<Text style={styles.resultText}>{(numEvents || 'No') + (numEvents == 1 ? ' event' : ' events') + ' found.' }</Text> 
 					<Button href="/create/event">
-						<Text>Create Event +</Text>
+						<Text>Create an event</Text>
 					</Button>
 				</Section>
 
