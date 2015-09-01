@@ -5,7 +5,11 @@ var React = require('react')
   , View = require('../common/view')
   , timeUtil = require('../../util/time')
 
-var style = {}
+var styles = {}
+
+styles.container = {
+	flexDirection:'row'
+}
 
 class LocationInput extends React.Component {
 	constructor(props) {
@@ -54,7 +58,7 @@ class LocationInput extends React.Component {
 		  , error = this.state.time < new Date()
 
 		return (
-			<View>
+			<View style={styles.container}>
 				<input type="time" value={time} onChange={this.changeTime.bind(this)} />
 				<select ref="day" value={day} onChange={this.changeDay.bind(this)}>
 					<option value="today">Today</option>
