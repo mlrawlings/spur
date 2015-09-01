@@ -11,12 +11,12 @@ router.all('*', function(req, res, next) {
 	res.document.scripts = [
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
-        'http://maps.google.com/maps/api/js?sensor=false',
+        'https://maps.google.com/maps/api/js?sensor=false',
 		'/dist/client.js'
 	]
 
 	res.document.styles = [
-		'http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
+		'https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
 		'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
 		'/styles/core.css'
 	]
