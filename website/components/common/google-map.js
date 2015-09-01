@@ -38,6 +38,10 @@ class GoogleMap extends React.Component {
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		})
 
+		if(this.props.stylers) {
+			this.map.setOptions({ styles:this.props.stylers })
+		}
+
 		this.forceUpdate()
 	}
 	componentDidMount() {
@@ -52,6 +56,9 @@ class GoogleMap extends React.Component {
 		}
 		if(this.props.zoom != nextProps.zoom) {
 			this.map.setZoom(nextProps.zoom)
+		}
+		if(this.props.stylers != nextProps.stylers) {
+			this.map.setOptions({ styles:nextProps.stylers })
 		}
 	}
 	renderChildren() {
