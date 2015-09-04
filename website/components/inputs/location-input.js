@@ -1,13 +1,39 @@
 var React = require('react')
-  , GeoPoint = require('geopoint')
-  , AutoSuggest = require('react-autosuggest')
+  , AddressInput = require('./address-input')
   , GoogleMap = require('../common/google-map')
   , GoogleMapMarker = require('../common/google-map-marker')
-  , Image = require('../common/image')
+  , Input = require('../common/input')
   , View = require('../common/view')
   , locationUtil = require('../../util/location')
 
 var styles = {}
+
+styles.container = {
+	borderWidth:1,
+	borderColor:'#ccc'
+}
+
+styles.nameInput = {
+	borderWidth:0,
+	borderBottomColor:'#eee',
+	borderBottomWidth:1,
+	paddingTop:5,
+	paddingBottom:3
+}
+
+styles.addressInput = {
+	...Input.style,
+	borderWidth:0,
+	paddingTop:3,
+	paddingBottom:5,
+	fontSize:13
+}
+
+styles.bigAddressInput = {
+	...styles.addressInput,
+	height:54,
+	fontSize:15
+}
 
 class LocationInput extends React.Component {
 	constructor(props) {
@@ -18,45 +44,43 @@ class LocationInput extends React.Component {
 			location: {
 				coords:location.coords
 			},
-			bounds: locationUtil.getBounds(location.coords, 50),
-			zoom: 13
+			zoom: 14
 		}
 	}
 	changeLocation(result) {
-		this.setState({ location:locationUtil.getAddressComponents(result), zoom: 17 })
+		this.setState({ location:locationUtil.getAddressComponents(result), zoom: 18 })
+		this.focusName()
 	}
-	getSuggestions(value, fn) {
-		locationUtil.getAddressFromSearch(value, this.state.bounds, true).then((results) => {
-			fn(null, results)
-		})
-	}
-	getSuggestionValue(result) {
-		return result.formatted_address
+	focusName() {
+		var name = React.findDOMNode(this.refs.name)
+		setTimeout(() => {
+			if(!name) return this.focusName()
+			if(!name.value && document.activeElement != name) {
+				name.focus()
+				this.focusName()
+			}
+		}, 10)
 	}
 	setCoords(coords) {
 		this.state.location.coords = coords
 		this.setState({ location:this.state.location })
+		this.focusName()
 
 		locationUtil.getAddressFromCoords(coords).then((address) => {
 			address.coords = coords
 			this.setState({ location:address })
-			this.refs.autosuggest.setState({ value:address.full })
 		}).catch(window.alert)
 	}
 	render() {
 		var location = this.state.location
-		  , { name, ...props } = this.props
-		  , inputProps = { ...props, value:this.state.address }
+		  , name = this.props.name
+		  , address = location.full
+		  , addressInputStyle = address ? styles.addressInput : styles.bigAddressInput
 
 		return (
-			<View>
-				<AutoSuggest
-					ref="autosuggest"
-					inputAttributes={inputProps} 
-					suggestions={this.getSuggestions.bind(this)} 
-					suggestionValue={this.getSuggestionValue.bind(this)}
-					suggestionRenderer={this.getSuggestionValue.bind(this)}
-					onSuggestionSelected={this.changeLocation.bind(this)} />
+			<View style={styles.container}>
+				{!!address && <Input ref="name" style={styles.nameInput} name={name+'[name]'} autocomplete="off" placeholder="Name this location..." />}
+				<AddressInput style={addressInputStyle} value={address} onChange={this.changeLocation.bind(this)} location={this.props.location} />
 				<GoogleMap center={location.coords} zoom={this.state.zoom}>
 					<GoogleMapMarker draggable={true} position={location.coords} onDragEnd={this.setCoords.bind(this)} />
 				</GoogleMap>

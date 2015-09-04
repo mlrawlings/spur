@@ -34,7 +34,12 @@ div, span, a, button, form {
 	color:#444;
 }
 
+span {
+	flex-direction:'row';
+}
+
 span span, a span, span a, button span {
+	display: inline-flex;
 	color:inherit;
 }
 

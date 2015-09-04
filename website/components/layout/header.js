@@ -12,7 +12,9 @@ styles.header = {
 	paddingTop:30,
 	paddingBottom:25,
 	backgroundColor:'#fff',
-	flexDirection:'row'
+	flexDirection:'row',
+	borderBottomWidth:1,
+	borderBottomColor:'#ddd'
 }
 
 styles.homeLink = {

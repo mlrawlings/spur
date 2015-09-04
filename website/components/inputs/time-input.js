@@ -1,7 +1,7 @@
 var React = require('react')
   , GeoPoint = require('geopoint')
   , GoogleMap = require('google-map-react')
-  , Image = require('../common/image')
+  , Input = require('../common/input')
   , View = require('../common/view')
   , timeUtil = require('../../util/time')
 
@@ -9,6 +9,10 @@ var styles = {}
 
 styles.container = {
 	flexDirection:'row'
+}
+
+styles.day = {
+	borderLeftWidth:0
 }
 
 class LocationInput extends React.Component {
@@ -59,12 +63,12 @@ class LocationInput extends React.Component {
 
 		return (
 			<View style={styles.container}>
-				<input type="time" value={time} onChange={this.changeTime.bind(this)} />
-				<select ref="day" value={day} onChange={this.changeDay.bind(this)}>
+				<Input type="time" style={styles.time} value={time} onChange={this.changeTime.bind(this)} />
+				<Input type="select" ref="day" style={styles.day} value={day} onChange={this.changeDay.bind(this)}>
 					<option value="today">Today</option>
 					<option value="tomorrow">Tomorrow</option>
-				</select>
-				<input name="time" value={this.state.time.toJSON()} type="hidden" />
+				</Input>
+				<Input name="time" value={this.state.time.toJSON()} type="hidden" />
 				{error && <View>Error! You can't post an event in the past.</View>}
 			</View>
 		)
