@@ -14,7 +14,9 @@ styles.item = {
 	textDecoration:'none',
 	width:'100%',
 	marginTop:8,
-	marginBottom:8
+	marginBottom:8,
+	borderWidth:1,
+	borderColor:'#ddd'
 }
 
 styles.summary = {

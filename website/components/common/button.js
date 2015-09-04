@@ -3,11 +3,9 @@ var React = require('react')
 var styles = {}
 
 styles.normal = {
-	display:'flex',
-
 	fontFamily: 'Open Sans, sans-serif',
 	fontWeight: 600,
-	fontSize: 16,
+	fontSize: 14,
 	textAlign: 'center',
 	color:'#fff',
 

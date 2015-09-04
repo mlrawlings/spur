@@ -2,6 +2,7 @@ var React = require('react')
   , EventBanner = require('./event-banner')
   , Layout = require('./layout')
   , Attendees = require('./attendees')
+  , Posts = require('./posts')
   , GoogleMap = require('./common/google-map')
   , GoogleMapMarker = require('./common/google-map-marker')
   , Section = require('./common/section')
@@ -24,6 +25,8 @@ styles.summary = {
 	flexDirection:'row',
 	justifyContent:'space-between',
 	backgroundColor:'#fff',
+	borderBottomWidth:1,
+	borderBottomColor:'#ddd'
 }
 
 styles.title = {
@@ -32,7 +35,7 @@ styles.title = {
 }
 
 styles.time = {
-	fontSize: 16,
+	fontSize: 14,
 	color: '#888',
 	textTransform:'lowercase'
 }
@@ -118,22 +121,7 @@ class EventPage extends React.Component {
 
 				<Section style={styles.content}>
 					<View style={styles.leftColumn}>
-						<View style={styles.details}>
-							<Heading>Details</Heading>
-							<Text style={styles.detailsText}>
-								{event.description}
-							</Text>
-						</View>
-						<View style={styles.discussion}>
-							<Heading>Discussion</Heading>
-							<Text style={styles.detailsText}>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-								Quisque urna lectus, sollicitudin eu tempor non, lacinia non felis. 
-								Etiam faucibus ut justo sed bibendum. 
-								Phasellus lorem nisl, consequat id blandit dignissim, volutpat a dui. 
-								In pretium elementum sem id.
-							</Text>
-						</View>
+						<Posts event={event} fbid={this.props.fbid} />
 					</View>
 					<View style={styles.attendees}>
 						{!attending && <Button href={'/event/'+event.id+'/join'}>

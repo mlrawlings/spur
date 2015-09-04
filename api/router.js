@@ -91,6 +91,7 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(moment.time <= now) throw new Error('time cannot be in the past')
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
+	moment.posts = []
 	moment.attendees = [req.session.fbid]
 	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
 
@@ -116,16 +117,27 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 })
 
 // Create a post on a moment
-// router.post('/moments/:id/posts', session, bodyParser, function(req, res, next){})
+router.post('/moments/:id/posts', function(req, res, next) {
+	if(!req.session.fbid)
+		return res.status(401).end('Not Logged In')
+
+	r.table('moment').get(req.params.id).update({ 
+		posts:r.row('posts').prepend({
+			user:req.session.fbid,
+			message:req.body.message,
+			time:new Date()
+		}) 
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(next)
+})
 
 // I'm in
 router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.fbid)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').get(req.params.id).update({ 
-		attendees:r.row('attendees').setInsert(req.session.fbid) 
-	}).run(connection).then(function(moment) {
+	r.table('moment').run(connection).then(function(moment) {
 		res.status(204).end()
 	}).catch(next)
 })

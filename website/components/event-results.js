@@ -12,7 +12,10 @@ var React = require('react')
 var styles = {}
 
 styles.search = {
-	backgroundColor:'#444'
+	backgroundColor:'#444',
+	borderColor:'#3e3e3e',
+	borderBottomWidth:1,
+	borderTopWidth:1
 }
 
 styles.searchWrapper = {
@@ -49,7 +52,9 @@ styles.results = {
 	flexDirection:'row',
 	justifyContent:'space-between',
 	alignItems:'center',
-	background:'#e5e5e5',
+	background:'#f2f2f2',
+	borderBottomWidth:1,
+	borderBottomColor:'#ddd',
 	paddingTop:15,
 	paddingBottom:15
 }

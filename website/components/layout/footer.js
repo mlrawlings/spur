@@ -6,10 +6,12 @@ var React = require('react')
 var styles = {}
 
 styles.footer = {
-	backgroundColor: '#e8e8e8',
+	backgroundColor: '#e0e0e0',
 	paddingTop:15,
 	paddingBottom:15,
-	alignItems: 'center'
+	alignItems: 'center',
+	borderTopWidth:1,
+	borderTopColor:'#ddd'
 }
 
 styles.copyright = {

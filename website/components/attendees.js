@@ -7,13 +7,16 @@ var React = require('react')
 
 var styles = {}
 
+styles.attendee = {
+	alignItems:'flex-end'
+}
+
 class Attendees extends React.Component {
 	render() {
 		return (
 			<View>
 				{this.props.event.attendees.map(function(attendee) {
-					return <View>
-						<Text>{attendee}</Text>
+					return <View style={styles.attendee}>
 						<Image src={'https://graph.facebook.com/'+attendee+'/picture'} />
 					</View>
 				})}

@@ -67,6 +67,14 @@ router.get('/event/:id/join', function(req, res, next) {
 	})
 })
 
+router.post('/event/:id/post', function(req, res, next) {
+	req.api.post('/moments/'+req.params.id+'/posts').send(req.body).end(function(err, response) {
+		if(err) return next(err)
+
+		res.redirect('/event/'+req.params.id)
+	})
+})
+
 router.get('/create/event', function(req, res) {
 	res.render(EventForm, {})
 })
