@@ -1,7 +1,7 @@
 var React = require('react')
-  , AddressInput = require('./address-input')
   , GoogleMap = require('../common/google-map')
   , GoogleMapMarker = require('../common/google-map-marker')
+  , GooglePlaceInput = require('./google-place-input')
   , Input = require('../common/input')
   , View = require('../common/view')
   , locationUtil = require('../../util/location')
@@ -47,8 +47,8 @@ class LocationInput extends React.Component {
 			zoom: 14
 		}
 	}
-	changeLocation(result) {
-		this.setState({ location:locationUtil.getAddressComponents(result), zoom: 18 })
+	changePlace(place) {
+		this.setState({ location:locationUtil.getAddressComponents(place), zoom: 18 })
 		this.focusName()
 	}
 	focusName() {
@@ -80,7 +80,7 @@ class LocationInput extends React.Component {
 		return (
 			<View style={styles.container}>
 				{!!address && <Input ref="name" style={styles.nameInput} name={name+'[name]'} autocomplete="off" placeholder="Name this location..." />}
-				<AddressInput style={addressInputStyle} value={address} onChange={this.changeLocation.bind(this)} location={this.props.location} />
+				<GooglePlaceInput style={addressInputStyle} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
 				<GoogleMap center={location.coords} zoom={this.state.zoom}>
 					<GoogleMapMarker draggable={true} position={location.coords} onDragEnd={this.setCoords.bind(this)} />
 				</GoogleMap>

@@ -17,7 +17,15 @@ body {
 	margin:0;
 }
 
-div, span, a, button, form {
+#app {
+	flex:1
+}
+
+#app a, 
+#app div, 
+#app span, 
+#app form, 
+#app button {
 	box-sizing: border-box;
 	position: relative;
 
@@ -34,15 +42,14 @@ div, span, a, button, form {
 	color:#444;
 }
 
-span {
+#app span {
 	flex-direction:'row';
 }
 
-span span, a span, span a, button span {
+#app a span, 
+#app span a, 
+#app span span, 
+#app button span {
 	display: inline-flex;
 	color:inherit;
-}
-
-#app {
-	flex:1
 }

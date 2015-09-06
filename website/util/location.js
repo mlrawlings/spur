@@ -91,15 +91,19 @@ exports.getAddressFromCoords = function(coords) {
 	})
 }
 
-exports.getAddressComponents = function(data) {
+exports.getAddressComponents = function(place) {
 	var address = {}
 	  , components = {}
 
-	data.address_components.forEach(function(component) {
+	place.address_components.forEach(function(component) {
 		component.types.forEach(function(type) {
 			components[type] = component.short_name
 		})
 	})
+
+	if(place.name && place.name.indexOf(components.route) == -1) {
+		address.name = place.name
+	}
 
 	if(components.street_number && components.route) {
 		address.street = components.street_number + ' ' + components.route
@@ -109,11 +113,11 @@ exports.getAddressComponents = function(data) {
 
 	address.citystatezip = components.locality + ', ' + components.administrative_area_level_1 + ' ' + components.postal_code
 	
-	address.coords = data.geometry.location.toUrlValue().split(',').map(function(val) {
+	address.coords = place.geometry.location.toUrlValue().split(',').map(function(val) {
 		return parseFloat(val)
 	})
 
-	address.full = data.formatted_address
+	address.full = place.formatted_address
 
 	return address
 }

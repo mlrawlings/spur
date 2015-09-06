@@ -11,7 +11,7 @@ router.all('*', function(req, res, next) {
 	res.document.scripts = [
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
-        'https://maps.google.com/maps/api/js?sensor=false',
+        'https://maps.google.com/maps/api/js?sensor=false&libraries=places',
 		'/dist/client.js'
 	]
 

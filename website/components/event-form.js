@@ -47,7 +47,7 @@ class CreateEventForm extends React.Component {
 								<Label required={true}>Name</Label>
 								<Text style={styles.helpText}>Keep it short, but descriptive.  You can add more info in a post after you create the event.</Text>
 							</View>
-							<Input ref="name" style={styles.titleInput} name="name" type="text" required={true} />
+							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
 							<View style={styles.fieldInfo}>
