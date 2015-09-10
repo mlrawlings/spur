@@ -14,17 +14,39 @@ r.connect(config.rethink).then(function(conn) {
 
 router.post('/auth'/*, session*/, function(req, res, next) {
 	fb.exchangeToken(req.query.access_token, function(err, access_token) {
-		fb.get('/me').query({
+		fb.get('/me?fields=name,first_name,last_name,birthday').query({
 			access_token:access_token
 		}).end(function(err, response) {
 			if(err) return next(err)
 
-			var user = JSON.parse(response.text)
+			var fbUser = JSON.parse(response.text)
 
-			req.session.fbid = user.id
-			req.session.token = access_token
+			r.table('users').filter({ fbid:fbUser.id }).limit(1).run(connection).then(function(users) {
+				return users.toArray()
+			}).then(function(users) {
+				var user = users[0]
+				if(!user) {
+					user = {
+						fbid:fbUser.id,
+						name: {
+							first:fbUser.first_name,
+							last:fbUser.last_name,
+							full:fbUser.name
+						},
+						birthday: new Date(fbUser.birthday)
+					}
+					return r.table('users').insert(user).run(connection).then(function(result) {
+						user.id = result.generated_keys[0]
+						return user
+					})
+				}
+				return user
+			}).then(function(user) {
+				req.session.user = user
+				req.session.token = access_token
 
-			res.json({ fbid:user.id, token:access_token })
+				res.json({ user:user, token:access_token })
+			})
 		})
 	})
 })
@@ -67,14 +89,27 @@ router.get('/moments', function(req, res, next) {
 
 // Get moment by id
 router.get('/moments/:id', function(req, res, next) {
-	r.table('moment').get(req.params.id).run(connection).then(function(moment) {
+	r.table('moment').get(req.params.id).merge(function(moment) {
+		return {
+			attendees:r.table('users').filter(function(user) {
+				return moment('attendees').contains(user('id'))
+			}).coerceTo('array'),
+			posts:moment('posts').map(function(post) {
+				return post.merge(function(post) {
+					return {
+						user:r.db('spur').table('users').get(post('user'))
+					}
+				})
+			})
+		}
+	}).run(connection).then(function(moment) {
 		res.json(moment)
 	}).catch(next)
 })
 
 // Create moment
 router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
-	if(!req.session.fbid)
+	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 	
 	var now = new Date()
@@ -92,7 +127,7 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
 	moment.posts = []
-	moment.attendees = [req.session.fbid]
+	moment.attendees = [req.session.user.id]
 	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
 
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
@@ -118,12 +153,12 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 
 // Create a post on a moment
 router.post('/moments/:id/posts', function(req, res, next) {
-	if(!req.session.fbid)
+	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
 	r.table('moment').get(req.params.id).update({ 
 		posts:r.row('posts').prepend({
-			user:req.session.fbid,
+			user:req.session.user.id,
 			message:req.body.message,
 			time:new Date()
 		}) 
@@ -134,7 +169,7 @@ router.post('/moments/:id/posts', function(req, res, next) {
 
 // I'm in
 router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
-	if(!req.session.fbid)
+	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
 	r.table('moment').run(connection).then(function(moment) {

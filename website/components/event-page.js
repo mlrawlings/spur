@@ -84,12 +84,13 @@ styles.actions = {
 class EventPage extends React.Component {
 	render() {
 		var event = this.props.event
+		  , user = this.props.user
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
-		  , attending = event.attendees.indexOf(this.props.fbid) != -1
+		  , attending = user && event.attendees.indexOf(user.id) != -1
 
 		return (
-			<Layout fbid={this.props.fbid}>
+			<Layout user={this.props.user}>
 				
 				<GoogleMap center={event.location.coords} zoom={17}>
 					<GoogleMapMarker position={event.location.coords} />
@@ -121,7 +122,7 @@ class EventPage extends React.Component {
 
 				<Section style={styles.content}>
 					<View style={styles.leftColumn}>
-						<Posts event={event} fbid={this.props.fbid} />
+						<Posts event={event} user={this.props.user} />
 					</View>
 					<View style={styles.attendees}>
 						{!attending && <Button href={'/event/'+event.id+'/join'}>

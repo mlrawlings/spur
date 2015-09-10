@@ -94,6 +94,7 @@ styles.commentTextarea = {
 class Posts extends React.Component {
 	render() {
 		var event = this.props.event
+		  , user = this.props.user
 
 		return (
 			<View>
@@ -109,9 +110,9 @@ class Posts extends React.Component {
 						<View style={styles.postContainer}>
 							<View style={styles.post}>
 								<View style={styles.postHeading}>
-									<Image style={styles.postImage} src={'https://graph.facebook.com/'+post.user+'/picture'} />
+									<Image style={styles.postImage} src={'https://graph.facebook.com/'+post.user.fbid+'/picture'} />
 									<View style={styles.postData}>
-										<Text style={styles.postName}>Poster Name</Text>
+										<Text style={styles.postName}>{post.user.name.full}</Text>
 										<Text style={styles.postTime}>{timeUtil.format(post.time)}</Text>
 									</View>
 								</View>
@@ -121,10 +122,10 @@ class Posts extends React.Component {
 								{(post.comments || []).map((comment) => {
 									return <View style={styles.comment} />
 								})}
-								<form style={styles.commentForm} action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
-									<Image style={styles.commentImage} src={'https://graph.facebook.com/'+post.user+'/picture'} />
+								{user && <form style={styles.commentForm} action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
+									<Image style={styles.commentImage} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
 									<TextArea style={styles.commentTextarea} name="message" placeholder="Write a comment..." />
-								</form>
+								</form>}
 							</View>
 						</View>
 					)

@@ -12,7 +12,7 @@ require('../common/util/json-date-parse')
 app.use(expressReact())
 
 app.use(function(req, res, next) {
-	res.props.fbid = FB.getUserID()
+	res.props.user = window.user
   res.props.location = JSON.parse(cookie.get('location'))
   next()
 })

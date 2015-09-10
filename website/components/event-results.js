@@ -70,7 +70,7 @@ class EventResults extends React.Component {
 	render() {
 		var numEvents = this.props.events.length
 		return (
-			<Layout fbid={this.props.fbid}>
+			<Layout user={this.props.user}>
 				<Section style={styles.search}>
 					<form ref="form" action="/events">
 						<View style={styles.searchWrapper}>

@@ -8,7 +8,7 @@ var React = require('react')
 class Home extends React.Component {
 	render() {
 		return (
-			<Layout fbid={this.props.fbid}>
+			<Layout user={this.props.user}>
 		    	<Hero />			
 				<About />
 				<EventList events={this.props.events} location={this.props.location} />

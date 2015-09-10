@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({}))
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-	res.props.fbid = req.session.fbid
+	res.props.user = req.session.user
 
   if(req.cookies.location) {
     res.props.location = JSON.parse(req.cookies.location)

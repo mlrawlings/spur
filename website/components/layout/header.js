@@ -62,7 +62,7 @@ class Header extends React.Component {
 					<Link href="" style={styles.navLink}>
 						Businesses
 					</Link>
-					<FacebookLoginButton style={styles.login} userId={this.props.fbid} />
+					<FacebookLoginButton style={styles.login} user={this.props.user} />
 				</View>
 			</Section>
 		)

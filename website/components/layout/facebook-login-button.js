@@ -26,7 +26,7 @@ class FacebookLoginButton extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			userId: this.props.userId
+			userId: this.props.user && this.props.user.fbid
 		}
 	}
 	componentDidMount() {
@@ -53,6 +53,8 @@ class FacebookLoginButton extends React.Component {
 			
 			api.post('/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
 				if(err) throw err
+
+				window.user = res.body.user
 			})
 		} else {
 			this.setState({ userId: null })
@@ -66,7 +68,7 @@ class FacebookLoginButton extends React.Component {
 		if(this.state.userId) {
 			FB.logout(this.onChangeLoginStatus.bind(this))
 		} else {
-			FB.login(this.onChangeLoginStatus.bind(this))
+			FB.login(this.onChangeLoginStatus.bind(this), { scope:'public_profile,email,user_birthday' })
 		}
 	}
 	render() {

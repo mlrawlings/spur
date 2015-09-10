@@ -39,7 +39,7 @@ class CreateEventForm extends React.Component {
 	}
 	render() {
 		return (
-			<Layout fbid={this.props.fbid}>
+			<Layout user={this.props.user}>
 				<Section>
 					<form method="POST" action="/create/event" className="createEvent">
 						<View style={styles.field}>
