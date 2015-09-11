@@ -6,6 +6,8 @@ var React = require('react')
   , TextArea = require('react-textarea-autosize')
   , timeUtil = require('../util/time')
 
+const ENTER = 13
+
 var styles = {}
 
 styles.postForm = {
@@ -70,10 +72,13 @@ styles.postContent = {
 	marginTop:10
 }
 
+styles.comment = 
 styles.commentForm = {
 	flexDirection:'row',
 	backgroundColor:'#f4f4f4',
-	padding:10
+	padding:10,
+	borderTopWidth:1,
+	borderTopColor:'#ddd'
 }
 
 styles.commentImage = {
@@ -92,6 +97,14 @@ styles.commentTextarea = {
 }
 
 class Posts extends React.Component {
+	handleCommentKeyDown(postId, e) {
+		var form = React.findDOMNode(this.refs['commentForm'+postId])
+
+		if(e.which == ENTER) {
+			e.preventDefault()
+			form.submit()
+		}
+	}
 	render() {
 		var event = this.props.event
 		  , user = this.props.user
@@ -120,11 +133,14 @@ class Posts extends React.Component {
 							</View>
 							<View style={styles.comments}>
 								{(post.comments || []).map((comment) => {
-									return <View style={styles.comment} />
+									return <View style={styles.comment}>
+										<Image style={styles.commentImage} src={'https://graph.facebook.com/'+comment.user.fbid+'/picture'} />
+										<Text style={styles.commentMessage}><Text>{comment.user.name.first}</Text> {comment.message} <Text>{timeUtil.format(comment.time)}</Text></Text>
+									</View>
 								})}
-								{user && <form style={styles.commentForm} action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
+								{user && <form style={styles.commentForm} ref={'commentForm'+post.id} action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
 									<Image style={styles.commentImage} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
-									<TextArea style={styles.commentTextarea} name="message" placeholder="Write a comment..." />
+									<TextArea style={styles.commentTextarea} onKeyDown={this.handleCommentKeyDown.bind(this, post.id)} name="message" placeholder="Write a comment..." />
 								</form>}
 							</View>
 						</View>

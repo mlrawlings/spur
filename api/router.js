@@ -97,7 +97,14 @@ router.get('/moments/:id', function(req, res, next) {
 			posts:moment('posts').map(function(post) {
 				return post.merge(function(post) {
 					return {
-						user:r.db('spur').table('users').get(post('user'))
+						user:r.db('spur').table('users').get(post('user')),
+						comments:post('comments').map(function(comment) {
+							return comment.merge(function(comment) {
+								return {
+									user:r.db('spur').table('users').get(comment('user'))
+								}
+							})
+						})
 					}
 				})
 			})
@@ -156,12 +163,38 @@ router.post('/moments/:id/posts', function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
+	var post = {
+		user:req.session.user.id,
+		message:req.body.message,
+		time:new Date(),
+		comments:[],
+		id:r.row('posts').count()
+	}
+
 	r.table('moment').get(req.params.id).update({ 
-		posts:r.row('posts').prepend({
-			user:req.session.user.id,
-			message:req.body.message,
-			time:new Date()
-		}) 
+		posts:r.row('posts').append(post) 
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(next)
+})
+
+// Create a comment on a post
+router.post('/moments/:mid/posts/:pid/comments', function(req, res, next) {
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
+
+	var postIndex = parseInt(req.params.pid)
+	
+	var comment = {
+		user:req.session.user.id,
+		message:req.body.message,
+		time:new Date()
+	}
+
+	r.table('moment').get(req.params.mid).update({
+		posts:r.row('posts').changeAt(postIndex, r.row('posts').nth(postIndex).merge(function(post) {
+			return { comments:post('comments').append(comment) }
+		}))
 	}).run(connection).then(function(moment) {
 		res.status(204).end()
 	}).catch(next)
