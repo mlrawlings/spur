@@ -87,7 +87,7 @@ class EventPage extends React.Component {
 		  , user = this.props.user
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
-		  , attending = user && event.attendees.indexOf(user.id) != -1
+		  , attending = !user || event.attendees.some(attendee => attendee.id == user.id)
 
 		return (
 			<Layout user={this.props.user}>

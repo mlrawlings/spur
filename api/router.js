@@ -205,7 +205,9 @@ router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').run(connection).then(function(moment) {
+	r.table('moment').get(req.params.id).update({ 
+		attendees:r.row('attendees').setInsert(req.session.user.id) 
+	}).run(connection).then(function(moment) {
 		res.status(204).end()
 	}).catch(next)
 })
