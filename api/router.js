@@ -107,7 +107,7 @@ router.get('/moments/:id', function(req, res, next) {
 						})
 					}
 				})
-			})
+			}).orderBy(r.desc('time'))
 		}
 	}).run(connection).then(function(moment) {
 		res.json(moment)
