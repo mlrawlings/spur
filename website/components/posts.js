@@ -102,8 +102,14 @@ class Posts extends React.Component {
 
 		if(e.which == ENTER) {
 			e.preventDefault()
-			app.submit(form)
+			
+			if(e.target.value)
+				app.submit(form)
 		}
+	}
+	submitPost(e) {
+		if(!e.target.value)
+			e.preventDefault()
 	}
 	render() {
 		var event = this.props.event
@@ -115,7 +121,7 @@ class Posts extends React.Component {
 					
 					<TextArea style={styles.postTextarea} name="message" placeholder="Write something..." />
 					<View style={styles.postBar}>
-						<Button style={styles.postButton} type="submit">Post</Button>
+						<Button style={styles.postButton} onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 					</View>
 				</form>
 				{event.posts.map((post) => {
