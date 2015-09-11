@@ -74,6 +74,10 @@ styles.attendees = {
 	alignItems:'flex-end'
 }
 
+styles.bail = {
+	backgroundColor: '#c00'
+}
+
 styles.actions = {
 	backgroundColor:'#fff',
 	paddingTop:10,
@@ -125,8 +129,11 @@ class EventPage extends React.Component {
 						<Posts event={event} user={this.props.user} />
 					</View>
 					<View style={styles.attendees}>
-						{!attending && <Button href={'/event/'+event.id+'/join'}>
+						{user && !attending && <Button href={'/event/'+event.id+'/join'}>
 							+ Join
+						</Button>}
+						{user && attending && <Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
+							&times; Bail
 						</Button>}
 						<Heading>{event.attendees.length + ' Going'}</Heading>
 						<Attendees event={event} />

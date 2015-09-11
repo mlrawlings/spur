@@ -214,7 +214,14 @@ router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 
 // I'm out
 router.delete('/moments/:id/attendees'/*, session*/, function(req, res, next){
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
 
+	r.table('moment').get(req.params.id).update({ 
+		attendees:r.row('attendees').setDifference([req.session.user.id]) 
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(next)
 })
 
 module.exports = router
