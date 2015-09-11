@@ -102,7 +102,7 @@ class Posts extends React.Component {
 
 		if(e.which == ENTER) {
 			e.preventDefault()
-			form.submit()
+			app.submit(form)
 		}
 	}
 	render() {

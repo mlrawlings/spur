@@ -55,12 +55,16 @@ class FacebookLoginButton extends React.Component {
 				if(err) throw err
 
 				window.user = res.body.user
+				if(originalUserId != userId) app.refresh()
 			})
 		} else {
 			this.setState({ userId: null })
 
 			api.del('/auth').end(function(err, res){
 				if(err) throw err
+
+				window.user = undefined
+				if(originalUserId) app.refresh()		
 			})
 		}
 	}
