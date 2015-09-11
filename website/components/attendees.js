@@ -8,7 +8,15 @@ var React = require('react')
 var styles = {}
 
 styles.attendee = {
-	alignItems:'flex-end'
+	alignItems:'center',
+	flexDirection:'row',
+	justifyContent:'flex-end',
+	marginTop: 5
+}
+
+styles.picture = {
+	height: 25,
+	marginLeft: 5
 }
 
 class Attendees extends React.Component {
@@ -18,7 +26,7 @@ class Attendees extends React.Component {
 				{this.props.event.attendees.map(function(attendee) {
 					return <View style={styles.attendee}>
 						<Text>{attendee.name.first}</Text>
-						<Image src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
+						<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
 					</View>
 				})}
 			</View>

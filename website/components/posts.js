@@ -11,7 +11,7 @@ const ENTER = 13
 var styles = {}
 
 styles.postForm = {
-	marginBottom: 20,
+	marginBottom: 30,
 	alignItems: 'flex-end',
 	borderWidth:1,
 	borderColor:'#ddd'
@@ -35,8 +35,7 @@ styles.postButton = {
 }
 
 styles.postContainer = {
-	marginTop:15,
-	marginBottom:15,
+	marginTop:30,
 	borderWidth:1,
 	borderColor:'#ddd'
 }
@@ -108,7 +107,7 @@ class Posts extends React.Component {
 		}
 	}
 	submitPost(e) {
-		if(!e.target.value)
+		if(!React.findDOMNode(this.refs.postMessage).value)
 			e.preventDefault()
 	}
 	render() {
@@ -117,16 +116,20 @@ class Posts extends React.Component {
 
 		return (
 			<View>
-				<form style={styles.postForm} action={'/event/'+event.id+'/post'} method="POST">
+				{user && <form style={styles.postForm} action={'/event/'+event.id+'/post'} method="POST">
 					
-					<TextArea style={styles.postTextarea} name="message" placeholder="Write something..." />
+					<TextArea ref="postMessage" style={styles.postTextarea} name="message" placeholder="Write something..." />
 					<View style={styles.postBar}>
 						<Button style={styles.postButton} onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 					</View>
-				</form>
-				{event.posts.map((post) => {
+				</form>}
+				{event.posts.map((post, index) => {
+					var postContainerStyle = styles.postContainer
+
+					if(index == 0) delete postContainerStyle['marginTop']
+
 					return (
-						<View style={styles.postContainer}>
+						<View style={postContainerStyle}>
 							<View style={styles.post}>
 								<View style={styles.postHeading}>
 									<Image style={styles.postImage} src={'https://graph.facebook.com/'+post.user.fbid+'/picture'} />

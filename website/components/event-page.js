@@ -13,6 +13,7 @@ var React = require('react')
   , Image = require('./common/image')
   , timeUtil = require('../util/time')
   , categories = require('../data/categories')
+  , FacebookLoginButton = require('./layout/facebook-login-button')
 
 var styles = {}
 
@@ -60,18 +61,60 @@ styles.leftColumn = {
 	flex:1
 }
 
-styles.details = {
-	paddingBottom:30
-}
-
-styles.detailsText = {
-	flexWrap:'wrap'
-}
-
 styles.attendees = {
-	width:150,
+	width:100,
 	marginLeft:30,
 	alignItems:'flex-end'
+}
+
+styles.attendeesHeader = {
+	flexDirection:'row',
+	width: '100%',
+	justifyContent:'flex-end',
+	alignItems:'flex-end'
+}
+
+styles.details = {
+	backgroundColor: '#f4f4f4',
+	borderBottomWidth: 1,
+	borderBottomColor: '#ddd',
+	flexDirection:'row'
+}
+
+styles.attend = {
+	justifyContent:'center',
+	alignItems:'flex-end'
+}
+
+styles.attendingHeader = {
+	textTransform:'none',
+	color:'#444',
+	marginBottom:5,
+}
+
+styles.attendingButtons = {
+	flexDirection:'row'
+}
+
+styles.inviteButton = {
+	marginLeft:5,
+	backgroundColor:'rgb(0,132,255)',
+	flexDirection:'row'
+}
+
+styles.inviteButtonImage = {
+	width:20,
+	height:20,
+	marginRight:8
+}
+
+styles.inviteButtonText = {
+	flex:1
+}
+
+
+styles.description = {
+	flex: 1
 }
 
 styles.bail = {
@@ -113,9 +156,6 @@ class EventPage extends React.Component {
 						<Text style={styles.time}>
 							{'@ ' + timeUtil.format(event.time) + ' ' + timeUtil.getTimeClass(event.time)}
 						</Text>
-						<View>
-							
-						</View>
 					</View>
 					<View style={styles.location}>
 						<Text style={styles.locationName}>{event.location.name}</Text>
@@ -123,19 +163,58 @@ class EventPage extends React.Component {
 						<Text style={styles.address}>{event.location.citystatezip}</Text>
 					</View>
 				</Section>
+				
+				<Section style={styles.details}>
+					<View style={styles.description}>
+						<Heading>Description</Heading>
+						<Text>
+							Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem
+						</Text>
+					</View>
+					{()=>{
+						if(!user) return <View style={styles.attend}>
+							<Heading style={styles.attendingHeader}>Want to go?</Heading>
+							<FacebookLoginButton>Login to Join or Post</FacebookLoginButton>
+						</View>
+						
+						if(!attending) return <View style={styles.attend}>
+							<Heading style={styles.attendingHeader}>Want to go?</Heading>
+							<View style={styles.attendingButtons}>
+								<Button href={'/event/'+event.id+'/join'}>
+									+ Join
+								</Button>
+								<Button style={styles.inviteButton}>
+									<Image style={styles.inviteButtonImage} src="/images/messenger-icon-white.png" />
+									<Text style={styles.inviteButtonText}>Invite a Friend</Text>
+								</Button>
+							</View>
+						</View>
+
+						if(attending) return <View style={styles.attend}>
+							<Heading style={styles.attendingHeader}>You are going!</Heading>
+							<View style={styles.attendingButtons}>
+								<Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
+									&times; Bail
+								</Button>
+								<Button style={styles.inviteButton}>
+									<Image style={styles.inviteButtonImage} src="/images/messenger-icon-white.png" />
+									<Text style={styles.inviteButtonText}>Invite a Friend</Text>
+								</Button>
+							</View>
+						</View>
+					}()}
+				</Section>
 
 				<Section style={styles.content}>
 					<View style={styles.leftColumn}>
+						<Heading>Discussion</Heading>
 						<Posts event={event} user={this.props.user} />
 					</View>
+
 					<View style={styles.attendees}>
-						{user && !attending && <Button href={'/event/'+event.id+'/join'}>
-							+ Join
-						</Button>}
-						{user && attending && <Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
-							&times; Bail
-						</Button>}
-						<Heading>{event.attendees.length + ' Going'}</Heading>
+						<View style={styles.attendeesHeader}>
+							<Heading style={styles.going}>{event.attendees.length + ' Going'}</Heading>
+						</View>
 						<Attendees event={event} />
 					</View>
 				</Section>
