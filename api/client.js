@@ -1,35 +1,18 @@
-var url = require('url')
-  , methods = require('methods')
-  , request = require('superagent')
+var createApi = require('../common/util/create-api')
   , config = require('../common/config')
   , apiRoot = config.api.protocol+'://'+config.api.host+':'+config.api.port
 
-function createInstance(cookies) {
-	var api = {}
-
-	methods.forEach(function(method) {
-		method = 'delete' == method ? 'del' : method
+function createSpurClient(cookies) {
+	return createApi(apiRoot, function(request) {
+		request.set('Content-Type', 'application/json')
 		
-		api[method] = function(path) {
-			var req = createBasicRequest(method, path)
-
-			if(typeof window !== 'undefined') {
-				return req.withCredentials()
-			}
-
-			return cookies ? req.set('Cookie', cookies) : req
+		if(typeof window !== 'undefined') {
+			return request.withCredentials()
 		}
+
+		cookies && request.set('Cookie', cookies)
 	})
-
-	api['delete'] = api.del
-
-	return api
 }
 
-function createBasicRequest(method, path) {
-	path = url.resolve(apiRoot, path)
-	return request[method](path).set('Content-Type', 'application/json')
-}
-
-module.exports = createInstance()
-module.exports.createInstance = createInstance
+module.exports = createSpurClient()
+module.exports.createInstance = createSpurClient

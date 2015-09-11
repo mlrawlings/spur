@@ -1,34 +1,61 @@
+require('babel/register')({
+  ignore:false
+})
+
 var express = require('express')
   , app = module.exports = express()
-  , nunjucks = require('nunjucks')
   , webpackDevMiddleware = require("webpack-dev-middleware")
+  , expressReact = require('express-react')
   , webpack = require("webpack")
   , compiler = webpack(require('./webpack.config.js'))
   , session = require('../common/middleware/session')
   , config = require('../common/config')
   , bodyParser = require('body-parser')
+  , cookieParser = require('cookie-parser')
+  , locationUtil = require('./util/location')
   , api = require('../api/client')
+  , fb = require('../common/util/facebook')
 
-nunjucks.configure(__dirname+'/views', {
-    autoescape: true,
-    express: app
-})
+app.use(expressReact())
 
 app.use(express.static(__dirname+'/public'))
-
-app.use(webpackDevMiddleware(compiler))
+app.use('/dist', express.static(__dirname+'/dist'))
 
 app.use(session)
 
 app.use(bodyParser.urlencoded({}))
 
+app.use(cookieParser())
+
 app.use(function(req, res, next) {
-	res.locals.fbid = req.session.fbid
-	next()
+	res.props.user = req.session.user
+
+  if(req.cookies.location) {
+    res.props.location = JSON.parse(req.cookies.location)
+    return next()
+  }
+
+  locationUtil.getLocationFromIp(req.ip).then(function(location) {
+    if(!location.coords[0]) {
+      res.props.location = {
+        name:'Roanoke, VA',
+        coords:[37.253354,-79.9572075]
+      }
+    } else {
+      res.props.location = location
+    }
+    res.cookie('location', JSON.stringify(res.props.location))
+    next()
+  }).catch(next)
 })
 
 app.use(function(req, res, next) {
   req.api = api.createInstance(req.get('cookie'))
+  next()
+})
+
+app.use(function(req, res, next) {
+  req.fb = fb.createInstance(req.session.token)
   next()
 })
 
