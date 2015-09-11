@@ -7,7 +7,6 @@ var React = require('react')
 var styles = {}
 
 styles.facebookButton = {
-	width:110,
 	backgroundColor:'#3a579d',
 	flexDirection:'row'
 }
@@ -19,7 +18,9 @@ styles.image = {
 }
 
 styles.text = {
-	flex:1
+	flex:1,
+	paddingLeft:10,
+	paddingRight:10
 }
 
 class FacebookLoginButton extends React.Component {
@@ -33,6 +34,11 @@ class FacebookLoginButton extends React.Component {
 		if(window.FB) return this.initFacebook()
 
 		window.fbAsyncInit = this.initFacebook.bind(this)
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			userId: nextProps.user && nextProps.user.fbid
+		})
 	}
 	initFacebook() {
 		FB.init({
@@ -79,7 +85,7 @@ class FacebookLoginButton extends React.Component {
 		return (
 			<Button style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
 				<Image style={styles.image} src={this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png" } />
-				<Text style={styles.text}>{this.state.userId ? 'Log out' : 'Log in' }</Text>
+				<Text style={styles.text}>{this.props.children ? this.props.children : this.state.userId ? 'Log out' : 'Log in' }</Text>
 			</Button>
 		)
 	}
