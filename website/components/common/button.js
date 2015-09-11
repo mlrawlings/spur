@@ -15,7 +15,7 @@ styles.normal = {
 	borderBottomWidth: 3,
 	borderRadius: 4,
 
-	background: '#04beca',
+	backgroundColor: '#04beca',
 	borderBottomColor:'rgba(0,0,0,0.2)',
 
 	textDecoration: 'none',
