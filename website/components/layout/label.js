@@ -5,7 +5,7 @@ var styles = {}
 
 styles.label = {
 	fontWeight: 600,
-	fontSize:14,
+	fontSize:12
 }
 
 class Label extends React.Component {

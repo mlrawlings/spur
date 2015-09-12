@@ -4,6 +4,7 @@ var React = require('react')
   , Label = require('../layout/label')
   , LocationInput = require('../input/location-input')
   , CategoryInput = require('../input/category-input')
+  , TextArea = require('react-textarea-autosize')
   , TimeInput = require('../input/time-input')
   , Input = require('../core/input')
   , Button = require('../core/button')
@@ -16,21 +17,18 @@ styles.field = {
 	marginBottom:30,
 }
 
-styles.fieldInfo = {
-}
-
-styles.formActions = {
+styles.actions = {
 	alignItems:'flex-end'
-}
-
-styles.helpText = {
-	fontSize:13,
-	color:'#666'
 }
 
 styles.titleInput = {
 	fontWeight:300,
 	fontSize:24
+}
+
+styles.descriptionInput = {
+	...Input.style,
+	borderTopWidth:0
 }
 
 class NewEventForm extends React.Component {
@@ -43,36 +41,23 @@ class NewEventForm extends React.Component {
 				<Section>
 					<form method="POST" action="/create/event" className="createEvent">
 						<View style={styles.field}>
-							<View style={styles.fieldInfo}>
-								<Label required={true}>Name</Label>
-								<Text style={styles.helpText}>Keep it short, but descriptive.  You can add more info in a post after you create the event.</Text>
-							</View>
+							<Label required={true}>Name &amp; Description</Label>
 							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
+							<TextArea name="description" style={styles.descriptionInput} placeholder="Add an optional description..." />
 						</View>
 						<View style={styles.field}>
-							<View style={styles.fieldInfo}>
-								<Label required={true}>When</Label>
-							</View>
+							<Label required={true}>When</Label>
 							<TimeInput name="time" required={true} />
 						</View>
 						<View style={styles.field}>
-							<View style={styles.fieldInfo}>
-								<Label required={true}>Where</Label>
-								<Text style={styles.helpText}>
-									Enter an address and drag the pin to the exact meeting location.  
-									Then give the location a name (something simple like "Starbucks on Main" or "New Hall - Room #308").
-								</Text>
-							</View>
+							<Label required={true}>Where</Label>
 							<LocationInput name="location" location={this.props.location} required={true} />
 						</View>
 						<View style={styles.field}>
-							<View style={styles.fieldInfo}>
-								<Label required={true}>Category</Label>
-								<Text style={styles.helpText}>It's okay if there's not an exact match, just choose the one that best fits.  </Text>
-							</View>
+							<Label required={true}>Category</Label>
 							<CategoryInput name="category" required={true} />
 						</View>
-						<View style={styles.formActions}>
+						<View style={styles.actions}>
 							<Button type="submit">Create Event</Button>
 						</View>
 					</form>
