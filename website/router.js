@@ -2,7 +2,7 @@ var Router = require('express/lib/router')
   , Home = require('./components/home')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
-  , EventForm = require('./components/event/event-form')
+  , NewEventForm = require('./components/event/new-event-form')
   , router = new Router()
 
 router.all('*', function(req, res, next) {
@@ -92,7 +92,7 @@ router.post('/event/:id/posts/:pid/comment', function(req, res, next) {
 })
 
 router.get('/create/event', function(req, res) {
-	res.render(EventForm, {})
+	res.render(NewEventForm, {})
 })
 
 router.post('/create/event', function(req, res) {

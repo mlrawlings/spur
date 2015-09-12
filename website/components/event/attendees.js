@@ -21,14 +21,17 @@ styles.picture = {
 
 class Attendees extends React.Component {
 	render() {
+		var { event, style } = this.props
+		
 		return (
-			<View>
-				{this.props.event.attendees.map(function(attendee) {
-					return <View style={styles.attendee}>
+			<View style={style}>
+				<Heading style={styles.going}>{event.attendees.length + ' Going'}</Heading>	
+				{event.attendees.map(attendee =>
+					<View style={styles.attendee}>
 						<Text>{attendee.name.first}</Text>
 						<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
 					</View>
-				})}
+				)}
 			</View>
 		)
 	}

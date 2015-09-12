@@ -2,51 +2,11 @@ var React = require('react')
   , Layout = require('../layout')
   , Section = require('../layout/section')
   , EventList = require('./event-list')
-  , SearchInput = require('../input/search-input')
+  , EventSearchForm = require('./event-search-form')
   , Button = require('../core/button')
-  , Image = require('../core/image')
-  , Link = require('../core/link')
-  , View = require('../core/view')
   , Text = require('../core/text')
 
 var styles = {}
-
-styles.search = {
-	backgroundColor:'#444',
-	borderColor:'#3e3e3e',
-	borderBottomWidth:1,
-	borderTopWidth:1
-}
-
-styles.searchWrapper = {
-	alignItems:'center'
-}
-
-styles.searchField = {
-	width:'100%',
-	maxWidth:450
-}
-
-styles.where = {
-	flexDirection:'row',
-	justifyContent:'center',
-	marginTop:15
-}
-
-styles.text = {
-	color:'#ddd',
-	paddingLeft:8,
-	paddingRight:8
-}
-
-styles.field = {
-	color:'#fff',
-	borderWidth:0,
-	borderBottomStyle: 'dashed',
-	borderBottomWidth: 1,
-	borderBottomColor: '#999',
-	backgroundColor: '#444'
-}
 
 styles.results = {
 	flexDirection:'row',
@@ -64,39 +24,19 @@ styles.resultText = {
 }
 
 class EventResults extends React.Component {
-	submitForm() {
-		app.submit(React.findDOMNode(this.refs.form))
-	}
 	render() {
-		var numEvents = this.props.events.length
+		var events = this.props.events
+		  , search = this.props.search
+		  , radius = this.props.radius
+		  , location = this.props.location
+		
 		return (
 			<Layout user={this.props.user}>
-				<Section style={styles.search}>
-					<form ref="form" action="/events">
-						<View style={styles.searchWrapper}>
-							<SearchInput name="q" defaultValue={this.props.search} style={styles.searchField} />
-						</View>
-						<View style={styles.where}>
-							<Text style={styles.text}>within</Text>
-							<select  style={{ ...styles.text, ...styles.field }} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
-								<option value={1}>1 mile</option>
-								<option value={3}>3 miles</option>
-								<option value={5}>5 miles</option>
-								<option value={10}>10 miles</option>
-								<option value={25}>25 miles</option>
-								<option value={50}>50 miles</option>
-							</select>
-							<Text style={styles.text}>of</Text>
-							<Link style={{ ...styles.text, ...styles.field }}>{this.props.location.name}</Link>
-						</View>
-					</form>
-				</Section>
+				<EventSearchForm search={search} radius={radius} location={location} />
 
 				<Section style={styles.results}>
-					<Text style={styles.resultText}>{(numEvents || 'No') + (numEvents == 1 ? ' event' : ' events') + ' found.' }</Text> 
-					<Button href="/create/event">
-						<Text>Create an event</Text>
-					</Button>
+					<Text style={styles.resultText}>{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found.' }</Text> 
+					<Button href="/create/event">Create an event</Button>
 				</Section>
 
 				<EventList events={this.props.events} location={this.props.location} />
