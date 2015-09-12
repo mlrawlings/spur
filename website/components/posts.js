@@ -30,9 +30,6 @@ styles.postBar = {
 	backgroundColor: '#f4f4f4',
 	alignItems: 'flex-end'
 }
-styles.postButton = {
-	width: 80
-}
 
 styles.postContainer = {
 	marginTop:30,
@@ -120,7 +117,7 @@ class Posts extends React.Component {
 					
 					<TextArea ref="postMessage" style={styles.postTextarea} name="message" placeholder="Write something..." />
 					<View style={styles.postBar}>
-						<Button style={styles.postButton} onClick={this.submitPost.bind(this)} type="submit">Post</Button>
+						<Button onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 					</View>
 				</form>}
 				{event.posts.map((post, index) => {

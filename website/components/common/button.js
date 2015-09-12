@@ -1,4 +1,6 @@
 var React = require('react')
+  , Image = require('./image')
+  , Text = require('./text')
 
 var styles = {}
 
@@ -18,6 +20,8 @@ styles.normal = {
 	backgroundColor: '#04beca',
 	borderBottomColor:'rgba(0,0,0,0.2)',
 
+	flexDirection:'row',
+
 	textDecoration: 'none',
 	cursor:'pointer'
 }
@@ -27,6 +31,24 @@ styles.pressed = {
 	paddingBottom: 8,
 	borderBottomWidth: 0,
 	outline:'none'
+}
+
+styles.image = {
+	width:20,
+	height:20
+}
+
+styles.text = {
+	flex:1,
+	paddingLeft:6,
+	paddingRight:6
+}
+
+styles.textWithIcon = {
+	flex:1,
+	paddingLeft:6,
+	paddingRight:6,
+	marginLeft:8
 }
 
 styles.overlay = {
@@ -52,10 +74,11 @@ class Button extends React.Component {
 		this.setState({ pressed:false })
 	}
 	render() {
-		var { style, ...props } = this.props
+		var { style, src, children, ...props } = this.props
 		  , buttonStyle = { ...styles.normal, ...style }
 		  , press = this.press.bind(this)
 		  , release = this.release.bind(this)
+		  , Tag = this.props.href ? 'a' : 'button'
 
 		if(this.state.pressed) {
 			buttonStyle = { ...buttonStyle, ...styles.pressed }
@@ -65,10 +88,12 @@ class Button extends React.Component {
 			//props.children = [props.children, <div style={styles.overlay} />]
 		}
 
-		if(this.props.href)
-			return <a style={buttonStyle} {...props} onMouseDown={press} onMouseUp={release} onMouseLeave={release} />
-		else
-			return <button style={buttonStyle} {...props} onMouseDown={press} onMouseUp={release} onMouseLeave={release} />
+		return (
+			<Tag style={buttonStyle} {...props} onMouseDown={press} onMouseUp={release} onMouseLeave={release}>
+				{src && <Image style={styles.image} src={src} />}
+				{children && <Text style={src ? styles.textWithIcon : styles.text}>{children}</Text>}
+			</Tag>
+		)
 	}
 }
 

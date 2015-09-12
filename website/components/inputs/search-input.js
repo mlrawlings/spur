@@ -34,9 +34,7 @@ class SearchInput extends React.Component {
 		return (
 			<View style={{ ...styles.container, ...style }}>
 				<input {...props} style={styles.input} type="text" placeholder="what do you want to do?" />
-				<Button type="submit">
-					<Image style={styles.icon} src="/images/search-white.png" />
-				</Button>
+				<Button type="submit" src="/images/search-white.png" />
 			</View>
 		)
 	}

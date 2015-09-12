@@ -98,27 +98,15 @@ styles.attendingButtons = {
 
 styles.inviteButton = {
 	marginLeft:5,
-	backgroundColor:'rgb(0,132,255)',
-	flexDirection:'row'
+	backgroundColor:'rgb(0,132,255)'
 }
-
-styles.inviteButtonImage = {
-	width:20,
-	height:20,
-	marginRight:8
-}
-
-styles.inviteButtonText = {
-	flex:1
-}
-
 
 styles.description = {
 	flex: 1
 }
 
 styles.bail = {
-	backgroundColor: '#c00'
+	backgroundColor: '#666'
 }
 
 styles.actions = {
@@ -181,11 +169,10 @@ class EventPage extends React.Component {
 							<Heading style={styles.attendingHeader}>Want to go?</Heading>
 							<View style={styles.attendingButtons}>
 								<Button href={'/event/'+event.id+'/join'}>
-									+ Join
+									Join
 								</Button>
-								<Button style={styles.inviteButton}>
-									<Image style={styles.inviteButtonImage} src="/images/messenger-icon-white.png" />
-									<Text style={styles.inviteButtonText}>Invite a Friend</Text>
+								<Button style={styles.inviteButton} src="/images/messenger-icon-white.png">
+									Invite a Friend
 								</Button>
 							</View>
 						</View>
@@ -194,11 +181,10 @@ class EventPage extends React.Component {
 							<Heading style={styles.attendingHeader}>You are going!</Heading>
 							<View style={styles.attendingButtons}>
 								<Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
-									&times; Bail
+									Bail
 								</Button>
-								<Button style={styles.inviteButton}>
-									<Image style={styles.inviteButtonImage} src="/images/messenger-icon-white.png" />
-									<Text style={styles.inviteButtonText}>Invite a Friend</Text>
+								<Button style={styles.inviteButton} src="/images/messenger-icon-white.png">
+									Invite a Friend
 								</Button>
 							</View>
 						</View>

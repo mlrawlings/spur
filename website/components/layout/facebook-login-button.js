@@ -82,10 +82,12 @@ class FacebookLoginButton extends React.Component {
 		}
 	}
 	render() {
+		var src = this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png"
+		  , text = this.props.children ? this.props.children : this.state.userId ? 'Log out' : 'Log in' 
+
 		return (
-			<Button style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
-				<Image style={styles.image} src={this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png" } />
-				<Text style={styles.text}>{this.props.children ? this.props.children : this.state.userId ? 'Log out' : 'Log in' }</Text>
+			<Button src={src} style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
+				{text}
 			</Button>
 		)
 	}
