@@ -35,7 +35,7 @@ class PostForm extends React.Component {
 		var event = this.props.event
 		  , user = this.props.user
 
-		if(!user) return
+		if(!user) return false
 
 		return (
 			<form style={styles.form} action={'/event/'+event.id+'/post'} method="POST">

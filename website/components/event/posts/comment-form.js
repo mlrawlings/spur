@@ -1,5 +1,6 @@
 var React = require('react')
   , Image = require('../../core/image')
+  , View = require('../../core/view')
   , TextArea = require('react-textarea-autosize')
 
 const ENTER = 13
@@ -43,7 +44,7 @@ class Comment extends React.Component {
 		  , post = this.props.post
 		  , user = this.props.user
 
-		if(!user) return
+		if(!user) return false
 
 		return (
 			<form style={styles.form} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
