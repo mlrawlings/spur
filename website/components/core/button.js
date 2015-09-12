@@ -10,7 +10,6 @@ styles.normal = {
 	fontWeight: 600,
 	fontSize: 14,
 	textAlign: 'center',
-	color:'#fff',
 
 	padding:8,
 	paddingBottom:5,
@@ -42,14 +41,16 @@ styles.image = {
 styles.text = {
 	flex:1,
 	paddingLeft:6,
-	paddingRight:6
+	paddingRight:6,
+	color:'#fff'
 }
 
 styles.textWithIcon = {
 	flex:1,
 	paddingLeft:6,
 	paddingRight:6,
-	marginLeft:8
+	marginLeft:8,
+	color:'#fff'
 }
 
 class Button extends React.Component {
