@@ -1,29 +1,19 @@
 var React = require('react')
+  , Touchable = require('./touchable')
 
 var styles = {}
 
-styles.pressed = {
+styles.active = {
 	opacity:0.8
 }
 
 class Link extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { pressed:false }
-	}
-	press() {
-		this.setState({ pressed:true })
-	}
-	release() {
-		this.setState({ pressed:false })
-	}
 	render() {
-		var { style, ...props } = this.props
-		  , linkStyle = this.state.pressed ? { ...style, ...styles.pressed } : style
-		  , press = this.press.bind(this)
-		  , release = this.release.bind(this)
+		var { style, styleActive, ...props } = this.props
 
-		return <a {...props} style={linkStyle} onMouseDown={press} onMouseUp={release} onMouseLeave={release} />
+		styleActive = { ...styles.active, ...styleActive }
+
+		return <Touchable tag="a" {...props} style={style} styleActive={styleActive} />
 	}
 }
 

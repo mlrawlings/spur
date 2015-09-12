@@ -1,4 +1,5 @@
 var React = require('react')
+  , Touchable = require('./touchable')
   , Image = require('./image')
   , Text = require('./text')
 
@@ -26,7 +27,7 @@ styles.normal = {
 	cursor:'pointer'
 }
 
-styles.pressed = {
+styles.active = {
 	top:2,
 	paddingBottom: 8,
 	borderBottomWidth: 0,
@@ -51,48 +52,16 @@ styles.textWithIcon = {
 	marginLeft:8
 }
 
-styles.overlay = {
-	backgroundColor:'rgba(0,0,0,0.2)',
-	position:'absolute',
-	top:0,
-	right:0,
-	left:0,
-	bottom:0,
-	borderRadius:4,
-	pointerEvents:'none'
-}
-
 class Button extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { pressed:false }
-	}
-	press() {
-		this.setState({ pressed:true })
-	}
-	release() {
-		this.setState({ pressed:false })
-	}
 	render() {
-		var { style, src, children, ...props } = this.props
-		  , buttonStyle = { ...styles.normal, ...style }
-		  , press = this.press.bind(this)
-		  , release = this.release.bind(this)
-		  , Tag = this.props.href ? 'a' : 'button'
-
-		if(this.state.pressed) {
-			buttonStyle = { ...buttonStyle, ...styles.pressed }
-		}
-
-		if(this.state.pressed) {
-			//props.children = [props.children, <div style={styles.overlay} />]
-		}
+		var { style, styleActive, src, children, ...props } = this.props
+		  , tag = this.props.href ? 'a' : 'button'
 
 		return (
-			<Tag style={buttonStyle} {...props} onMouseDown={press} onMouseUp={release} onMouseLeave={release}>
+			<Touchable tag={tag} {...props} style={{ ...styles.normal, ...style}} styleActive={{ ...styles.active, ...styleActive}}>
 				{src && <Image style={styles.image} src={src} />}
 				{children && <Text style={src ? styles.textWithIcon : styles.text}>{children}</Text>}
-			</Tag>
+			</Touchable>
 		)
 	}
 }
