@@ -1,7 +1,7 @@
 var React = require('react')
-  , Button = require('../common/button')
-  , Image = require('../common/image')
-  , View = require('../common/view')
+  , Button = require('../core/button')
+  , Image = require('../core/image')
+  , View = require('../core/view')
   , categories = require('../../data/categories')
 
 var styles = {}

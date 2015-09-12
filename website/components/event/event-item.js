@@ -1,11 +1,11 @@
 var React = require('react')
   , Color = require('color')
   , EventBanner = require('./event-banner')
-  , Link = require('./common/link')
-  , View = require('./common/view')
-  , Text = require('./common/text')
-  , timeUtil = require('../util/time')
-  , categories = require('../data/categories')
+  , Link = require('../core/link')
+  , View = require('../core/view')
+  , Text = require('../core/text')
+  , timeUtil = require('../../util/time')
+  , categories = require('../../data/categories')
 
 var styles = {}
 

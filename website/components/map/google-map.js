@@ -1,7 +1,7 @@
 var React = require('react/addons')
   , Marker = require('./google-map-marker')
-  , Image = require('../common/image')
-  , View = require('../common/view')
+  , Image = require('../core/image')
+  , View = require('../core/view')
 
 var styles = {}
 

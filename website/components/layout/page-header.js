@@ -1,9 +1,9 @@
 var React = require('react')
-  , FacebookLoginButton = require('./facebook-login-button')
-  , Section = require('../common/section')
-  , Link = require('../common/link')
-  , Image = require('../common/image')
-  , View = require('../common/view')
+  , FacebookLoginButton = require('../button/facebook-login-button')
+  , Section = require('./section')
+  , Link = require('../core/link')
+  , Image = require('../core/image')
+  , View = require('../core/view')
 
 var styles = {}
 

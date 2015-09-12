@@ -1,8 +1,8 @@
 var Router = require('express/lib/router')
   , Home = require('./components/home')
-  , EventResults = require('./components/event-results')
-  , EventPage = require('./components/event-page')
-  , EventForm = require('./components/event-form')
+  , EventResults = require('./components/event/event-results')
+  , EventPage = require('./components/event/event-page')
+  , EventForm = require('./components/event/event-form')
   , router = new Router()
 
 router.all('*', function(req, res, next) {

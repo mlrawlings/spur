@@ -1,5 +1,5 @@
 var React = require('react')
-  , Input = require('../common/input')
+  , Input = require('../core/input')
   , locationUtil = require('../../util/location')
 
 var styles = {}

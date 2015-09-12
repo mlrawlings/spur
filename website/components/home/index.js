@@ -1,9 +1,8 @@
 var React = require('react')
-  , Layout = require('./layout')
+  , Layout = require('../layout')
   , Hero = require('./hero')
   , About = require('./about')
-  , EventList = require('./event-list')
-
+  , EventList = require('../event/event-list')
 
 class Home extends React.Component {
 	render() {

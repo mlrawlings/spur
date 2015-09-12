@@ -1,9 +1,9 @@
 var React = require('react')
-  , Section = require('./common/section')
-  , Heading = require('./common/heading')
-  , Text = require('./common/text')
-  , View = require('./common/view')
-  , Image = require('./common/image')
+  , Section = require('../layout/section')
+  , Heading = require('../layout/heading')
+  , Image = require('../core/image')
+  , Text = require('../core/text')
+  , View = require('../core/view')
 
 var styles = {}
 

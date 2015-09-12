@@ -1,7 +1,7 @@
 var React = require('react')
-  , Section = require('./common/section')
-  , Heading = require('./common/heading')
-  , Text = require('./common/text')
+  , Section = require('../layout/section')
+  , Heading = require('../layout/heading')
+  , Text = require('../core/text')
 
 var styles = {}
 

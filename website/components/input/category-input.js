@@ -1,8 +1,8 @@
 var React = require('react')
   , Color = require('color')
-  , Image = require('../common/image')
-  , View = require('../common/view')
-  , Text = require('../common/text')
+  , Image = require('../core/image')
+  , View = require('../core/view')
+  , Text = require('../core/text')
   , categories = require('../../data/categories')
 
 var styles = {}

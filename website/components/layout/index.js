@@ -1,8 +1,7 @@
 var React = require('react')
-  , FacebookLoginButton = require('./facebook-login-button')
-  , Header = require('./header')
-  , Footer = require('./footer')
-  , View = require('../common/view')
+  , PageHeader = require('./page-header')
+  , PageFooter = require('./page-footer')
+  , View = require('../core/view')
 
 var styles = {}
 
@@ -15,9 +14,9 @@ class Layout extends React.Component {
 		var { children, ...props} = this.props
 		return (
 			<View style={styles.container}>
-				<Header {...props} />
+				<PageHeader {...props} />
 				<View style={styles.container}>{children}</View>
-				<Footer />
+				<PageFooter />
 			</View>
 		)
 	}

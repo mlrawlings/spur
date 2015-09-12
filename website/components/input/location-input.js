@@ -1,9 +1,9 @@
 var React = require('react')
-  , GoogleMap = require('../common/google-map')
-  , GoogleMapMarker = require('../common/google-map-marker')
+  , GoogleMap = require('../map/google-map')
+  , GoogleMapMarker = require('../map/google-map-marker')
   , GooglePlaceInput = require('./google-place-input')
-  , Input = require('../common/input')
-  , View = require('../common/view')
+  , Input = require('../core/input')
+  , View = require('../core/view')
   , locationUtil = require('../../util/location')
 
 var styles = {}

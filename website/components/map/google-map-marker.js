@@ -1,6 +1,6 @@
 var React = require('react')
-  , Image = require('../common/image')
-  , View = require('../common/view')
+  , Image = require('../core/image')
+  , View = require('../core/view')
 
 var styles = {}
 

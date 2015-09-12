@@ -1,13 +1,13 @@
 var React = require('react')
-  , Layout = require('./layout')
+  , Layout = require('../layout')
+  , Section = require('../layout/section')
   , EventList = require('./event-list')
-  , SearchInput = require('./inputs/search-input')
-  , Section = require('./common/section')
-  , Button = require('./common/button')
-  , Image = require('./common/image')
-  , Link = require('./common/link')
-  , View = require('./common/view')
-  , Text = require('./common/text')
+  , SearchInput = require('../input/search-input')
+  , Button = require('../core/button')
+  , Image = require('../core/image')
+  , Link = require('../core/link')
+  , View = require('../core/view')
+  , Text = require('../core/text')
 
 var styles = {}
 

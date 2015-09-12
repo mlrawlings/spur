@@ -1,10 +1,10 @@
 var React = require('react')
-  , Button = require('./common/button')
-  , View = require('./common/view')
-  , Text = require('./common/text')
-  , Image = require('./common/image')
+  , Button = require('../../core/button')
+  , View = require('../../core/view')
+  , Text = require('../../core/text')
+  , Image = require('../../core/image')
   , TextArea = require('react-textarea-autosize')
-  , timeUtil = require('../util/time')
+  , timeUtil = require('../../../util/time')
 
 const ENTER = 13
 

@@ -1,5 +1,5 @@
 var React = require('react')
-  , Text = require('./text')
+  , Text = require('../core/text')
   , timeUtil = require('../../util/time')
 
 

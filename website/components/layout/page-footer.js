@@ -1,7 +1,6 @@
 var React = require('react')
-  , FacebookLoginButton = require('./facebook-login-button')
-  , Section = require('../common/section')
-  , Text = require('../common/text')
+  , Section = require('./section')
+  , Text = require('../core/text')
 
 var styles = {}
 
@@ -19,7 +18,7 @@ styles.copyright = {
 	color:'#999'
 }
 
-class Footer extends React.Component {
+class PageFooter extends React.Component {
 	render() {
 		return (
 			<Section style={styles.footer}>
@@ -31,4 +30,4 @@ class Footer extends React.Component {
 	}
 }
 
-module.exports = Footer
+module.exports = PageFooter

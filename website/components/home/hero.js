@@ -1,9 +1,9 @@
 var React = require('react')
-  , SearchInput = require('./inputs/search-input')
-  , Section = require('./common/section')
-  , Button = require('./common/button')
-  , Image = require('./common/image')
-  , Text = require('./common/text')
+  , SearchInput = require('../input/search-input')
+  , Section = require('../layout/section')
+  , Button = require('../core/button')
+  , Image = require('../core/image')
+  , Text = require('../core/text')
 
 var styles = {}
 

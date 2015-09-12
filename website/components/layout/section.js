@@ -1,5 +1,5 @@
 var React = require('react')
-  , View = require('./view')
+  , View = require('../core/view')
 
 var styles = {}
 

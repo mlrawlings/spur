@@ -1,8 +1,8 @@
 var React = require('react')
   , EventItem = require('./event-item')
-  , Section = require('./common/section')
-  , Heading = require('./common/heading')
-  , time = require('../util/time')
+  , Section = require('../layout/section')
+  , Heading = require('../layout/heading')
+  , time = require('../../util/time')
 
 var styles = {}
 

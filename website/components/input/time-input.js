@@ -1,8 +1,6 @@
 var React = require('react')
-  , GeoPoint = require('geopoint')
-  , GoogleMap = require('google-map-react')
-  , Input = require('../common/input')
-  , View = require('../common/view')
+  , Input = require('../core/input')
+  , View = require('../core/view')
   , timeUtil = require('../../util/time')
 
 var styles = {}

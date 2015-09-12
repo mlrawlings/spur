@@ -1,12 +1,12 @@
 var React = require('react')
   , Color = require('color')
-  , TimeUntil = require('./common/time-until')
-  , Image = require('./common/image')
-  , View = require('./common/view')
-  , Text = require('./common/text')
-  , timeUtil = require('../util/time')
-  , locationUtil = require('../util/location')
-  , categories = require('../data/categories')
+  , TimeUntil = require('../format/time-until')
+  , Image = require('../core/image')
+  , View = require('../core/view')
+  , Text = require('../core/text')
+  , timeUtil = require('../../util/time')
+  , locationUtil = require('../../util/location')
+  , categories = require('../../data/categories')
 
 var styles = {}
 

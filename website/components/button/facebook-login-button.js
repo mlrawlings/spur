@@ -1,7 +1,7 @@
 var React = require('react')
-  , Button = require('../common/button')
-  , Image = require('../common/image')
-  , Text = require('../common/text')
+  , Button = require('../core/button')
+  , Image = require('../core/image')
+  , Text = require('../core/text')
   , api = require('../../../api/client')
 
 var styles = {}
