@@ -12,7 +12,7 @@ class Posts extends React.Component {
 
 		return (
 			<View style={style}>
-				<Heading>Discussion</Heading>
+				{!!(user || event.posts.length) && <Heading>Discussion</Heading>}
 				<PostForm event={event} user={user} />
 				{event.posts.map(post => <Post event={event} user={user} post={post} key={post.id} />)}
 			</View>
