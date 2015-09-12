@@ -10,7 +10,7 @@ var styles = {}
 
 styles.attend = {
 	justifyContent:'center',
-	alignItems:'center'
+	alignItems:'flex-start'
 }
 
 styles.header = {
@@ -20,7 +20,8 @@ styles.header = {
 }
 
 styles.buttons = {
-	flexDirection:'row'
+	flexDirection:'row',
+	marginTop:5
 }
 
 styles.invite = {
@@ -37,12 +38,14 @@ class AttendAndInvite extends React.Component {
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 
 		if(!user) return <View style={{...styles.attend, ...style}}>
-			<Heading style={styles.header}>Want to go?</Heading>
-			<FacebookLoginButton>Login to Join or Post</FacebookLoginButton>
+			<Heading>Want to go?</Heading>
+			<View style={styles.buttons}>
+				<FacebookLoginButton>Login to Join or Post</FacebookLoginButton>
+			</View>
 		</View>
 		
 		if(!attending) return <View style={{...styles.attend, ...style}}>
-			<Heading style={styles.header}>Want to go?</Heading>
+			<Heading>Want to go?</Heading>
 			<View style={styles.buttons}>
 				<Button href={'/event/'+event.id+'/join'}>
 					Join
@@ -52,7 +55,7 @@ class AttendAndInvite extends React.Component {
 		</View>
 
 		if(attending) return <View style={{...styles.attend, ...style}}>
-			<Heading style={styles.header}>You are going!</Heading>
+			<Heading>You are going!</Heading>
 			<View style={styles.buttons}>
 				<Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
 					Bail

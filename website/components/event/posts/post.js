@@ -9,7 +9,7 @@ var React = require('react')
 var styles = {}
 
 styles.container = {
-	marginBottom:30,
+	marginTop:30,
 	borderWidth:1,
 	borderColor:'#ddd'
 }
@@ -47,12 +47,10 @@ styles.content = {
 
 class Post extends React.Component {
 	render() {
-		var event = this.props.event
-		  , post = this.props.post
-		  , user = this.props.user
+		var { event, post, user, style } = this.props
 
 		return (
-			<View style={styles.container}>
+			<View style={{...styles.container, ...style}}>
 				<View style={styles.post}>
 					<View style={styles.heading}>
 						<Image style={styles.image} src={'https://graph.facebook.com/'+post.user.fbid+'/picture'} />

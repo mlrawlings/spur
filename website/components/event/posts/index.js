@@ -6,6 +6,10 @@ var React = require('react')
 
 var styles = {}
 
+styles.first = {
+	marginTop:0
+}
+
 class Posts extends React.Component {
 	render() {
 		var { event, user, style } = this.props
@@ -14,7 +18,9 @@ class Posts extends React.Component {
 			<View style={style}>
 				{!!(user || event.posts.length) && <Heading>Discussion</Heading>}
 				<PostForm event={event} user={user} />
-				{event.posts.map(post => <Post event={event} user={user} post={post} key={post.id} />)}
+				{event.posts.map((post, i) => 
+					<Post event={event} user={user} post={post} style={!i ? styles.first : {}} key={post.id} />
+				)}
 			</View>
 		)
 	}

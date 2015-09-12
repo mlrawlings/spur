@@ -52,11 +52,26 @@ styles.address = {
 }
 
 styles.content = {
-	flexDirection:'row'
+	flexDirection:'row',
+	paddingTop:20,
+	paddingBottom:20
 }
 
 styles.leftColumn = {
 	flex:1
+}
+
+styles.details = {
+	backgroundColor: '#f4f4f4',
+	borderBottomWidth: 1,
+	borderBottomColor: '#ddd',
+	flexDirection:'row',
+	paddingTop:20,
+	paddingBottom:20
+}
+
+styles.description = {
+	flex: 1
 }
 
 styles.attendees = {
@@ -65,26 +80,8 @@ styles.attendees = {
 	alignItems:'flex-end'
 }
 
-styles.details = {
-	backgroundColor: '#f4f4f4',
-	borderBottomWidth: 1,
-	borderBottomColor: '#ddd',
-	flexDirection:'row',
-	paddingTop:15,
-	paddingBottom:15
-}
-
-styles.attendCenter = {
-	flex:1
-}
-
-styles.attendLeft = {
-	alignItems:'flex-end'
-}
-
-styles.description = {
-	flex: 1,
-	marginRight:15
+styles.posts = {
+	marginTop:30
 }
 
 class EventPage extends React.Component {
@@ -123,16 +120,18 @@ class EventPage extends React.Component {
 					</View>
 				</Section>
 				
-				<Section style={styles.details}>
-					{event.description && <View style={styles.description}>
+				{event.description && <Section style={styles.details}>
+					<View style={styles.description}>
 						<Heading>Description</Heading>
 						<Text>{event.description}</Text>
-					</View>}
-					<AttendAndInvite style={event.description ? styles.attendLeft : styles.attendCenter} event={event} user={user} />
-				</Section>
+					</View>
+				</Section>}
 
 				<Section style={styles.content}>
-					<Posts style={styles.leftColumn} event={event} user={this.props.user} />
+					<View style={styles.leftColumn}>
+						<AttendAndInvite event={event} user={user} />
+						<Posts style={styles.posts} event={event} user={this.props.user} />
+					</View>
 					<Attendees style={styles.attendees} event={event} />
 				</Section>
 			</Layout>
