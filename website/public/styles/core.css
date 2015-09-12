@@ -44,13 +44,13 @@ body {
 }
 
 #app span {
-	flex-direction:'row';
+	display:inline-block;
 }
 
 #app a span, 
 #app span a, 
 #app span span, 
 #app button span {
-	display: inline-flex;
+	display: inline;
 	color:inherit;
 }
