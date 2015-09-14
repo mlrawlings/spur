@@ -33,7 +33,8 @@ styles.name = {
 
 styles.time = {
 	color:'#999',
-	marginLeft:4
+	marginLeft:4,
+	fontSize:11
 }
 
 class Comment extends React.Component {

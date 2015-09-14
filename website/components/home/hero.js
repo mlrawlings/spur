@@ -28,14 +28,10 @@ styles.tagline = {
 	color:'#fff'
 }
 
-styles.searchForm = {
-	width:'100%',
-	maxWidth:450,
-	marginTop:16
-}
-
-styles.searchInput = {
-	width:'100%'
+styles.action = {
+	marginTop:16,
+	fontSize:20,
+	fontWeight:400
 }
 
 class Hero extends React.Component {
@@ -44,9 +40,7 @@ class Hero extends React.Component {
 			<Section style={styles.hero}>
 				<Image style={styles.logo} src="/images/spur-text-white.png" alt="spur" />
 				<Text style={styles.tagline}>live in the moment</Text>
-				<form action="/events" style={styles.searchForm}>
-					<SearchInput name="q" style={styles.searchInput} />
-				</form>
+				<Button style={styles.action} href="/events">Find Nearby Events!</Button>
 			</Section>
 		)
 	}
