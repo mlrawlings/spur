@@ -38,12 +38,8 @@ router.get('/', function (req, res, next) {
 	})
 })
 
-router.get('/profile', function(req, res, next) {
-	if(!res.props.user) {
-		return res.redirect('/events')
-	}
-
-	req.api.get('/users/me').end(function(err, response) {
+router.get('/profile/:id', function(req, res, next) {
+	req.api.get('/users/'+req.params.id).end(function(err, response) {
 		if(err) return next(err)
 
 		res.render(Profile, { profileUser:response.body })

@@ -64,9 +64,7 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 })
 
 router.get('/users/:id', function(req, res, next) {
-	var id = req.params.id == 'me' ? req.session.user.id : req.params.id
-
-	r.table('users').get(id).merge(function(user) {
+	r.table('users').get(req.params.id).merge(function(user) {
 		return {
 			events:r.table('moment').filter(function(event) {
 				return user('events').contains(event('id'))

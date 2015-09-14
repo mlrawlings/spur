@@ -3,6 +3,7 @@ var React = require('react')
   , Heading = require('../layout/heading')
   , Image = require('../core/image')
   , Text = require('../core/text')
+  , Link = require('../core/link')
   , View = require('../core/view')
 
 var styles = {}
@@ -28,10 +29,10 @@ class Attendees extends React.Component {
 			<View style={style}>
 				<Heading style={styles.going}>{event.attendees.length + ' Going'}</Heading>	
 				{event.attendees.map(attendee =>
-					<View style={styles.attendee}>
+					<Link style={styles.attendee} href={'/profile/'+attendee.id}>
 						<Text>{attendee.name.first}</Text>
 						<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
-					</View>
+					</Link>
 				)}
 			</View>
 		)
