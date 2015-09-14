@@ -27,13 +27,13 @@ styles.field = {
 	borderBottomWidth: 1,
 	borderBottomColor: '#999',
 	backgroundColor: '#444',
-	cursor:'pointer'
+	cursor:'pointer',
+	marginLeft:8,
+	marginRight:8
 }
 
 styles.text = {
-	color:'#eee',
-	marginLeft:8,
-	marginRight:8
+	color:'#eee'
 }
 
 class EventResults extends React.Component {
@@ -41,10 +41,7 @@ class EventResults extends React.Component {
 		app.submit(React.findDOMNode(this.refs.form))
 	}
 	render() {
-		var events = this.props.events
-		  , search = this.props.search
-		  , radius = this.props.radius
-		  , location = this.props.location
+		var { events, user, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
 		
 		return (
@@ -54,16 +51,16 @@ class EventResults extends React.Component {
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found ' }
 							within
-							<select style={{ ...styles.text, ...styles.field }} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
+							<select style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
 								{radii.map(r => <option value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
 							</select>
 							of
-							<Link style={{ ...styles.text, ...styles.field }}>
+							<Link style={styles.field}>
 								{this.props.location.name}
 							</Link>
 						</Text>
 					</form>
-					<Button href="/create/event">Create an event</Button>
+					{user && <Button href="/create/event">Create an event</Button>}
 				</Section>
 
 				<EventList events={this.props.events} location={this.props.location} />
