@@ -1,5 +1,6 @@
 var Router = require('express/lib/router')
   , Home = require('./components/home')
+  , Profile = require('./components/profile')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
@@ -34,6 +35,18 @@ router.get('/', function (req, res, next) {
 		if(err) return next(err)
 
 		res.render(Home, { events: response.body })
+	})
+})
+
+router.get('/profile', function(req, res, next) {
+	if(!res.props.user) {
+		return res.redirect('/events')
+	}
+
+	req.api.get('/users/me').end(function(err, response) {
+		if(err) return next(err)
+
+		res.render(Profile, { profileUser:response.body })
 	})
 })
 

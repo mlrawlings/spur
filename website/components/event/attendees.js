@@ -16,7 +16,8 @@ styles.attendee = {
 
 styles.picture = {
 	height: 25,
-	marginLeft: 5
+	marginLeft: 5,
+	borderRadius:4
 }
 
 class Attendees extends React.Component {

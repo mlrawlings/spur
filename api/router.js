@@ -33,7 +33,8 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 							last:fbUser.last_name,
 							full:fbUser.name
 						},
-						birthday: new Date(fbUser.birthday)
+						birthday: new Date(fbUser.birthday),
+						events:[]
 					}
 					return r.table('users').insert(user).run(connection).then(function(result) {
 						user.id = result.generated_keys[0]
@@ -56,6 +57,23 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 		if(err) return next(err)
 
 		res.end()
+	})
+})
+
+router.get('/users/:id', function(req, res, next) {
+	var id = req.params.id == 'me' ? req.session.user.id : req.params.id
+
+	r.table('users').get(id).merge(function(user) {
+		return {
+			events:r.table('moment').filter(function(event) {
+				return user('events').contains(event('id'))
+			}).coerceTo('array')
+		}
+	}).run(connection).then(function(user) {
+		res.json(user)
+	}).catch(function(err) {
+		console.log(err)
+		next(err)
 	})
 })
 
@@ -97,7 +115,7 @@ router.get('/moments/:id', function(req, res, next) {
 			posts:moment('posts').map(function(post) {
 				return post.merge(function(post) {
 					return {
-						user:r.db('spur').table('users').get(post('user')),
+						user:r.table('users').get(post('user')),
 						comments:post('comments').map(function(comment) {
 							return comment.merge(function(comment) {
 								return {
@@ -138,7 +156,11 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
 
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
-		res.status(201).json(moment.generated_keys[0])
+		r.table('users').get(req.session.user.id).update({ 
+			events:r.row('events').setInsert(moment.id) 
+		}).run(connection).then(function() {
+			res.status(201).json(moment.generated_keys[0])
+		})
 	}).catch(next)
 
 	// {
@@ -205,9 +227,14 @@ router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').get(req.params.id).update({ 
-		attendees:r.row('attendees').setInsert(req.session.user.id) 
-	}).run(connection).then(function(moment) {
+	Promise.all([
+		r.table('moment').get(req.params.id).update({ 
+			attendees:r.row('attendees').setInsert(req.session.user.id) 
+		}).run(connection),
+		r.table('users').get(req.session.user.id).update({ 
+			events:r.row('events').setInsert(req.params.id) 
+		}).run(connection)
+	]).then(function() {
 		res.status(204).end()
 	}).catch(next)
 })
@@ -217,9 +244,14 @@ router.delete('/moments/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').get(req.params.id).update({ 
-		attendees:r.row('attendees').setDifference([req.session.user.id]) 
-	}).run(connection).then(function(moment) {
+	Promise.all([
+		r.table('moment').get(req.params.id).update({ 
+			attendees:r.row('attendees').setDifference([req.session.user.id]) 
+		}).run(connection),
+		r.table('users').get(req.session.user.id).update({ 
+			events:r.row('events').setDifference([req.params.id]) 
+		}).run(connection)
+	]).then(function(moment) {
 		res.status(204).end()
 	}).catch(next)
 })

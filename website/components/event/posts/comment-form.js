@@ -18,7 +18,8 @@ styles.form = {
 styles.image = {
 	width:35,
 	height:35,
-	marginRight:10
+	marginRight:10,
+	borderRadius:4
 }
 
 styles.message = {

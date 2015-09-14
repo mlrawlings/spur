@@ -25,6 +25,7 @@ styles.heading = {
 
 styles.image = {
 	marginRight:10,
+	borderRadius:4
 }
 
 styles.data = {

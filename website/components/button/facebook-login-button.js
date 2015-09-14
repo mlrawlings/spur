@@ -1,5 +1,6 @@
 var React = require('react')
   , Button = require('../core/button')
+  , Link = require('../core/link')
   , Image = require('../core/image')
   , Text = require('../core/text')
   , api = require('../../../api/client')
@@ -21,6 +22,13 @@ styles.text = {
 	flex:1,
 	paddingLeft:10,
 	paddingRight:10
+}
+
+styles.avatar = {
+	width:36,
+	height:36,
+	borderRadius:4,
+	marginLeft:16
 }
 
 class FacebookLoginButton extends React.Component {
@@ -82,11 +90,16 @@ class FacebookLoginButton extends React.Component {
 		}
 	}
 	render() {
-		var src = this.state.userId ? 'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture' : "/images/facebook-icon-white.png"
-		  , text = this.props.children ? this.props.children : this.state.userId ? 'Log out' : 'Log in' 
+		var text = this.props.children ? this.props.children : this.state.userId ? 'Log out' : 'Log in' 
+
+		if(this.props.avatar && this.state.userId) return (
+			<Link href="/profile">
+				<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture?width=36'} />
+			</Link>
+		)
 
 		return (
-			<Button src={src} style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
+			<Button src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
 				{text}
 			</Button>
 		)

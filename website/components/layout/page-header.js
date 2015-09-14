@@ -50,6 +50,8 @@ styles.login = {
 
 class Header extends React.Component {
 	render() {
+		var user = this.props.user
+
 		return (
 			<Section style={styles.header}>
 				<Link href="/" style={styles.homeLink}>
@@ -57,12 +59,9 @@ class Header extends React.Component {
 				</Link>
 				<View style={styles.nav}>
 					<Link href="/events" style={styles.navLink}>
-						Browse
+						Events
 					</Link>
-					<Link href="" style={styles.navLink}>
-						Businesses
-					</Link>
-					<FacebookLoginButton style={styles.login} user={this.props.user} />
+					<FacebookLoginButton style={styles.login} user={user} avatar={true} />
 				</View>
 			</Section>
 		)
