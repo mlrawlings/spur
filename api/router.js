@@ -47,6 +47,9 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 				req.session.token = access_token
 
 				res.json({ user:user, token:access_token })
+			}).catch(function(err) {
+				console.error(err)
+				next(err)
 			})
 		})
 	})
@@ -72,7 +75,7 @@ router.get('/users/:id', function(req, res, next) {
 	}).run(connection).then(function(user) {
 		res.json(user)
 	}).catch(function(err) {
-		console.log(err)
+		console.error(err)
 		next(err)
 	})
 })
@@ -102,7 +105,10 @@ router.get('/moments', function(req, res, next) {
 		return moments.toArray()
 	}).then(function(moments) {
 		res.json(moments)
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 // Get moment by id
@@ -129,7 +135,10 @@ router.get('/moments/:id', function(req, res, next) {
 		}
 	}).run(connection).then(function(moment) {
 		res.json(moment)
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 // Create moment
@@ -157,11 +166,14 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
 		r.table('users').get(req.session.user.id).update({ 
-			events:r.row('events').setInsert(moment.id) 
+			events:r.row('events').setInsert(moment.generated_keys[0]) 
 		}).run(connection).then(function() {
 			res.status(201).json(moment.generated_keys[0])
 		})
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 
 	// {
 	// 	name: String required,
@@ -197,7 +209,10 @@ router.post('/moments/:id/posts', function(req, res, next) {
 		posts:r.row('posts').append(post) 
 	}).run(connection).then(function(moment) {
 		res.status(204).end()
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 // Create a comment on a post
@@ -219,7 +234,10 @@ router.post('/moments/:mid/posts/:pid/comments', function(req, res, next) {
 		}))
 	}).run(connection).then(function(moment) {
 		res.status(204).end()
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 // I'm in
@@ -236,7 +254,10 @@ router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 		}).run(connection)
 	]).then(function() {
 		res.status(204).end()
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 // I'm out
@@ -253,7 +274,10 @@ router.delete('/moments/:id/attendees'/*, session*/, function(req, res, next){
 		}).run(connection)
 	]).then(function(moment) {
 		res.status(204).end()
-	}).catch(next)
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
 })
 
 module.exports = router
