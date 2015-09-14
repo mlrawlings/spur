@@ -94,7 +94,7 @@ class FacebookLoginButton extends React.Component {
 
 		if(this.props.avatar && this.state.userId) return (
 			<Link href="/profile">
-				<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture?width=36'} />
+				<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+this.state.userId+'/picture'} />
 			</Link>
 		)
 

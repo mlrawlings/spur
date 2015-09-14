@@ -45,7 +45,7 @@ class Profile extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section style={styles.header}>
-					<Image style={styles.photo} src={'https://graph.facebook.com/v2.3/'+user.fbid+'/picture?width=150'} />
+					<Image style={styles.photo} src={'https://graph.facebook.com/v2.3/'+user.fbid+'/picture?width=150&height=150'} />
 					<Text style={styles.name}>{user.name.full}</Text>
 					<FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>
 				</Section>
