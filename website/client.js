@@ -14,6 +14,12 @@ app.use(expressReact())
 app.use(function(req, res, next) {
 	res.props.user = window.user
   res.props.location = JSON.parse(cookie.get('location'))
+  res.props.radius = parseFloat(cookie.get('radius'))
+  next()
+})
+
+app.use(function(req, res, next) {
+  res.cookie = cookie.set.bind(cookie)
   next()
 })
 

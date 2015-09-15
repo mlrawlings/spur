@@ -22,9 +22,9 @@ router.all('*', function(req, res, next) {
 		'/styles/core.css'
 	]
 
-	res.document.meta = [
+	/*res.document.meta = [
 		{ name:'viewport', content:'width=device-width, initial-scale=1' }
-	]
+	]*/
 
 	next()
 })
@@ -47,10 +47,22 @@ router.get('/profile/:id', function(req, res, next) {
 })
 
 router.get('/events', function(req, res, next) {
-	var location = res.props.location.coords.join(',')
-	  , radius = req.query.radius || 5
+	var radius = parseFloat(req.query.radius) || res.props.radius
+	  , location = res.props.location.coords.join(',')
 
-	req.api.get('/moments').query({ location, radius }).end(function(err, response) {
+	if(radius != res.props.radius) {
+		res.cookie('radius', radius)
+		res.props.radius = radius
+	}
+
+	if(req.query.location) try {
+		var newLocation = JSON.parse(req.query.location)
+		location = newLocation.coords.join(',')
+		res.props.location = newLocation
+		res.cookie('location', req.query.location)
+  	} catch(e) {}
+
+  	req.api.get('/moments').query({ location, radius }).end(function(err, response) {
 		if(err) return next(err)
 
 		res.render(EventResults, { events: response.body, radius, search:req.query.q })

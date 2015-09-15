@@ -29,6 +29,7 @@ app.use(cookieParser())
 
 app.use(function(req, res, next) {
 	res.props.user = req.session.user
+  res.props.radius = parseFloat(req.cookies.radius) || 5
 
   if(req.cookies.location) {
     res.props.location = JSON.parse(req.cookies.location)
