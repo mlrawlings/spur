@@ -68,7 +68,7 @@ router.get('/users/:id', function(req, res, next) {
 		return {
 			events:r.table('moment').filter(function(event) {
 				return user('events').contains(event('id'))
-			}).coerceTo('array')
+			}).orderBy(r.desc('time')).coerceTo('array')
 		}
 	}).run(connection).then(function(user) {
 		res.json(user)
