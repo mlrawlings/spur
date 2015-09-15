@@ -28,7 +28,7 @@ class Video extends React.Component {
 		return (
 			<Section style={styles.container}>
 				<View style={styles.aspect}>
-					<iframe style={styles.video} src="https://www.youtube.com/embed/HXTpJ9CZTMU?modestbranding=1&autohide=1&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
+					<iframe style={styles.video} src="https://www.youtube.com/embed/HXTpJ9CZTMU?modestbranding=1&autohide=1&showinfo=0&rel=0" frameBorder="0" allowFullScreen></iframe>
 				</View>
 			</Section>
 		)
