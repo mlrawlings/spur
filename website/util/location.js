@@ -7,7 +7,7 @@ exports.getLocation = function() {
 		navigator.geolocation.getCurrentPosition(function(location) {
 			var coords = [location.coords.latitude, location.coords.longitude]
 			exports.getAddressFromCoords(coords).then(function(address) {
-				resolve({ name:address.street, coords })
+				resolve(address)
 			}).catch(reject)
 		}, reject)
 	})
@@ -79,8 +79,8 @@ exports.getAddressFromCoords = function(coords) {
 
 		geocoder.geocode({ location:exports.toGoogleLatLng(coords) }, (results, status) => {
 			if (status === google.maps.GeocoderStatus.OK) {
-				if (results[0]) {
-					resolve(exports.getAddressComponents(results[0]))
+				if(results[0]) {
+					resolve(results[0])
 				} else {
 					reject('No results found')
 				}

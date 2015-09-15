@@ -75,6 +75,7 @@ body {
 	color:#444;
 }
 
+#app img, 
 #app span {
 	display:inline-block;
 
@@ -86,6 +87,14 @@ body {
 	padding: 0;
 	
 	color:#444;
+}
+
+#app span > * {
+	display: -webkit-inline-box;
+	display: -moz-inline-box;
+	display: -ms-inline-flexbox;
+	display: -webkit-inline-flex;
+	display: inline-flex;
 }
 
 #app a span, 

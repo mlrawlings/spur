@@ -66,7 +66,9 @@ class LocationInput extends React.Component {
 		this.setState({ location:this.state.location })
 		this.focusName()
 
-		locationUtil.getAddressFromCoords(coords).then((address) => {
+		locationUtil.getAddressFromCoords(coords).then(address => {
+			return locationUtil.getAddressComponents(address)
+		}).then(address => {
 			address.coords = coords
 			this.setState({ location:address })
 		}).catch(window.alert)
