@@ -121,7 +121,7 @@ exports.roundToNearest15 = function(time) {
 	if(difference <= 7) {
 		time.setMinutes(originalMinutes-difference)
 	} else {
-		time.setMinutes(originalMinutes+difference)
+		time.setMinutes(originalMinutes+15-difference)
 	}
 
 	time.setSeconds(0)
