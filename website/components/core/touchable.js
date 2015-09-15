@@ -1,4 +1,5 @@
 var React = require('react')
+  , prefix = require('auto-prefixer')
 
 class Touchable extends React.Component {
 	constructor(props) {
@@ -28,7 +29,7 @@ class Touchable extends React.Component {
 
 		return (
 			<Tag {...props} 
-				style={linkStyle} 
+				style={prefix(linkStyle)} 
 				onMouseDown={press} 
 				onMouseUp={release} 
 				onMouseEnter={hover} 

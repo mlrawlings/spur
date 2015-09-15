@@ -1,4 +1,5 @@
 var React = require('react')
+  , prefix = require('auto-prefixer')
 
 var styles = {}
 
@@ -8,7 +9,7 @@ class Text extends React.Component {
 	render() {
 		var { style, ...props } = this.props
 
-		return <span {...this.props} style={{ ...styles.text, ...style }} />
+		return <span {...props} style={prefix({ ...styles.text, ...style })} />
 	}
 }
 

@@ -1,8 +1,11 @@
 var React = require('react')
+  , prefix = require('auto-prefixer')
 
 class Image extends React.Component {
 	render() {
-		return <img {...this.props} />
+		var { style, ...props } = this.props
+
+		return <img style={prefix(style)} {...props} />
 	}
 }
 

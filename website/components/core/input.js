@@ -1,4 +1,5 @@
 var React = require('react')
+  , prefix = require('auto-prefixer')
 
 var styles = {}
 
@@ -14,15 +15,15 @@ class Input extends React.Component {
 		var { style, type, ...props } = this.props
 		
 		if(type == 'textarea')
-			return <textarea {...props} style={{ ...styles.input, ...style }} />
+			return <textarea {...props} style={prefix({ ...styles.input, ...style })} />
 		
 		if(type == 'select')
-			return <select {...props} style={{ ...styles.input, ...style }} />
+			return <select {...props} style={prefix({ ...styles.input, ...style })} />
 		
 		if(type == 'hidden')
 			return <input type={type} {...props} />
 
-		return <input type={type} {...props} style={{ ...styles.input, ...style }} />
+		return <input type={type} {...props} style={prefix({ ...styles.input, ...style })} />
 	}
 }
 

@@ -21,6 +21,10 @@ class Section extends React.Component {
 		var { flexDirection, flexWrap, flexFlow, justifyContent, alignItems, alignContent, ...containerStyles} = this.props.style || {}
 		  , wrapperStyles = { flexDirection, flexWrap, flexFlow, justifyContent, alignItems, alignContent }
 
+		Object.keys(wrapperStyles).forEach(function(style) {
+			if(wrapperStyles[style] === undefined) delete wrapperStyles[style]
+		})
+
 		return (
 			<View style={{ ...styles.container, ...containerStyles }}>
 				<View style={{ ...styles.wrapper, ...wrapperStyles }}>
