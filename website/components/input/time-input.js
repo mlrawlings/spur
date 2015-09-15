@@ -1,6 +1,7 @@
 var React = require('react')
   , Input = require('../core/input')
   , View = require('../core/view')
+  , Text = require('../core/text')
   , timeUtil = require('../../util/time')
 
 var styles = {}
@@ -11,6 +12,14 @@ styles.container = {
 
 styles.day = {
 	borderLeftWidth:0
+}
+
+styles.text = {
+	fontSize:13
+}
+
+styles.error = {
+	color:'#c00'
 }
 
 class LocationInput extends React.Component {
@@ -60,14 +69,18 @@ class LocationInput extends React.Component {
 		  , error = this.state.time < new Date()
 
 		return (
-			<View style={styles.container}>
-				<Input type="time" style={styles.time} value={time} onChange={this.changeTime.bind(this)} />
-				<Input type="select" ref="day" style={styles.day} value={day} onChange={this.changeDay.bind(this)}>
-					<option value="today">Today</option>
-					<option value="tomorrow">Tomorrow</option>
-				</Input>
+			<View>
+				<View style={styles.container}>
+					<Input type="time" style={styles.time} value={time} onChange={this.changeTime.bind(this)} />
+					<Input type="select" ref="day" style={styles.day} value={day} onChange={this.changeDay.bind(this)}>
+						<option value="today">Today</option>
+						<option value="tomorrow">Tomorrow</option>
+					</Input>
+				</View>
+				<Text style={styles.text}>
+					{error && <Text style={styles.error}>Error! You cannot post an event in the past.</Text>}
+				</Text>
 				<Input name="time" value={this.state.time.toJSON()} type="hidden" />
-				{error && <View>Error! You can't post an event in the past.</View>}
 			</View>
 		)
 	}
