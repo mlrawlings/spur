@@ -13,11 +13,17 @@ exports.format = function(time) {
 
 exports.getTimeClass = function(time) {
 	var hours = time.getHours()
-	  , today = time.getDay() == new Date().getDay()
+	  , monthNames = ["January", "February", "March", "April", "May", "June",
+			"July", "August", "September", "October", "November", "December"
+		]
 
-	if(today){
+	if(exports.isToday(time)) {
 		if(hours < 4) {
-			return 'Late Tonight/Early Today'
+			if(new Date().getHours() < 4) {
+				return 'Late Tonight/Early This Morning'
+			} else {
+				return 'Late Last Night/Early This Morning'
+			}
 		} else if(hours >= 4 && hours < 12) {
 			return 'This Morning'
 		} else if(hours >= 12 && hours < 17) {
@@ -27,9 +33,9 @@ exports.getTimeClass = function(time) {
 		} else {
 			return 'Tonight'
 		}
-	} else {
+	} else if(exports.isTomorrow(time)) {
 		if(hours < 4) {
-			return 'Late Tonight/Early Tomorrow'
+			return 'Late Tonight/Early Tomorrow Morning'
 		} else if(hours >= 4 && hours < 12) {
 			return 'Tomorrow Morning'
 		} else if(hours >= 12 && hours < 17) {
@@ -39,7 +45,31 @@ exports.getTimeClass = function(time) {
 		} else {
 			return 'Tomorrow Night'
 		}
+	} else if(exports.isYesterday(time)) {
+		return 'Yesterday'
+	} else {
+		return monthNames[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
 	}
+}
+
+exports.isToday = function(time) {
+	var now = new Date()
+
+	return time.getFullYear() == now.getFullYear() && time.getMonth() == now.getMonth() && time.getDate() == now.getDate()
+}
+
+exports.isTomorrow = function(time) {
+	var tomorrow = new Date()
+	tomorrow.setDate(tomorrow.getDate()+1)
+
+	return time.getFullYear() == tomorrow.getFullYear() && time.getMonth() == tomorrow.getMonth() && time.getDate() == tomorrow.getDate()
+}
+
+exports.isYesterday = function(time) {
+	var yesterday = new Date()
+	yesterday.setDate(yesterday.getDate()-1)
+
+	return time.getFullYear() == yesterday.getFullYear() && time.getMonth() == yesterday.getMonth() && time.getDate() == yesterday.getDate()
 }
 
 exports.getRelativeTimeString = function(time, current) {
