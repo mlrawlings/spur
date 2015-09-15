@@ -1,7 +1,8 @@
 var React = require('react')
   , Layout = require('../layout')
   , Hero = require('./hero')
-  , About = require('./about')
+  , DownloadAndShare = require('./download-and-share')
+  , Video = require('./video')
   , EventList = require('../event/event-list')
 
 class Home extends React.Component {
@@ -9,7 +10,8 @@ class Home extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 		    	<Hero />			
-				<About />
+				<DownloadAndShare />
+				<Video />
 				<EventList events={this.props.events} location={this.props.location} />
 			</Layout>
 		)
