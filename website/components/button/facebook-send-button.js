@@ -8,9 +8,18 @@ styles.send = {
 }
 
 class FacebookSendButton extends React.Component {
+	onClick(e) {
+		if(!/android|ios/i.test(navigator.userAgent)) {
+			FB.ui({
+				method: 'send',
+				link: window.location.href,
+			})
+			e.preventDefault()
+		}
+	}
 	render() {
 		return (
-			<Button style={{...styles.send, ...this.props.style}} src="/images/messenger-icon-white.png">
+			<Button onClick={this.onClick} style={{...styles.send, ...this.props.style}} src="/images/messenger-icon-white.png">
 				{this.props.children || 'Send'}
 			</Button>
 		)
