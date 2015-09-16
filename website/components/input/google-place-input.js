@@ -9,15 +9,18 @@ var styles = {}
 
 styles.container = {
 	flexDirection: 'row',
-	alignItems: 'center',
 	borderWidth:1,
 	borderColor:'#ddd',
 	backgroundColor:'#fff'
 }
 
-styles.currentLocation = {
-	width: 15,
+styles.currentLocationLink = {
 	cursor: 'pointer',
+	justifyContent:'center'
+}
+
+styles.currentLocationImage = {
+	width: 15,
 	top: 2,
 	marginRight:8
 }
@@ -82,9 +85,10 @@ class GooglePlaceInput extends React.Component {
 		var { value, style, onChange, ...props } = this.props
 		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height, ...containerStyle} = style
 		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height}
+		  , linkStyle = styles.currentLocationLink
 
 		inputStyle.paddingLeft = 0
-		containerStyle.paddingLeft = paddingLeft || padding
+		linkStyle.paddingLeft = paddingLeft || padding
 
 		Object.keys(inputStyle).forEach(function(style) {
 			if(inputStyle[style] === undefined) delete inputStyle[style]
@@ -92,8 +96,8 @@ class GooglePlaceInput extends React.Component {
 
 		return (
 			<View style={{ ...styles.container, ...containerStyle}}>
-				<Link onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
-					<Image style={styles.currentLocation} src="/images/current-location.png" />
+				<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
+					<Image style={styles.currentLocationImage} src="/images/current-location.png" />
 				</Link>
 				<Input ref="input" style={{...styles.input, ...inputStyle}} defaultValue={value} placeholder="Enter an address or the name of an establishment..." {...props} />
 			</View>
