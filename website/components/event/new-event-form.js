@@ -31,6 +31,11 @@ styles.descriptionInput = {
 	borderTopWidth:0
 }
 
+styles.optional = {
+	fontSize:11,
+	color:'#aaa'
+}
+
 class NewEventForm extends React.Component {
 	componentDidMount() {
 		React.findDOMNode(this.refs.name).focus()
@@ -41,9 +46,8 @@ class NewEventForm extends React.Component {
 				<Section>
 					<form method="POST" action="/create/event" className="createEvent">
 						<View style={styles.field}>
-							<Label required={true}>Name &amp; Description</Label>
+							<Label required={true}>Name</Label>
 							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
-							<TextArea name="description" style={styles.descriptionInput} placeholder="Add an optional description..." />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>When</Label>
@@ -56,6 +60,10 @@ class NewEventForm extends React.Component {
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
 							<CategoryInput name="category" required={true} />
+						</View>
+						<View style={styles.field}>
+							<Label required={true}>Details <Text style={styles.optional}>(optional)</Text></Label>
+							<TextArea name="description" style={styles.descriptionInput} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
 							<Button type="submit">Create Event</Button>
