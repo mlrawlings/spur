@@ -1,6 +1,7 @@
 var React = require('react')
   , View = require('../../core/view')
   , Text = require('../../core/text')
+  , Link = require('../../core/link')
   , Image = require('../../core/image')
   , timeUtil = require('../../../util/time')
 
@@ -18,7 +19,8 @@ styles.comment = {
 styles.image = {
 	width:35,
 	height:35,
-	marginRight:10
+	marginRight:10,
+	borderRadius:4
 }
 
 styles.message = {
@@ -43,9 +45,11 @@ class Comment extends React.Component {
 
 		return (
 			<View style={styles.comment}>
-				<Image style={styles.image} src={'https://graph.facebook.com/'+comment.user.fbid+'/picture'} />
+				<Link href={'/profile/'+comment.user.id}>
+					<Image style={styles.image} src={'https://graph.facebook.com/'+comment.user.fbid+'/picture'} />
+				</Link>
 				<Text style={styles.message}>
-					<Text style={styles.name}>{comment.user.name.first}</Text> 
+					<Link href={'/profile/'+comment.user.id} style={styles.name}>{comment.user.name.first}</Link> 
 					{comment.message} 
 					<Text style={styles.time}>{timeUtil.format(comment.time)}</Text>
 				</Text>

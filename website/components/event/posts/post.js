@@ -3,6 +3,7 @@ var React = require('react')
   , CommentForm = require('./comment-form')
   , View = require('../../core/view')
   , Text = require('../../core/text')
+  , Link = require('../../core/link')
   , Image = require('../../core/image')
   , timeUtil = require('../../../util/time')
 
@@ -54,9 +55,11 @@ class Post extends React.Component {
 			<View style={{...styles.container, ...style}}>
 				<View style={styles.post}>
 					<View style={styles.heading}>
-						<Image style={styles.image} src={'https://graph.facebook.com/'+post.user.fbid+'/picture'} />
+						<Link href={'/profile/'+post.user.id}>
+							<Image style={styles.image} src={'https://graph.facebook.com/'+post.user.fbid+'/picture'} />
+						</Link>
 						<View style={styles.data}>
-							<Text style={styles.name}>{post.user.name.full}</Text>
+							<Link href={'/profile/'+post.user.id} style={styles.name}>{post.user.name.full}</Link>
 							<Text style={styles.time}>{timeUtil.format(post.time)}</Text>
 						</View>
 					</View>

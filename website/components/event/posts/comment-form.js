@@ -1,6 +1,7 @@
 var React = require('react')
   , Image = require('../../core/image')
   , View = require('../../core/view')
+  , Link = require('../../core/link')
   , TextArea = require('react-textarea-autosize')
 
 const ENTER = 13
@@ -49,7 +50,9 @@ class Comment extends React.Component {
 
 		return (
 			<form style={styles.form} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
-				<Image style={styles.image} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
+				<Link href={'/profile/'+user.id}>
+					<Image style={styles.image} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
+				</Link>
 				<TextArea style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
 			</form>
 		)
