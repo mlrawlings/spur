@@ -57,7 +57,6 @@ class EventResults extends React.Component {
 	render() {
 		var { events, user, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
-		console.log(location)
 
 		return (
 			<Layout user={this.props.user}>
