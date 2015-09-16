@@ -74,10 +74,15 @@ exports.isYesterday = function(time) {
 
 exports.getRelativeTimeString = function(time, current) {
 	var now = current || new Date()
-	  , diff = time.getTime() - now.getTime()
+	now.setSeconds(0)
+	now.setMilliseconds(0)
+	time.setSeconds(0)
+	time.setMilliseconds(0)
+
+	var diff = time.getTime() - now.getTime()
 	  , days = Math.floor(diff/(24*60*60*1000))
 	  , hours = Math.floor(diff/(60*60*1000)) - days*24
-	  , minutes = time.getMinutes() - now.getMinutes()
+	  , minutes = Math.floor(diff/(60*1000)) - days*24*60 - hours*60//time.getMinutes() - now.getMinutes()
 
 	minutes = minutes < 0 ? minutes+60 : minutes
 

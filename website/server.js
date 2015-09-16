@@ -1,6 +1,4 @@
-require('babel/register')({
-  ignore:false
-})
+require('../babel')
 
 var express = require('express')
   , app = module.exports = express()
