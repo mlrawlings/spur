@@ -159,7 +159,9 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
 	moment.posts = []
+	moment.cancelled = false
 	moment.attendees = [req.session.user.id]
+	moment.owner = req.session.user.id
 	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
 
 	r.table('moment').insert(moment).run(connection).then(function(moment) {
@@ -188,6 +190,38 @@ router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
 	// 	// attendees: [UserId],
 	// 	// posts: [PostId]
 	// }
+})
+
+// Cancel an event
+router.post('/moments/:id/cancel', function(req, res, next) {
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
+
+	r.table('moment').get(req.params.id).update(function(moment) {
+		return r.branch(moment('owner').eq(req.session.user.id), {
+			cancelled: true
+		}, {})
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(function(err) {
+		next(err)
+	})
+})
+
+// Cancel an event
+router.post('/moments/:id/uncancel', function(req, res, next) {
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
+
+	r.table('moment').get(req.params.id).update(function(moment) {
+		return r.branch(moment('owner').eq(req.session.user.id), {
+			cancelled: false
+		}, {})
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(function(err) {
+		next(err)
+	})
 })
 
 // Create a post on a moment

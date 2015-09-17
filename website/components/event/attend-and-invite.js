@@ -32,10 +32,29 @@ styles.bail = {
 	backgroundColor: '#666'
 }
 
+styles.uncancel = {
+	
+}
+
+styles.cancel = {
+	backgroundColor: '#c00',
+	marginLeft:5
+}
+
 class AttendAndInvite extends React.Component {
 	render() {
 		var { event, user, style } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
+		  , isOwner = user && user.id == event.owner
+
+		if(event.cancelled) return <View style={{...styles.attend, ...style}}>
+			<Heading>This event is cancelled</Heading>
+			{isOwner && <View style={styles.buttons}>
+				<Button style={styles.uncancel} href={'/event/'+event.id+'/uncancel'}>
+					UnCancel
+				</Button>
+			</View>}
+		</View>
 
 		if(!user) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>
@@ -43,6 +62,8 @@ class AttendAndInvite extends React.Component {
 				<FacebookLoginButton>Login to Join or Post</FacebookLoginButton>
 			</View>
 		</View>
+
+		
 		
 		if(!attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>
@@ -51,6 +72,9 @@ class AttendAndInvite extends React.Component {
 					Join
 				</Button>
 				<FacebookSendButton style={styles.invite}>Invite a Friend</FacebookSendButton>
+				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
+					Cancel
+				</Button>}
 			</View>
 		</View>
 
@@ -61,6 +85,9 @@ class AttendAndInvite extends React.Component {
 					Bail
 				</Button>
 				<FacebookSendButton style={styles.invite}>Invite a Friend</FacebookSendButton>
+				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
+					Cancel
+				</Button>}
 			</View>
 		</View>
 	}

@@ -98,6 +98,22 @@ router.get('/event/:id/bail', function(req, res, next) {
 	})
 })
 
+router.get('/event/:id/cancel', function(req, res, next) {
+	req.api.post('/moments/'+req.params.id+'/cancel').send(req.body).end(function(err, response) {
+		if(err) return next(err)
+
+		res.redirect('/event/'+req.params.id)
+	})
+})
+
+router.get('/event/:id/uncancel', function(req, res, next) {
+	req.api.post('/moments/'+req.params.id+'/uncancel').send(req.body).end(function(err, response) {
+		if(err) return next(err)
+
+		res.redirect('/event/'+req.params.id)
+	})
+})
+
 router.post('/event/:id/post', function(req, res, next) {
 	req.api.post('/moments/'+req.params.id+'/posts').send(req.body).end(function(err, response) {
 		if(err) return next(err)
