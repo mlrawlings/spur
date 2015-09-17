@@ -25,7 +25,7 @@ styles.createLink = {
 
 class EventList extends React.Component {
 	render() {
-		var { location, events } = this.props
+		var { location, events, user } = this.props
 		  , previousTimeClass
 		
 		return (
@@ -45,8 +45,10 @@ class EventList extends React.Component {
 						]
 					}
 				}) : (
-					<Text style={styles.noEvents}>
+					user ? <Text style={styles.noEvents}>
 						There are currently no events nearby.  Try increasing your radius or <Link style={styles.createLink} href="/create/event">create your own event</Link>.
+					</Text> : <Text style={styles.noEvents}>
+						There are currently no events nearby.  Try increasing your radius.
 					</Text>
 				)}
 			</Section>

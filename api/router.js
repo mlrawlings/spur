@@ -94,6 +94,7 @@ router.get('/moments', function(req, res, next) {
 	}
 
 	var containsAttendees = req.session.user ? r.row('attendees').contains(req.session.user.id) : false
+	  , isOwner = req.session.user ? r.row('owner').eq(req.session.user.id) : false
 
 	r.table('moment').getIntersecting(
 		r.circle(location, radius, {unit: 'mi'}), 
@@ -103,6 +104,7 @@ router.get('/moments', function(req, res, next) {
 		.and(
 			r.row('cancelled').ne(true)
 			.or(containsAttendees)
+			.or(isOwner)
 		)
 	).orderBy(
 		r.asc('time')
