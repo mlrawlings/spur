@@ -76,7 +76,7 @@ class EventResults extends React.Component {
 					{user && <Button href="/create/event">Create an event</Button>}
 				</Section>
 
-				<EventList events={this.props.events} location={this.props.location} />
+				<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
 			</Layout>
 		)
 	}

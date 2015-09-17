@@ -36,13 +36,23 @@ styles.details = {
 }
 
 class EventItem extends React.Component {
+
+
 	render() {
 		var event = this.props.event
 		  , category = categories[event.category || 'other']
+		  , itemStyles = {...styles.item }
+		  , nameStyles = {...styles.name }
+
+		if(event.cancelled) {
+			itemStyles.opacity = 0.5
+			nameStyles.textDecoration = 'line-through'
+		}
+
 		return (
-			<Link style={styles.item} href={"/event/"+event.id}>
+			<Link style={itemStyles} href={"/event/"+event.id}>
 				<View style={styles.summary}>
-					<Text style={styles.name}>
+					<Text style={nameStyles}>
 						{event.name}
 					</Text>
 					<Text style={styles.details}>

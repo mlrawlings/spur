@@ -95,6 +95,10 @@ router.get('/moments', function(req, res, next) {
 		{ index:'locationIndex' }
 	).filter(
 		r.row('time').gt(twentyMinutesAgo)
+		.and(
+			r.row('cancelled').ne(true)
+			.or(r.row('attendees').contains(req.session.user && req.session.user.id))
+		)
 	).orderBy(
 		r.asc('time')
 	).without(
