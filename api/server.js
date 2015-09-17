@@ -4,6 +4,9 @@ var express = require('express')
   , config = require('../common/config')
   , router = require('./router')
   , session = require('../common/middleware/session')
+  , cookieParser = require('cookie-parser')
+
+app.use(cookieParser())
 
 require('../common/util/json-date-parse')
 

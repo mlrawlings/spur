@@ -90,12 +90,10 @@ class EventPage extends React.Component {
 		  , user = this.props.user
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
-		  , attending = !user || event.attendees.some(attendee => attendee.id == user.id)
 		  , titleStyles = { ...styles.title }
 
 		if(event.cancelled)
 			titleStyles.textDecoration = 'line-through'
-		
 
 		return (
 			<Layout user={this.props.user}>

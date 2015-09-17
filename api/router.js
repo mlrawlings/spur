@@ -14,7 +14,7 @@ r.connect(config.rethink).then(function(conn) {
 
 router.post('/auth'/*, session*/, function(req, res, next) {
 	fb.exchangeToken(req.query.access_token, function(err, access_token) {
-		fb.get('/me?fields=name,first_name,last_name,birthday').query({
+		fb.get('/me?fields=name,first_name,last_name,birthday,email,gender').query({
 			access_token:access_token
 		}).end(function(err, response) {
 			if(err) return next(err)
@@ -33,7 +33,10 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 							last:fbUser.last_name,
 							full:fbUser.name
 						},
+						gender: fbUser.gender,
 						birthday: new Date(fbUser.birthday),
+						email: fbUser.email,
+						location: JSON.parse(req.cookies.location),
 						events:[]
 					}
 					return r.table('users').insert(user).run(connection).then(function(result) {
@@ -90,6 +93,8 @@ router.get('/moments', function(req, res, next) {
 		return next(new Error('you must define a location: "lat,lng"'))
 	}
 
+	var containsAttendees = req.session.user ? r.row('attendees').contains(req.session.user.id) : false
+
 	r.table('moment').getIntersecting(
 		r.circle(location, radius, {unit: 'mi'}), 
 		{ index:'locationIndex' }
@@ -97,7 +102,7 @@ router.get('/moments', function(req, res, next) {
 		r.row('time').gt(twentyMinutesAgo)
 		.and(
 			r.row('cancelled').ne(true)
-			.or(r.row('attendees').contains(req.session.user && req.session.user.id))
+			.or(containsAttendees)
 		)
 	).orderBy(
 		r.asc('time')
