@@ -15,22 +15,22 @@ if(process.env.NODE_ENV == 'production') {
 	/* DEVELOPMENT */
 	defaultConfig = {
 		rethink: {
-			host:'localhost',
+			host:'local.tryspur.com',
 			port: 28015,
 			db: 'spur'
 		},
 		redis: {
-			host: 'localhost',
+			host: 'local.tryspur.com',
 			port: 6379
 		},
 		api: {
 			protocol: 'http',
-			host: 'localhost',
+			host: 'local.tryspur.com',
 			port: 7788
 		},
 		webserver: {
 			protocol: 'http',
-			host: 'localhost',
+			host: 'local.tryspur.com',
 			port: 7787
 		}
 	}
