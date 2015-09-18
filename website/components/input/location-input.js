@@ -48,7 +48,15 @@ class LocationInput extends React.Component {
 		}
 	}
 	changePlace(place) {
-		this.setState({ location:locationUtil.getAddressComponents(place), zoom: 18 })
+		var placeObject = locationUtil.getAddressComponents(place)
+		this.setState({ location:placeObject, zoom: 18 })
+
+		if(placeObject.name)
+			React.findDOMNode(this.refs.name).value = placeObject.name
+		else {
+			React.findDOMNode(this.refs.name).value = ''
+		}
+
 		this.focusName()
 	}
 	focusName() {
