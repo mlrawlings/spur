@@ -5,6 +5,8 @@ var Router = require('express/lib/router')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
   , router = new Router()
+  , fb = require('../common/util/facebook')
+  , appId = 1455687261396384
 
 router.all('*', function(req, res, next) {
 	res.document.title = 'Spur | Live in the Moment'
@@ -75,6 +77,33 @@ router.get('/', function(req, res, next) {
 		if(err) return next(err)
 
 		res.render(EventResults, { events: response.body, radius, search:req.query.q })
+	})
+})
+
+router.get('/facebook', function(req, res, next) {
+	req.session.facebookReferrer = req.header('Referrer')
+
+	res.redirect("https://www.facebook.com/dialog/oauth?client_id="+appId+"&redirect_uri="+req.protocol + '://' + req.get('host')+"/facebook/callback&response_type=code")
+})
+
+router.get('/facebook/callback', function(req, res, next) {
+	fb.get('/oauth/access_token').query({
+		client_id: appId,
+		redirect_uri: req.protocol + '://' + req.get('host')+'/facebook/callback',
+		client_secret: 'dd4dabdb7190bf9a91550729a39c7e34',
+		code: req.query.code
+	}).end(function(err, response) {
+		if(err) return next(err)
+		
+		req.api.post('/auth?'+response.text).end(function(err, response) {
+			console.log('ended')
+			console.log(err)
+			console.log(response.body)
+			console.log(req.session.user)
+			res.redirect(req.session.facebookReferrer)
+		})
+		console.log(response.text.replace('access_token=', ''))
+		console.log(req.session.facebookReferrer)
 	})
 })
 

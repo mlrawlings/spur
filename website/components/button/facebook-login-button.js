@@ -99,7 +99,7 @@ class FacebookLoginButton extends React.Component {
 		)
 
 		return (
-			<Button src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
+			<Button href="/facebook" src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }} onClick={this.click.bind(this)}>
 				{text}
 			</Button>
 		)

@@ -46,10 +46,13 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 				}
 				return user
 			}).then(function(user) {
+				console.log('setting session', user)
 				req.session.user = user
 				req.session.token = access_token
 
-				res.json({ user:user, token:access_token })
+				req.session.save(function() {
+					res.json({ user:user, token:access_token })
+				})
 			}).catch(function(err) {
 				console.error(err)
 				next(err)
