@@ -9,6 +9,11 @@ var Router = require('express/lib/router')
 router.all('*', function(req, res, next) {
 	res.document.title = 'Spur | Live in the Moment'
 
+	res.document.links = [{
+		rel: 'shortcut icon',
+		href: '/favicon.ico'
+	}]
+
 	res.document.scripts = [
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
@@ -22,9 +27,13 @@ router.all('*', function(req, res, next) {
 		'/styles/core.css'
 	]
 
-	/*res.document.meta = [
-		{ name:'viewport', content:'width=device-width, initial-scale=1' }
-	]*/
+	res.document.meta = [
+		{ name:'viewport', content:'width=device-width, initial-scale=1' },
+		{ property:'og:site_name', content:'Spur' },
+		{ property:'fb:app_id', content:'1455687261396384' },
+		{ property:'og:locale', content:'en_US' },
+		{ property:'og:type', content:'article' }
+	]
 
 	next()
 })
@@ -77,6 +86,12 @@ router.get('/event/:id', function(req, res, next) {
 		var event = response.body
 
 		res.document.title = event.name + ' | Spur'
+
+		res.document.meta.push({ property:'og:title', content:event.name })
+		res.document.meta.push({ property:'og:url', content:req.protocol + '://' + req.get('host') + req.originalUrl })
+		
+		if(event.description)
+			res.document.meta.push({ property:'og:description', content:event.description })
 
 		res.render(EventPage, { event:event })
 	})
