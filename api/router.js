@@ -73,7 +73,7 @@ router.get('/users/:id', function(req, res, next) {
 				return user('events').contains(event('id'))
 			}).orderBy(r.desc('time')).coerceTo('array')
 		}
-	}).run(connection).then(function(user) {
+	}).without('email', 'location').run(connection).then(function(user) {
 		res.json(user)
 	}).catch(function(err) {
 		console.error(err)
@@ -124,13 +124,13 @@ router.get('/moments', function(req, res, next) {
 router.get('/moments/:id', function(req, res, next) {
 	r.table('moment').get(req.params.id).merge(function(moment) {
 		return {
-			attendees:r.table('users').filter(function(user) {
+			attendees:r.table('users').without('email', 'location').filter(function(user) {
 				return moment('attendees').contains(user('id'))
 			}).coerceTo('array'),
 			posts:moment('posts').map(function(post) {
 				return post.merge(function(post) {
 					return {
-						user:r.table('users').get(post('user')),
+						user:r.table('users').get(post('user')).without('email', 'location'),
 						comments:post('comments').map(function(comment) {
 							return comment.merge(function(comment) {
 								return {
