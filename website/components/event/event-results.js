@@ -37,7 +37,14 @@ styles.field = {
 }
 
 styles.text = {
-	color:'#eee'
+	color:'#eee',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center'
+}
+
+styles.googlePlaceWrapper = {
+	
 }
 
 class EventResults extends React.Component {
@@ -57,19 +64,23 @@ class EventResults extends React.Component {
 	render() {
 		var { events, user, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
+		  , addressField = {...styles.field }
+
+		addressField.width = 250
 
 		return (
 			<Layout user={this.props.user}>
 				<Section style={styles.results}>
 					<form ref="form" action="/events" method="GET">
 						<Text style={styles.text}>
-							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found ' }
-							within
+							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 							<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
 								{radii.map(r => <option value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
 							</select>
 							of
-							<GooglePlaceInput style={styles.field} location={location} value={location.name} onChange={this.changeLocation.bind(this)} />
+							<Text style={styles.googlePlaceWrapper}>
+								<GooglePlaceInput style={addressField} location={location} value={location.name} onChange={this.changeLocation.bind(this)} />
+							</Text>
 							<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 						</Text>
 					</form>

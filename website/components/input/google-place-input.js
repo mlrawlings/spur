@@ -21,7 +21,7 @@ styles.currentLocationLink = {
 
 styles.currentLocationImage = {
 	width: 15,
-	top: 2,
+	top: 1,
 	marginRight:8
 }
 
@@ -87,7 +87,7 @@ class GooglePlaceInput extends React.Component {
 		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height}
 		  , linkStyle = styles.currentLocationLink
 
-		inputStyle.paddingLeft = 0
+		inputStyle.padding = 2
 		linkStyle.paddingLeft = paddingLeft || padding
 
 		Object.keys(inputStyle).forEach(function(style) {

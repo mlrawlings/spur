@@ -10,6 +10,7 @@ var React = require('react')
   , GoogleMapMarker = require('../map/google-map-marker')
   , View = require('../core/view')
   , Text = require('../core/text')
+  , Link = require('../core/link')
   , timeUtil = require('../../util/time')
   , categories = require('../../data/categories')
 
@@ -40,7 +41,8 @@ styles.time = {
 }
 
 styles.location = {
-	alignItems:'flex-end'
+	alignItems:'flex-end',
+	textAlign: 'right'
 }
 
 styles.locationName = {
@@ -117,9 +119,12 @@ class EventPage extends React.Component {
 						</Text>
 					</View>
 					<View style={styles.location}>
+
 						<Text style={styles.locationName}>{event.location.name}</Text>
-						<Text style={styles.address}>{event.location.street}</Text>
-						<Text style={styles.address}>{event.location.citystatezip}</Text>
+						<Link href={"http://maps.google.com?daddr="+event.location.coords[0]+','+event.location.coords[1]}>
+							<Text style={styles.address}>{event.location.street}</Text>
+							<Text style={styles.address}>{event.location.citystatezip}</Text>
+						</Link>
 					</View>
 				</Section>
 				

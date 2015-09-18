@@ -42,14 +42,12 @@ styles.image = {
 }
 
 styles.text = {
-	flex:1,
 	paddingLeft:6,
 	paddingRight:6,
 	color:'#fff'
 }
 
 styles.textWithIcon = {
-	flex:1,
 	paddingLeft:6,
 	paddingRight:6,
 	marginLeft:8,
