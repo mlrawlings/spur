@@ -54,11 +54,11 @@ class Header extends React.Component {
 
 		return (
 			<Section style={styles.header}>
-				<Link href="/" style={styles.homeLink}>
+				<View style={styles.homeLink}>
 					<Image style={styles.logo} src="/images/spur-logo.png" />
-				</Link>
+				</View>
 				<View style={styles.nav}>
-					<Link href="/events" style={styles.navLink}>
+					<Link href="/" style={styles.navLink}>
 						Events
 					</Link>
 					<FacebookLoginButton style={styles.login} user={user} avatar={true} />

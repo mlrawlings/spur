@@ -38,14 +38,14 @@ router.all('*', function(req, res, next) {
 	next()
 })
 
-router.get('/', function (req, res, next) {
-	var location = res.props.location.coords.join(',')
-	req.api.get('/moments').query({ location, radius:req.query.radius }).end(function(err, response) {
-		if(err) return next(err)
+// router.get('/', function (req, res, next) {
+// 	var location = res.props.location.coords.join(',')
+// 	req.api.get('/moments').query({ location, radius:req.query.radius }).end(function(err, response) {
+// 		if(err) return next(err)
 
-		res.render(Home, { events: response.body })
-	})
-})
+// 		res.render(Home, { events: response.body })
+// 	})
+// })
 
 router.get('/profile/:id', function(req, res, next) {
 	req.api.get('/users/'+req.params.id).end(function(err, response) {
@@ -55,7 +55,7 @@ router.get('/profile/:id', function(req, res, next) {
 	})
 })
 
-router.get('/events', function(req, res, next) {
+router.get('/', function(req, res, next) {
 	var radius = parseFloat(req.query.radius) || res.props.radius
 	  , location = res.props.location.coords.join(',')
 
