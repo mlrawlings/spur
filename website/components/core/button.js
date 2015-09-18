@@ -2,6 +2,7 @@ var React = require('react')
   , Touchable = require('./touchable')
   , Image = require('./image')
   , Text = require('./text')
+  , View = require('./view')
 
 var styles = {}
 
@@ -20,10 +21,12 @@ styles.normal = {
 	backgroundColor: '#04beca',
 	borderBottomColor:'rgba(0,0,0,0.2)',
 
-	flexDirection:'row',
-
 	textDecoration: 'none',
 	cursor:'pointer'
+}
+
+styles.wrapper = {
+	flexDirection:'row'
 }
 
 styles.active = {
@@ -60,8 +63,10 @@ class Button extends React.Component {
 
 		return (
 			<Touchable tag={tag} {...props} style={{ ...styles.normal, ...style}} styleActive={{ ...styles.active, ...styleActive}}>
+				<View style={styles.wrapper}>
 				{src && <Image style={styles.image} src={src} />}
 				{children && <Text style={src ? styles.textWithIcon : styles.text}>{children}</Text>}
+				</View>
 			</Touchable>
 		)
 	}
