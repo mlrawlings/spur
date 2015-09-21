@@ -1,6 +1,7 @@
 var GeoPoint = require('geopoint')
   , request = require('superagent')
   , geocoder
+  , geoip = require('geoip-lite')
 
 exports.getLocation = function() {
 	return new Promise(function(resolve, reject) {
@@ -15,12 +16,16 @@ exports.getLocation = function() {
 
 exports.getLocationFromIp = function(ip) {
 	return new Promise(function(resolve, reject) {
-		request('http://www.telize.com/geoip/'+ip).end(function(err, response) {
-			if(err) return reject(err)
-			resolve({
-				name:response.body.city +', ' + response.body.region_code,
-				coords:[response.body.latitude, response.body.longitude]
-			})
+		var geo = geoip.lookup("24.248.92.0")
+
+		if(!geo) return resolve({
+			name:'Boston MA',
+			coords:[42.364506, -71.038887]
+		})
+
+		resolve({
+			name:geo.city +', ' + geo.region,
+			coords:geo.ll
 		})
 	})
 }
