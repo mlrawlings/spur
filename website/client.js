@@ -53,3 +53,5 @@ window.fbAsyncInit = function() {
 		}
 	})
 }
+
+if(window.FB) window.fbAsyncInit()
