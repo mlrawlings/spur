@@ -5,6 +5,7 @@ var kent = require('kent/client')
   , locationUtil = require('./util/location')
   , router = require('./router')
   , app = window.app = kent()
+  , config = require('../common/config')
 
 app.use(kentReact())
 
@@ -32,10 +33,10 @@ app.start()
 
 window.fbAsyncInit = function() {
 	FB.init({
-		appId: '1455687261396384',
+		appId: config.facebook.appId,
 		xfbml: false,
 		status: true,
-		version: 'v2.3'
+		version: config.facebook.version
 	})
 
 	FB.getLoginStatus(function onChangeLoginStatus(response) {

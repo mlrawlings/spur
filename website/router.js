@@ -4,9 +4,9 @@ var Home = require('./components/home')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
   , fb = require('../common/util/facebook')
-  , appId = 1455687261396384
   , kent = require('kent/router')
   , router = kent()
+  , config = require('../common/config')
 
 router.use(function(next) {
 	this.document.title = 'Spur | Live in the Moment'
@@ -71,7 +71,7 @@ router.on('/', function(next) {
 router.on('/facebook/login', function(next) {
 	if(__SERVER__) {
 		this.req.session.facebookReferrer = this.req.header('Referrer')
-		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code")
+		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code")
 	}
 
 	if(__BROWSER__) {
@@ -112,9 +112,9 @@ router.on('/facebook/logout', function(next) {
 if(__SERVER__) {
 	router.on('/facebook/callback', function(next) {
 		fb.get('/oauth/access_token').query({
-			client_id: appId,
+			client_id: config.facebook.appId,
 			redirect_uri: this.site+'/facebook/callback',
-			client_secret: 'dd4dabdb7190bf9a91550729a39c7e34',
+			client_secret: config.facebook.appSecret,
 			code: this.req.query.code
 		}).end((err, response) => {
 			if(err) return next(err)
