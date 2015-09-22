@@ -1,5 +1,6 @@
 var express = require('express')
   , router = express.Router()
+  , jsonParser = require('body-parser').json()
   , timeUtil = require('./util/time')
   , request = require('superagent')
   , qs = require('qs')
@@ -13,48 +14,42 @@ r.connect(config.rethink).then(function(conn) {
 })
 
 router.post('/auth'/*, session*/, function(req, res, next) {
-	fb.exchangeToken(req.query.access_token, function(err, access_token) {
-		fb.get('/me?fields=name,first_name,last_name,birthday,email,gender').query({
-			access_token:access_token
-		}).end(function(err, response) {
-			if(err) return next(err)
-
-			var fbUser = JSON.parse(response.text)
-
-			r.table('users').filter({ fbid:fbUser.id }).limit(1).run(connection).then(function(users) {
-				return users.toArray()
-			}).then(function(users) {
-				var user = users[0]
-				if(!user) {
-					user = {
-						fbid:fbUser.id,
-						name: {
-							first:fbUser.first_name,
-							last:fbUser.last_name,
-							full:fbUser.name
-						},
-						gender: fbUser.gender,
-						birthday: new Date(fbUser.birthday),
-						email: fbUser.email,
-						location: JSON.parse(req.cookies.location),
-						events:[]
-					}
-					return r.table('users').insert(user).run(connection).then(function(result) {
-						user.id = result.generated_keys[0]
-						return user
-					})
-				}
+	var access_token, fbUser
+	fb.exchangeToken(req.query.access_token).then(function(_result) {
+		access_token = _result
+		return fb.get('/me?fields=name,first_name,last_name,birthday,email,gender').query({ access_token })
+	}).then(function(_result) {
+		fbUser = _result
+		return r.table('users').filter({ fbid:fbUser.id }).limit(1).run(connection).then(users => users.toArray())
+	}).then(function(users) {
+		var user = users[0]
+		if(!user) {
+			user = {
+				fbid:fbUser.id,
+				name: {
+					first:fbUser.first_name,
+					last:fbUser.last_name,
+					full:fbUser.name
+				},
+				gender: fbUser.gender,
+				birthday: new Date(fbUser.birthday),
+				email: fbUser.email,
+				location: JSON.parse(req.cookies.location),
+				events:[]
+			}
+			return r.table('users').insert(user).run(connection).then(function(result) {
+				user.id = result.generated_keys[0]
 				return user
-			}).then(function(user) {
-				req.session.user = user
-				req.session.token = access_token
-
-				res.json({ user:user, token:access_token })
-			}).catch(function(err) {
-				console.error(err)
-				next(err)
 			})
-		})
+		}
+		return user
+	}).then(function(user) {
+		req.session.user = user
+		req.session.token = access_token
+		res.json({ user:user, token:access_token })
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
 	})
 })
 
@@ -151,7 +146,7 @@ router.get('/moments/:id', function(req, res, next) {
 })
 
 // Create moment
-router.post('/moments'/*, session, bodyParser*/, function(req, res, next) {
+router.post('/moments', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 	
@@ -236,7 +231,7 @@ router.post('/moments/:id/uncancel', function(req, res, next) {
 })
 
 // Create a post on a moment
-router.post('/moments/:id/posts', function(req, res, next) {
+router.post('/moments/:id/posts', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
@@ -259,7 +254,7 @@ router.post('/moments/:id/posts', function(req, res, next) {
 })
 
 // Create a comment on a post
-router.post('/moments/:mid/posts/:pid/comments', function(req, res, next) {
+router.post('/moments/:mid/posts/:pid/comments', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 

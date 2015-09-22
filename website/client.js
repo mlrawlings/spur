@@ -1,35 +1,28 @@
-var express = require('express-client')
-  , expressReact = require('express-react/client')
-  , cookie = require('tiny-cookie')
+var kent = require('kent/client')
+  , kentReact = require('kent-react/client')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
   , locationUtil = require('./util/location')
   , router = require('./router')
-  , app = express()
+  , app = window.app = kent()
 
-require('../common/util/json-date-parse')
+app.use(kentReact())
 
-app.use(expressReact())
+app.use(function(next) {
+  this.props.user = window.user
+  this.props.location = JSON.parse(this.cookies.get('location'))
+  this.props.radius = parseFloat(this.cookies.get('radius'))
 
-app.use(function(req, res, next) {
-	res.props.user = window.user
-  res.props.location = JSON.parse(cookie.get('location'))
-  res.props.radius = parseFloat(cookie.get('radius'))
   next()
 })
 
-app.use(function(req, res, next) {
-  res.cookie = cookie.set.bind(cookie)
+app.use(function(next) {
+  this.api = api
   next()
 })
 
-app.use(function(req, res, next) {
-  req.api = api
-  next()
-})
-
-app.use(function(req, res, next) {
-  req.fb = fb
+app.use(function(next) {
+  this.fb = fb
   next()
 })
 

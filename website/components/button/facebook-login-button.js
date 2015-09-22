@@ -65,21 +65,17 @@ class FacebookLoginButton extends React.Component {
 			
 			this.setState({ userId })
 			
-			api.post('/auth?access_token='+response.authResponse.accessToken).end(function(err, res){
-				if(err) throw err
-
-				window.user = res.body.user
+			api.post('/auth?access_token='+response.authResponse.accessToken).then(res => {
+				window.user = res.user
 				if(originalUserId != userId) app.refresh()
-			})
+			}).catch(e => console.error(e.stack))
 		} else {
 			this.setState({ userId: null })
 
-			api.del('/auth').end(function(err, res){
-				if(err) throw err
-
+			api.del('/auth').then(res => {
 				window.user = undefined
-				if(originalUserId) app.refresh()		
-			})
+				if(originalUserId) app.refresh()	
+			}).catch(e => console.error(e.stack))
 		}
 	}
 	click(e) {
