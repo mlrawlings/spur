@@ -1,4 +1,4 @@
-var merge = require('deep-defaults')
+var merge = require('deep-assign')
   , defaultConfig
   , localConfig
 
@@ -36,4 +36,4 @@ if(process.env.NODE_ENV == 'production') {
 	}
 }
 
-module.exports = merge(localConfig, defaultConfig)
+module.exports = merge({}, defaultConfig, localConfig)

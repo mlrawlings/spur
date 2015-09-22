@@ -1,3 +1,5 @@
 require('babel/register')({
-  ignore:false
+  optional:[
+	'asyncToGenerator'
+  ]
 })

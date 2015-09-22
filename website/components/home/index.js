@@ -12,7 +12,6 @@ class Home extends React.Component {
 		    	<Hero />			
 				<DownloadAndShare />
 				<Video />
-				<EventList events={this.props.events} location={this.props.location} />
 			</Layout>
 		)
 	}

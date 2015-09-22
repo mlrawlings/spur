@@ -65,7 +65,7 @@ class Post extends React.Component {
 					</View>
 					<Text style={styles.content}>{post.message}</Text>
 				</View>
-				{post.comments.map(comment => <Comment comment={comment} />)}
+				{post.comments.map((comment, i) => <Comment key={i} comment={comment} />)}
 				<CommentForm event={event} post={post} user={user} />
 			</View>
 		)

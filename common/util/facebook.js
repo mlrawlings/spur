@@ -10,15 +10,16 @@ function createFacebookClient(token) {
 }
 
 function exchangeToken(token, cb) {
-	fb.get('/oauth/access_token').query({
-		grant_type:'fb_exchange_token',
-		client_id:'1455687261396384',
-		client_secret:'dd4dabdb7190bf9a91550729a39c7e34',
-		fb_exchange_token:token
-	}).end(function(err, response) {
-		if(err) return cb(err)
-
-		cb(null, qs.parse(response.text).access_token)
+	return new Promise(function(resolve, reject) {
+		fb.get('/oauth/access_token').query({
+			grant_type:'fb_exchange_token',
+			client_id:'1455687261396384',
+			client_secret:'dd4dabdb7190bf9a91550729a39c7e34',
+			fb_exchange_token:token
+		}).end(function(err, response) {
+			if(err) return reject(err)
+			resolve(qs.parse(response.text).access_token)
+		})
 	})
 }
 
