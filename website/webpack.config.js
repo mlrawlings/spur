@@ -17,7 +17,12 @@ module.exports = {
 			loader: "json-loader"
 		}]
 	},
-	plugins: [],
+	plugins: [
+		new webpack.DefinePlugin({
+			__BROWSER__:true,
+			__SERVER__:false
+		})
+	],
 	resolveLoader: {
 		root:path.join(__dirname, '../node_modules')
 	},

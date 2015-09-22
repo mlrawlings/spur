@@ -1,38 +1,54 @@
-var express = require('express-client')
-  , expressReact = require('express-react/client')
-  , cookie = require('tiny-cookie')
+var kent = require('kent/client')
+  , kentReact = require('kent-react/client')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
   , locationUtil = require('./util/location')
   , router = require('./router')
-  , app = express()
+  , app = window.app = kent()
 
-require('../common/util/json-date-parse')
+app.use(kentReact())
 
-app.use(expressReact())
+app.use(function(next) {
+	this.props.user = window.user
+	this.props.location = JSON.parse(this.cookies.get('location'))
+	this.props.radius = parseFloat(this.cookies.get('radius'))
 
-app.use(function(req, res, next) {
-	res.props.user = window.user
-  res.props.location = JSON.parse(cookie.get('location'))
-  res.props.radius = parseFloat(cookie.get('radius'))
-  next()
+	next()
 })
 
-app.use(function(req, res, next) {
-  res.cookie = cookie.set.bind(cookie)
-  next()
+app.use(function(next) {
+	this.api = api
+	next()
 })
 
-app.use(function(req, res, next) {
-  req.api = api
-  next()
-})
-
-app.use(function(req, res, next) {
-  req.fb = fb
-  next()
+app.use(function(next) {
+	this.fb = fb
+	next()
 })
 
 app.use(router)
 
 app.start()
+
+window.fbAsyncInit = function() {
+	FB.init({
+		appId: '1455687261396384',
+		xfbml: false,
+		status: true,
+		version: 'v2.3'
+	})
+
+	FB.getLoginStatus(function onChangeLoginStatus(response) {
+		if(response.status == 'connected') {
+			var userId = response.authResponse.userID
+			
+			api.post('/auth?access_token='+response.authResponse.accessToken).then(res => {
+				window.user = res.user
+			}).catch(e => console.error(e.stack))
+		} else {
+			api.del('/auth').then(res => {
+				window.user = undefined 
+			}).catch(e => console.error(e.stack))
+		}
+	})
+}

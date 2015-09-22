@@ -44,7 +44,7 @@ styles.cancel = {
 class AttendAndInvite extends React.Component {
 	onJoin(href) {
 		alert('Don\'t forget to check back before you go to this event and make sure it hasn\'t been cancelled')
-		window.location.href = href
+		app.navigate(href)
 	}
 	render() {
 		var { event, user, style } = this.props

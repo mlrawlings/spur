@@ -7,7 +7,6 @@ var React = require('react')
   , Input = require('../core/input')
   , Text = require('../core/text')
   , Link = require('../core/link')
-  , cookie = require('tiny-cookie')
 
 var styles = {}
 
@@ -71,11 +70,11 @@ class EventResults extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section style={styles.results}>
-					<form ref="form" action="/events" method="GET">
+					<form ref="form" action="/" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 							<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
-								{radii.map(r => <option value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
+								{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
 							</select>
 							of
 							<Text style={styles.googlePlaceWrapper}>

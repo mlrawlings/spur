@@ -1,7 +1,6 @@
 var GeoPoint = require('geopoint')
   , request = require('superagent')
   , geocoder
-  , geoip = require('geoip-lite')
 
 exports.getLocation = function() {
 	return new Promise(function(resolve, reject) {
@@ -14,20 +13,22 @@ exports.getLocation = function() {
 	})
 }
 
-exports.getLocationFromIp = function(ip) {
-	return new Promise(function(resolve, reject) {
-		var geo = geoip.lookup("24.248.92.0")
+if(__SERVER__) {
+	exports.getLocationFromIp = function(ip) {
+		return new Promise(function(resolve, reject) {
+			var geo = require('geoip-lite').lookup("24.248.92.0")
 
-		if(!geo) return resolve({
-			name:'Boston MA',
-			coords:[42.364506, -71.038887]
-		})
+			if(!geo) return resolve({
+				name:'Boston MA',
+				coords:[42.364506, -71.038887]
+			})
 
-		resolve({
-			name:geo.city +', ' + geo.region,
-			coords:geo.ll
+			resolve({
+				name:geo.city +', ' + geo.region,
+				coords:geo.ll
+			})
 		})
-	})
+	}
 }
 
 exports.getDistanceBetween = function(coords1, coords2, inKilometers) {
