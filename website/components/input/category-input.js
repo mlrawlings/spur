@@ -9,7 +9,10 @@ var styles = {}
 
 styles.container = {
 	flexDirection:'row',
-	flexWrap:'wrap'
+	flexWrap:'wrap',
+	borderWidth:1,
+	borderStyle:'solid',
+	borderColor:'#ccc'
 }
 
 styles.block = {
