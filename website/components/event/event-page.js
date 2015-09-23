@@ -114,6 +114,7 @@ class EventPage extends React.Component {
 						<Text style={titleStyles}>
 							{event.name}
 						</Text>
+						<Text>{event.invited}</Text>
 						<Text style={styles.time}>
 							{'@ ' + timeUtil.format(event.time) + ' ' + timeUtil.getTimeClass(event.time)}
 						</Text>

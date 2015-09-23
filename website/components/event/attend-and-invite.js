@@ -42,9 +42,8 @@ styles.cancel = {
 }
 
 class AttendAndInvite extends React.Component {
-	onJoin(href) {
+	onJoin(e) {
 		alert('Don\'t forget to check back before you go to this event and make sure it hasn\'t been cancelled')
-		app.navigate(href)
 	}
 	render() {
 		var { event, user, style } = this.props
@@ -72,10 +71,10 @@ class AttendAndInvite extends React.Component {
 		if(!attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>
 			<View style={styles.buttons}>
-				<Button onClick={this.onJoin.bind(this, '/event/'+event.id+'/join')}>
+				<Button ref="joinButton" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
 					Join
 				</Button>
-				<FacebookSendButton style={styles.invite}>Invite a Friend</FacebookSendButton>
+				<FacebookSendButton style={styles.invite} append="/invite">Invite a Friend</FacebookSendButton>
 				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}

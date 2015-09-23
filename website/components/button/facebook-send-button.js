@@ -12,7 +12,7 @@ class FacebookSendButton extends React.Component {
 		if(!/android|ios/i.test(navigator.userAgent)) {
 			FB.ui({
 				method: 'send',
-				link: window.location.href,
+				link: window.location.href + this.props.append,
 			})
 			e.preventDefault()
 		}
