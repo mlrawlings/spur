@@ -26,14 +26,10 @@ styles.titleInput = {
 	fontSize:24
 }
 
-styles.descriptionInput = {
-	...Input.style,
-	borderTopWidth:0
-}
-
 styles.optional = {
 	fontSize:11,
-	color:'#aaa'
+	color:'#aaa',
+	marginLeft:8
 }
 
 class NewEventForm extends React.Component {
@@ -44,9 +40,9 @@ class NewEventForm extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section>
-					<form method="POST" action="/create/event" className="createEvent">
+					<form method="POST" action="/create/event" autoComplete="false">
 						<View style={styles.field}>
-							<Label required={true}>Name</Label>
+							<Label required={true}>Event Name</Label>
 							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
@@ -62,8 +58,8 @@ class NewEventForm extends React.Component {
 							<CategoryInput name="category" required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Details <Text style={styles.optional}>(optional)</Text></Label>
-							<TextArea name="description" style={styles.descriptionInput} placeholder="Anthing else people need to know..." />
+							<Label required={true}>Additional Details <Text style={styles.optional}>(optional)</Text></Label>
+							<TextArea name="description" style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
 							<Button type="submit">Create Event</Button>

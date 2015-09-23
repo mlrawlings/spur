@@ -16,7 +16,7 @@ exports.getLocation = function() {
 if(__SERVER__) {
 	exports.getLocationFromIp = function(ip) {
 		return new Promise(function(resolve, reject) {
-			var geo = require('geoip-lite').lookup("24.248.92.0")
+			var geo = require('geoip-lite').lookup(ip)
 
 			if(!geo) return resolve({
 				name:'Boston MA',

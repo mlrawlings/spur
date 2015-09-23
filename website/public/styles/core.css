@@ -109,8 +109,19 @@ body {
 	color:#444;
 }
 
-#app a span, 
-#app span a, 
-#app span span {
+#app a > span, 
+#app span > a, 
+#app span > span {
+	display:inline;
 	color:inherit;
+}
+
+#app input,
+#app select,
+#app textarea {
+	outline:0;
+}
+
+#app input[type=search] {
+	box-sizing: border-box;
 }
