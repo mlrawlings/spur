@@ -99,7 +99,7 @@ class GooglePlaceInput extends React.Component {
 				<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 					<Image style={styles.currentLocationImage} src="/images/current-location.png" />
 				</Link>
-				<Input ref="input" style={{...styles.input, ...inputStyle}} defaultValue={value} placeholder="Enter an address or the name of an establishment..." {...props} />
+				<Input type="search" ref="input" style={{...styles.input, ...inputStyle}} defaultValue={value} placeholder="Enter an address or the name of an establishment..." {...props} />
 			</View>
 		)
 	}
