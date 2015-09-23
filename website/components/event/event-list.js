@@ -19,6 +19,7 @@ styles.noEvents = {
 }
 
 styles.createLink = {
+	display: 'inline-block',
 	color:'#888',
 	textDecoration:'underline'
 }

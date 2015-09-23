@@ -9,6 +9,7 @@ var Home = require('./components/home')
   , config = require('../common/config')
 
 router.use(function(next) {
+
 	this.document.title = 'Spur | Live in the Moment'
 
 	this.document.links = [
@@ -141,6 +142,26 @@ router.on('/event/:id', function(next) {
 
 		this.render(EventPage, { event:event })
 	}).catch(next)
+})
+
+router.on('/event/:id/invite', function(next) {
+	if(__SERVER__) {
+		var now = new Date()
+		  , oneYr = new Date()
+		  , invitee = this.cookies.get('invitee') || Math.random()*99999999999999
+
+		oneYr.setYear(now.getYear() + 1)
+
+		if(!this.req.session.user)
+			this.cookies.set('invitee', invitee, { expires: oneYr })
+		else
+			invitee = this.req.session.user.id
+	}
+
+	this.api.get('/moments/'+this.params.id+'/invite/'+invitee).then(() => {
+		
+		this.redirect('/event/'+this.params.id)
+	})
 })
 
 router.on('/event/:id/join', function(next) {

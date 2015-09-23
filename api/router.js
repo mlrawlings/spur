@@ -165,6 +165,7 @@ router.post('/moments', jsonParser, function(req, res, next) {
 	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
 	moment.posts = []
+	moment.invitees = []
 	moment.cancelled = false
 	moment.attendees = [req.session.user.id]
 	moment.owner = req.session.user.id
@@ -198,6 +199,32 @@ router.post('/moments', jsonParser, function(req, res, next) {
 	// }
 })
 
+// Invite person to an event
+router.get('/moments/:id/invite/:cid', function(req, res, next) {
+	var newInvitee = { time: new Date() }
+	if(req.session.user) {
+		newInvitee.type = 'id'
+		newInvitee.id = req.session.user.id
+	} else {
+		newInvitee.type = 'cookie'
+		newInvitee.id = req.params.cid
+	}
+
+	r.table('moment').get(req.params.id).update(function(moment) {
+		return r.branch(
+			moment('invitees').contains(function(invitee) {
+				return invitee('id').eq(newInvitee.id).and(invitee('type').eq(newInvitee.type))
+			}),
+			{ invitees: moment('invitees').default([newInvitee]) },
+			{ invitees: moment('invitees').append(newInvitee) }
+		)
+	}).run(connection).then(function(moment) {
+		res.status(204).end()
+	}).catch(function(err) {
+		next(err)
+	})
+})
+
 // Cancel an event
 router.post('/moments/:id/cancel', function(req, res, next) {
 	if(!req.session.user)
@@ -214,7 +241,7 @@ router.post('/moments/:id/cancel', function(req, res, next) {
 	})
 })
 
-// Cancel an event
+// UnCancel an event
 router.post('/moments/:id/uncancel', function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')

@@ -75,7 +75,7 @@ class AttendAndInvite extends React.Component {
 				<Button onClick={this.onJoin.bind(this, '/event/'+event.id+'/join')}>
 					Join
 				</Button>
-				<FacebookSendButton style={styles.invite}>Invite a Friend</FacebookSendButton>
+				<FacebookSendButton style={styles.invite} append="/invite">Invite a Friend</FacebookSendButton>
 				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
