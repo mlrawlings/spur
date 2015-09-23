@@ -22,7 +22,7 @@ module.exports = {
 			__BROWSER__:true,
 			__SERVER__:false,
 			'process.env': {
-				NODE_ENV: process.env.NODE_ENV || 'development'
+				NODE_ENV: process.env.NODE_ENV || '"development"'
 			}
 		})
 	],
