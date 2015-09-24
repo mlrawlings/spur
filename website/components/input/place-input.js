@@ -1,4 +1,5 @@
 var React = require('react')
+  , PlaceSuggestions = require('./place-suggestions')
   , Input = require('../core/input')
   , Image = require('../core/image')
   , Link = require('../core/link')
@@ -10,7 +11,7 @@ const UP = 38
 const DOWN = 40
 const ENTER = 13
 
-const MIN_TIME_BETWEEN_REQUESTS = 1200
+const MIN_TIME_BETWEEN_REQUESTS = 500
 
 var styles = {}
 
@@ -19,33 +20,6 @@ styles.container = {
 	borderWidth:1,
 	borderColor:'#ddd',
 	backgroundColor:'#fff'
-}
-
-styles.suggestionsContainer = {
-	position:'absolute',
-	top:0,
-	left:0,
-	width:'100%',
-	zIndex:10,
-	borderBottomWidth:1,
-	borderBottomColor:'#ddd'
-}
-
-styles.suggestion = {
-	padding:10,
-	borderTopWidth:1,
-	borderTopColor:'#ddd',
-	backgroundColor:'#fff',
-	cursor:'pointer',
-	opacity:0.95
-}
-
-styles.suggestionName = {
-	fontWeight:600,
-}
-
-styles.suggestionAddress = {
-	fontSize:13,
 }
 
 styles.currentLocationLink = {
@@ -59,53 +33,69 @@ styles.currentLocationImage = {
 	marginRight:8
 }
 
+styles.loadingImage = {
+	width: 15,
+	marginRight:8
+}
+
 styles.input = {
 	backgroundColor:'transparent',
 	borderWidth:0,
 	flex:1
 }
 
-styles.loading = {
-	fontSize:10,
-	fontWeight:600,
-	color:'#666'
-}
-
-class GooglePlaceInput extends React.Component {
+class PlaceInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			focused:false,
 			selected:0,
 			suggestions:[],
-			loading:false
+			loading:false,
+			value:props.defaultValue
 		}
 	}
 	getTimeRemaining() {
-		return Math.max(this.lastRequest-Date.now()+MIN_TIME_BETWEEN_REQUESTS||0, 0)
+		var timeSince = Date.now()-this.lastRequest
+		  , timeRemaining = MIN_TIME_BETWEEN_REQUESTS-timeSince
+		
+		return Math.max(timeRemaining||0, 0)
 	}
 	getSuggestions(value, throttle) {
-		var waitTime = Math.max(this.getTimeRemaining(), throttle)
-
-		value = value.trim()
+		var waitTime = Math.max(this.getTimeRemaining(), throttle||0)
 
 		clearTimeout(this.timeout)
 
 		if(!value) {
+			this.searching = false
 			return this.setState({ suggestions:[], loading:false })
+		}
+
+		if(this.searching) {
+			return this.timeout = setTimeout(() => this.getSuggestions(), waitTime)
 		}
 
 		this.setState({ loading:true })
 
 		this.timeout = setTimeout(() => {
-			console.log('SEARCH FOR:', value)
-			locationUtil.getResultsFromSearch(value, this.props.location.coords).then((suggestions) => {
-				this.setState({ suggestions, selected:0, loading:false })
-				this.lastRequest = Date.now()
-			}).catch((e) => {
+			value = this.state.value.trim()
+			this.searching = true
+			Promise.race([
+				locationUtil.getResultsFromSearch(value, this.props.location.coords).then((suggestions) => {
+					this.setState({ suggestions, selected:0, loading:false })
+					this.searching = false
+					this.lastRequest = Date.now()
+				}),
+				new Promise((resolve, reject) => {
+					setTimeout(() => {
+						reject('timeout')
+					}, 1000)
+				})
+			]).catch((e) => {
 				console.error(e)
-				this.lastRequest = Date.now()+2000
-				this.getSuggestions(value, 0)
+				this.lastRequest = Date.now()+1500
+				this.searching = false
+				this.getSuggestions()
 			})
 		}, waitTime)
 	}
@@ -116,12 +106,14 @@ class GooglePlaceInput extends React.Component {
 		this.setState({ focused:false })
 	}
 	onChange(e) {
+		var value = e.target.value
+		this.setState({ value })
 		this.lastChange = Date.now()
-		this.getSuggestions(e.target.value, 1000-e.target.value.length*100)
+		this.getSuggestions(value.trim(), Math.max(400, 1000-e.target.value.length*100))
 	}
 	makeSelection(suggestion) {
 		setTimeout(() => this.props.onChange(suggestion))
-		React.findDOMNode(this.refs.input).value = suggestion.formatted_address
+		this.setState({ value:suggestion.formatted_address })
 	}
 	onKeyDown(e) {
 		var suggestions = this.state.suggestions
@@ -152,22 +144,20 @@ class GooglePlaceInput extends React.Component {
 	}
 	currentAddressMouseOver() {
 		var domNode = React.findDOMNode(this.refs.input)
-
-		this.inputValue = domNode.value
+		this.inputValue = this.state.value
 		this.inputSelection = document.activeElement == domNode && [domNode.selectionStart, domNode.selectionEnd]
-		domNode.value = 'Use Current Location'
+		this.setState({ value:'Use Current Location' })
 	}
 	currentAddressMouseOut() {
 		var domNode = React.findDOMNode(this.refs.input)
-		if(domNode.value == 'Use Current Location') {
-			domNode.value = this.inputValue
+		if(this.state.value == 'Use Current Location') {
+			this.setState({ value:this.inputValue })
 			if(this.inputSelection) domNode.setSelectionRange(...this.inputSelection)
 		}
 	}
 	currentAddressClick() {
 		locationUtil.getLocation().then((location) => {
-			this.setState({ value: location.formatted_address, loading:false })
-			React.findDOMNode(this.refs.input).value = location.formatted_address
+			this.setState({ value:location.formatted_address, loading:false })
 			this.props.onChange && this.props.onChange(location)
 		})
 	}
@@ -188,40 +178,32 @@ class GooglePlaceInput extends React.Component {
 			<View>
 				<View style={{ ...styles.container, ...containerStyle}}>
 					<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
-						<Image style={styles.currentLocationImage} src="/images/current-location.png" />
+						{
+							this.state.loading 
+							? <Image style={styles.loadingImage} src="/images/loading-on-white.gif" />
+							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
+						}
 					</Link>
 					<Input 
 						ref="input"
 						type="search" 
-						defaultValue={value} 
+						value={this.state.value} 
 						placeholder="Enter an address or place..." 
-						{...props} 
+						{...props}
 						style={{...styles.input, ...inputStyle}}
 						onChange={this.onChange.bind(this)} 
 						onFocus={this.onFocus.bind(this)} 
 						onBlur={this.onBlur.bind(this)} 
 						onKeyDown={this.onKeyDown.bind(this)} />
 				</View>
-				<View style={styles.suggestionsMount}>
-					<View style={styles.suggestionsContainer}>
-						{this.state.loading && <View style={styles.suggestion}>
-							<Text style={styles.loading}>LOADING...</Text>
-						</View>}
-						{this.state.focused && this.state.suggestions.map((suggestion, i) => {
-							return <View style={styles.suggestion} ref={suggestion.place_id} onMouseDown={this.makeSelection.bind(this, suggestion)}>
-								<Text style={styles.suggestionName}>
-									{suggestion.name}
-								</Text>
-								<Text style={styles.suggestionAddress}>
-									{(i == this.state.selected ? '* ' : '') + suggestion.formatted_address}
-								</Text>
-							</View>
-						})}
-					</View>
-				</View>
+				{this.state.focused && this.state.value && <PlaceSuggestions 
+					suggestions={this.state.suggestions} 
+					loading={this.state.loading}
+					selected={this.state.selected} 
+					onSelect={this.makeSelection.bind(this)} />}
 			</View>
 		)
 	}
 }
 
-module.exports = GooglePlaceInput
+module.exports = PlaceInput

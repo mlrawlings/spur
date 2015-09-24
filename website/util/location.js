@@ -115,7 +115,7 @@ exports.getResultsFromSearch = function(input, near) {
 		)
 	).then(results => {
 		var terms = input.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ').split(' ')
-		return results.filter((result) => {
+		results = results.filter((result) => {
 			return !!result.geometry
 		}).sort((a, b) => {
 			var aScore = 0
@@ -154,8 +154,12 @@ exports.getResultsFromSearch = function(input, near) {
 					bScore++
 				}
 			}
+			a.score = aScore
+			b.score = bScore
 			return bScore - aScore
-		}).slice(0, MAX_RESULTS)
+		})
+
+		return results.slice(0, MAX_RESULTS)
 	})
 }
 
@@ -179,22 +183,6 @@ exports.mergeResults = function(resultsA, resultsB) {
 	})
 	
 	return results
-}
-
-exports.addressSearch = function(address, bounds) {
-	return new Promise(function(resolve, reject) {
-		geocoder = geocoder || new google.maps.Geocoder()
-
-		geocoder.geocode( { address, bounds }, (results, status) => {
-			if (status === google.maps.GeocoderStatus.OK) {
-				resolve(results)
-			} else if(status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-				resolve([])
-			} else {
-				reject('Geocoder failed due to: ' + status)
-			}
-		})
-	})
 }
 
 var completions = {}

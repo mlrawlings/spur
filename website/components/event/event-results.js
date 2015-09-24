@@ -1,7 +1,7 @@
 var React = require('react')
   , Layout = require('../layout')
   , Section = require('../layout/section')
-  , GooglePlaceInput = require('../input/google-place-input')
+  , PlaceInput = require('../input/place-input')
   , EventList = require('./event-list')
   , Button = require('../core/button')
   , Input = require('../core/input')
@@ -78,7 +78,7 @@ class EventResults extends React.Component {
 							</select>
 							of
 							<Text style={styles.googlePlaceWrapper}>
-								<GooglePlaceInput style={addressField} location={location} value={location.name} onChange={this.changeLocation.bind(this)} />
+								<PlaceInput style={addressField} location={location} value={location.name} onChange={this.changeLocation.bind(this)} />
 							</Text>
 							<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 						</Text>
