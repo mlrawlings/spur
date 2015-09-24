@@ -86,6 +86,22 @@ styles.posts = {
 	marginTop:30
 }
 
+styles.mapCover = {
+	zIndex: 1,
+	width: '100%',
+	height: '100%',
+	position: 'absolute',
+	justifyContent: 'center',
+	alignItems: 'center',
+	background: 'rgba(0, 0, 0, 0.55)'
+}
+
+styles.cancelledText = {
+	color: 'white',
+	fontSize: 40,
+	fontWeight: 300
+}
+
 class EventPage extends React.Component {
 	render() {
 		var event = this.props.event
@@ -94,13 +110,13 @@ class EventPage extends React.Component {
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
 		  , titleStyles = { ...styles.title }
 
-		if(event.cancelled)
-			titleStyles.textDecoration = 'line-through'
-
 		return (
 			<Layout user={this.props.user}>
 				
 				<GoogleMap center={event.location.coords} zoom={17}>
+					{event.cancelled && <View style={styles.mapCover}>
+						<Text style={styles.cancelledText}>CANCELLED</Text>
+					</View>}
 					<GoogleMapMarker position={event.location.coords} />
 				</GoogleMap>
 

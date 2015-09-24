@@ -63,7 +63,7 @@ class GoogleMap extends React.Component {
 	}
 	renderChildren() {
 		return React.Children.map(this.props.children, (child) => {
-			if(child.type != Marker) return child
+			if(!child || child.type != Marker) return child
 				
 			return React.addons.cloneWithProps(child, {
 				map: this.map
