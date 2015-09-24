@@ -65,7 +65,9 @@ styles.locationName = {
 }
 
 styles.address = {
-	fontSize:14
+	fontSize:14,
+	textDecoration: 'underline',
+	color: '#04A5B4'
 }
 
 styles.details = {
@@ -146,9 +148,8 @@ class EventPage extends React.Component {
 						</Text>
 					</View>
 					<View style={styles.location}>
-
-						<Text style={styles.locationName}>{event.location.name}</Text>
 						<Link href={"http://maps.google.com?daddr="+event.location.coords[0]+','+event.location.coords[1]}>
+							<Text style={styles.locationName}>{event.location.name}</Text>
 							<Text style={styles.address}>{event.location.street}</Text>
 							<Text style={styles.address}>{event.location.citystatezip}</Text>
 						</Link>
