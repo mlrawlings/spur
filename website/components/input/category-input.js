@@ -17,6 +17,8 @@ styles.container = {
 
 styles.block = {
 	width:'25%',
+	minWidth:140,
+	flexGrow:1,
 	height:80,
 	padding:15,
 	cursor:'pointer',
@@ -33,7 +35,8 @@ styles.label = {
 	textTransform:'uppercase',
 	fontWeight:600,
 	fontSize:14,
-	textAlign:'center'
+	textAlign:'center',
+	width:'100%'
 }
 
 styles.selected = {

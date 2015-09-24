@@ -5,6 +5,7 @@ var React = require('react')
   , EventList = require('./event-list')
   , Button = require('../core/button')
   , Input = require('../core/input')
+  , View = require('../core/view')
   , Text = require('../core/text')
   , Link = require('../core/link')
 
@@ -17,8 +18,9 @@ styles.results = {
 	background:'#444',
 	borderBottomWidth:1,
 	borderBottomColor:'#ddd',
-	paddingTop:15,
-	paddingBottom:15
+	paddingTop:8,
+	paddingBottom:8,
+	flexWrap:'wrap'
 }
 
 styles.field = {
@@ -35,15 +37,29 @@ styles.field = {
 	padding:0
 }
 
+styles.form = {
+	maxWidth:'100%',
+	paddingTop:8,
+	paddingBottom:8
+}
+
 styles.text = {
 	color:'#eee',
 	display: 'flex',
 	alignItems: 'center',
-	justifyContent: 'center'
+	justifyContent: 'center',
+	flexWrap:'wrap'
 }
 
-styles.googlePlaceWrapper = {
-	
+styles.spacer = {
+	flex:1
+}
+
+styles.buttonContainer = {
+	flexGrow:0.01,
+	alignItems:'center',
+	paddingTop:8,
+	paddingBottom:8
 }
 
 class EventResults extends React.Component {
@@ -70,7 +86,7 @@ class EventResults extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section style={styles.results}>
-					<form ref="form" action="/" method="GET">
+					<form style={styles.form} ref="form" action="/" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 							<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
@@ -78,12 +94,15 @@ class EventResults extends React.Component {
 							</select>
 							of
 							<Text style={styles.googlePlaceWrapper}>
-								<PlaceInput style={addressField} location={location} value={location.name} onChange={this.changeLocation.bind(this)} />
+								<PlaceInput style={addressField} location={location} defaultValue={location.name} onChange={this.changeLocation.bind(this)} />
 							</Text>
 							<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 						</Text>
 					</form>
-					{user && <Button href="/create/event">Create an event</Button>}
+					<View style={styles.spacer} />
+					{user && <View style={styles.buttonContainer}>
+						<Button href="/create/event">Create an event</Button>
+					</View>}
 				</Section>
 
 				<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
