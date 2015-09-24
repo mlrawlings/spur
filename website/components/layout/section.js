@@ -8,12 +8,17 @@ styles.container = {
 	paddingBottom:30
 }
 
-styles.wrapper = {
+styles.sizer = {
 	width:'100%',
 	maxWidth:800,
-	paddingLeft:30,
-	paddingRight:30,
+	paddingLeft:5,
+	paddingRight:5,
 	margin:'auto'
+}
+
+styles.wrapper = {
+	paddingLeft:'3%',
+	paddingRight:'3%'
 }
 
 class Section extends React.Component {
@@ -27,8 +32,10 @@ class Section extends React.Component {
 
 		return (
 			<View style={{ ...styles.container, ...containerStyles }}>
-				<View style={{ ...styles.wrapper, ...wrapperStyles }}>
-					{this.props.children}
+				<View style={styles.sizer}>
+					<View style={{ ...styles.wrapper, ...wrapperStyles }}>
+						{this.props.children}
+					</View>
 				</View>
 			</View>
 		)

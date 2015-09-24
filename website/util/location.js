@@ -1,6 +1,9 @@
 var GeoPoint = require('geopoint')
-  , request = require('superagent')
+  , placeAutocompleteService
+  , placeService
   , geocoder
+
+const MAX_RESULTS = 6
 
 exports.getLocation = function() {
 	return new Promise(function(resolve, reject) {
@@ -92,6 +95,151 @@ exports.getAddressFromCoords = function(coords) {
 				}
 			} else {
 				reject('Geocoder failed due to: ' + status)
+			}
+		})
+	})
+}
+
+exports.getResultsFromSearch = function(input, near) {
+	var bounds = exports.toGoogleLatLngBounds(exports.getBounds(near, 20))
+	  , searches = [exports.placeSearch, exports.placesAutocomplete]
+
+	//perhaps also search without the partial term.  only if no results?
+	return exports.searchMultiple(searches, input, bounds).then(results => 
+		Promise.all(
+			results.map(result => 
+				result.formatted_address && result.address_components 
+					? result 
+					: exports.getPlace(result.place_id)
+			)
+		)
+	).then(results => {
+		var terms = input.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ').split(' ')
+		results = results.filter((result) => {
+			return !!result.geometry
+		}).sort((a, b) => {
+			var aScore = 0
+			  , bScore = 0
+			  , aAddress = a.formatted_address.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ')
+			  , bAddress = b.formatted_address.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ')
+
+			if(bounds.contains(a.geometry.location)) {
+				aScore += 10
+			}
+			if(bounds.contains(b.geometry.location)) {
+				bScore += 10
+			}
+			terms.forEach((term) => {
+				if(aAddress.indexOf(term) != -1) {
+					aScore++
+				}
+				if(bAddress.indexOf(term) != -1) {
+					bScore++
+				}
+			})
+			if((a.types||[]).indexOf('locality') != -1) {
+				aScore--
+			}
+			if((b.types||[]).indexOf('locality') != -1) {
+				bScore--
+			}
+			if(aScore == bScore) {
+				var aPoint = new GeoPoint(a.geometry.location.lat(), a.geometry.location.lng())
+				  , bPoint = new GeoPoint(a.geometry.location.lat(), a.geometry.location.lng())
+				  , mePoint = new GeoPoint(near[0], near[1])
+
+				if(aPoint.distanceTo(mePoint) < bPoint.distanceTo(mePoint)) {
+					aScore++
+				} else {
+					bScore++
+				}
+			}
+			a.score = aScore
+			b.score = bScore
+			return bScore - aScore
+		})
+
+		return results.slice(0, MAX_RESULTS)
+	})
+}
+
+exports.searchMultiple = function(searches, input, bounds) {
+	if(!searches.length) return []
+
+	return searches[0](input, bounds).then((results) => {
+		if(searches.length == 1) return results
+
+		return exports.searchMultiple(searches.slice(1), input, bounds).then((additionalResults) => {
+			return exports.mergeResults(results, additionalResults)
+		})
+	})
+}
+
+exports.mergeResults = function(resultsA, resultsB) {
+	var results = [].concat(resultsA)
+	
+	resultsB.forEach((b) => {
+		resultsA.every(a => a.place_id != b.place_id) && results.push(b)
+	})
+	
+	return results
+}
+
+var completions = {}
+exports.placesAutocomplete = function(input, bounds) {
+	return new Promise(function(resolve, reject) {
+		if(completions[input]) return resolve(completions[input])
+
+		placeAutocompleteService = placeAutocompleteService || new google.maps.places.AutocompleteService()
+
+		placeAutocompleteService.getPlacePredictions({ input, bounds }, (results, status) => {
+			if (status === google.maps.places.PlacesServiceStatus.OK) {
+				Promise.all(results.slice(0, 4).map(result => exports.getPlace(result.place_id))).then(results => {
+					completions[input] = results
+					resolve(results)
+				})
+			} else if(status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+				resolve([])
+			} else {
+				reject('Places Text Search failed due to: ' + status)
+			}
+		})
+	})
+}
+
+var searches = {}
+exports.placeSearch = function(query, bounds) {
+	return new Promise(function(resolve, reject) {
+		if(searches[query]) return resolve(searches[query])
+
+		placeService = placeService || new google.maps.places.PlacesService(document.createElement('div'))
+
+		placeService.textSearch({ bounds, query }, (results, status) => {
+			if (status === google.maps.places.PlacesServiceStatus.OK) {
+				searches[query] = results.slice(0, 4)
+				resolve(results.slice(0, 4))
+			} else if(status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+				resolve([])
+			} else {
+				reject('Places Text Search failed due to: ' + status)
+			}
+		})
+	})
+}
+
+var places = {}
+exports.getPlace = function(placeId) {
+	return new Promise(function(resolve, reject) {
+		if(places[placeId]) return resolve(places[placeId])
+
+		placeService = placeService || new google.maps.places.PlacesService(document.createElement('div'))
+
+		placeService.getDetails({ placeId }, (result, status) => {
+			if (status === google.maps.places.PlacesServiceStatus.OK) {
+				places[placeId] = places[result.place_id] = result
+				resolve(result)
+			} else {
+				reject('Place Details failed due to: ' + status)
 			}
 		})
 	})

@@ -1,7 +1,7 @@
 var React = require('react')
   , GoogleMap = require('../map/google-map')
   , GoogleMapMarker = require('../map/google-map-marker')
-  , GooglePlaceInput = require('./google-place-input')
+  , PlaceInput = require('./place-input')
   , Input = require('../core/input')
   , View = require('../core/view')
   , locationUtil = require('../../util/location')
@@ -90,7 +90,7 @@ class LocationInput extends React.Component {
 		return (
 			<View style={styles.container}>
 				{!!address && <Input ref="name" style={styles.nameInput} name={name+'[name]'} autocomplete="off" placeholder="Name this location..." />}
-				<GooglePlaceInput style={addressInputStyle} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
+				<PlaceInput style={addressInputStyle} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
 				<GoogleMap center={location.coords} zoom={this.state.zoom}>
 					<GoogleMapMarker draggable={true} position={location.coords} onDragEnd={this.setCoords.bind(this)} />
 				</GoogleMap>

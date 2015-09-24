@@ -16,12 +16,14 @@ styles.item = {
 	marginTop:8,
 	marginBottom:8,
 	borderWidth:1,
-	borderColor:'#ddd'
+	borderColor:'#ddd',
+	flexWrap:'wrap'
 }
 
 styles.summary = {
 	backgroundColor:'#fff',
-	flex:1,
+	flex:1.5,
+	minWidth:'60%',
 	padding:15
 }
 
@@ -33,6 +35,13 @@ styles.name = {
 styles.details = {
 	fontSize: 14,
 	color: '#888'
+}
+
+styles.banner = {
+	minWidth:200,
+	width:'50%',
+	flex:1,
+	minHeight:60
 }
 
 class EventItem extends React.Component {
@@ -59,7 +68,7 @@ class EventItem extends React.Component {
 						{'@ ' + timeUtil.format(event.time) + ' - ' + event.location.name}
 					</Text>
 				</View>
-				<EventBanner event={event} location={this.props.location} />
+				<EventBanner style={styles.banner} event={event} location={this.props.location} />
 			</Link>
 		)
 	}

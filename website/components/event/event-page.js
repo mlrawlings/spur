@@ -17,16 +17,20 @@ var React = require('react')
 var styles = {}
 
 styles.banner = {
-	paddingTop:10,
-	paddingBottom:10
+	paddingTop:5,
+	paddingBottom:5
 }
 
 styles.summary = {
 	flexDirection:'row',
+	flexWrap:'wrap',
 	justifyContent:'space-between',
+	alignItems:'center',
 	backgroundColor:'#fff',
 	borderBottomWidth:1,
-	borderBottomColor:'#ddd'
+	borderBottomColor:'#ddd',
+	paddingTop:15,
+	paddingBottom:15
 }
 
 styles.title = {
@@ -40,9 +44,20 @@ styles.time = {
 	textTransform:'lowercase'
 }
 
+styles.nameAndTime = {
+	flex:1,
+	minWidth:300,
+	paddingTop:10,
+	paddingBottom:10
+}
+
 styles.location = {
 	alignItems:'flex-end',
-	textAlign: 'right'
+	textAlign: 'right',
+	flexGrow:0.01,
+	marginLeft:20,
+	paddingTop:10,
+	paddingBottom:10
 }
 
 styles.locationName = {
@@ -51,16 +66,6 @@ styles.locationName = {
 
 styles.address = {
 	fontSize:14
-}
-
-styles.content = {
-	flexDirection:'row',
-	paddingTop:20,
-	paddingBottom:20
-}
-
-styles.leftColumn = {
-	flex:1
 }
 
 styles.details = {
@@ -76,14 +81,19 @@ styles.description = {
 	flex: 1
 }
 
+styles.content = {
+	paddingTop:20,
+	paddingBottom:20
+}
+
 styles.attendees = {
-	width:100,
-	marginLeft:30,
-	alignItems:'flex-end'
+	marginTop:30,
+	maxWidth:600
 }
 
 styles.posts = {
-	marginTop:30
+	marginTop:30,
+	maxWidth:600
 }
 
 styles.mapCover = {
@@ -126,7 +136,7 @@ class EventPage extends React.Component {
 
 
 				<Section style={styles.summary}>
-					<View>
+					<View style={styles.nameAndTime}>
 						<Text style={titleStyles}>
 							{event.name}
 						</Text>
@@ -153,11 +163,9 @@ class EventPage extends React.Component {
 				</Section>}
 
 				<Section style={styles.content}>
-					<View style={styles.leftColumn}>
-						<AttendAndInvite event={event} user={user} />
-						<Posts style={styles.posts} event={event} user={this.props.user} />
-					</View>
+					<AttendAndInvite event={event} user={user} />
 					<Attendees style={styles.attendees} event={event} />
+					<Posts style={styles.posts} event={event} user={this.props.user} />
 				</Section>
 			</Layout>
 		)

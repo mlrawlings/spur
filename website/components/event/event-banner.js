@@ -42,7 +42,7 @@ styles.vertical = {}
 
 styles.vertical.section = {
 	...styles.section,
-	width:300,
+	width:'100%',
 	flex:0.5,
 	justifyContent:'space-around'
 }
@@ -64,31 +64,39 @@ styles.horizontal = {}
 
 styles.horizontal.banner = (backgroundColor) => ({
 	flexDirection:'row', 
+	flexWrap:'wrap',
 	backgroundColor
 })
 
 styles.horizontal.category = () => ({
 	...styles.section, 
 	justifyContent:'flex-start',
-	flex:1
+	flex:1,
+	minWidth:200,
+	paddingTop:5,
+	paddingBottom:5,
 })
 
 styles.horizontal.details = () => ({
 	...styles.section, 
-	width:280,
+	minWidth:230,
+	flex:0.5,
+	paddingTop:5,
+	paddingBottom:5,
 	justifyContent:'space-between'
 })
 
 class EventBanner extends React.Component {
 	render() {
 		var event = this.props.event
+		  , style = this.props.style
 		  , category = categories[event.category || 'other']
 		  , location = this.props.location
 		  , direction = this.props.horizontal ? 'horizontal' : 'vertical'
 		  , color = category.color
 
 		return (
-			<View style={styles[direction].banner(color)}>
+			<View style={{ ...styles[direction].banner(color), ...style }}>
 				<View style={styles[direction].category(color)}>
 					<Text style={styles.categoryText}>{category.name}</Text>
 				</View>

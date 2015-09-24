@@ -8,32 +8,44 @@ var React = require('react')
 
 var styles = {}
 
+styles.container = {
+	width:'100%',
+	flexDirection:'row',
+	overflow:'auto',
+	paddingTop:5,
+	paddingBottom:5
+}
+
 styles.attendee = {
 	alignItems:'center',
 	flexDirection:'row',
-	justifyContent:'flex-end',
-	marginTop: 5
+	justifyContent:'flex-start',
+	marginRight:20,
 }
 
 styles.picture = {
-	height: 25,
-	marginLeft: 5,
+	height: 35,
+	marginRight: 5,
 	borderRadius:4
 }
 
 class Attendees extends React.Component {
 	render() {
 		var { event, style } = this.props
+		  , attendees = event.attendees
+		  , num = attendees.length
 		
 		return (
 			<View style={style}>
-				<Heading style={styles.going}>{event.attendees.length + ' Going'}</Heading>	
-				{event.attendees.map(attendee =>
-					<Link style={styles.attendee} href={'/profile/'+attendee.id}>
-						<Text>{attendee.name.first}</Text>
-						<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
-					</Link>
-				)}
+				<Heading style={styles.going}>{(!num ? 'No one is' : num == 1 ? '1 Person is' : num + ' People are') + ' Going'}</Heading>	
+				<View style={styles.container}>
+					{attendees.map(attendee =>
+						<Link style={styles.attendee} href={'/profile/'+attendee.id}>
+							<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
+							<Text>{attendee.name.first}</Text>
+						</Link>
+					)}
+				</View>
 			</View>
 		)
 	}
