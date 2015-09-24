@@ -136,7 +136,7 @@ class PlaceInput extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.value != this.props.value) {
-			React.findDOMNode(this.refs.input).value = nextProps.value
+			this.setState({ value:nextProps.value })
 		}
 	}
 	componentWillUnmount() {
