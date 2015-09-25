@@ -10,7 +10,8 @@ var styles = {}
 
 styles.attend = {
 	justifyContent:'center',
-	alignItems:'flex-start'
+	alignItems:'flex-start',
+	marginBottom: 30
 }
 
 styles.header = {
@@ -50,14 +51,14 @@ class AttendAndInvite extends React.Component {
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , isOwner = user && user.id == event.owner
 
-		if(event.cancelled) return <View style={{...styles.attend, ...style}}>
+		if(event.cancelled) return isOwner ? <View style={{...styles.attend, ...style}}>
 			<Heading>This event is cancelled</Heading>
-			{isOwner && <View style={styles.buttons}>
+			<View style={styles.buttons}>
 				<Button style={styles.uncancel} href={'/event/'+event.id+'/uncancel'}>
 					UnCancel
 				</Button>
-			</View>}
-		</View>
+			</View>
+		</View> : false
 
 		if(!user) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>

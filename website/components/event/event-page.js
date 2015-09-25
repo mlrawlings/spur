@@ -89,7 +89,6 @@ styles.content = {
 }
 
 styles.attendees = {
-	marginTop:30,
 	maxWidth:600
 }
 
