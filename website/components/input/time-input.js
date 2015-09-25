@@ -29,22 +29,29 @@ class LocationInput extends React.Component {
 			time: timeUtil.anHourFromNow(true)
 		}
 	}
-	componentDidMount() {
-		
+	componentWillMount() {
+		try {
+			var input = document.createElement("input")
+
+		    input.type = "time"
+			
+			this.supportsTimeInput = input.type == 'time'
+		} catch(e) {
+			this.supportsTimeInput = false
+		}
+	}
+	reformatTime(e) {
+		if(!this.supportsTimeInput)
+			e.target.value = timeUtil.format(this.state.time)
 	}
 	changeTime(e) {
-		var time = this.state.time
-		  , parts = e.target.value.split(':')
-		  , hours = parseInt(parts[0])
-		  , minutes = parseInt(parts[1])
-		
-		if(!isNaN(hours))
-			time.setHours(hours)
+		try {
+			var time = timeUtil.parseTime(e.target.value, this.state.time)
 
-		if(!isNaN(minutes))
-			time.setMinutes(minutes)
-
-		this.setState({ time })
+			this.setState({ time, error:null })
+		} catch(e) {
+			this.setState({ error:e })
+		}
 	}
 	changeDay(e) {
 		var time = this.state.time
@@ -66,19 +73,20 @@ class LocationInput extends React.Component {
 		if(minutes <= 9) minutes = '0' + minutes
 
 		var time = hours + ':' + minutes
-		  , error = this.state.time < new Date()
+		  , timeString = this.supportsTimeInput ? time : timeUtil.format(this.state.time)
+		  , error = this.state.error || (this.state.time < new Date() ? new Error('You cannot post an event in the past.') : null)
 
 		return (
 			<View>
 				<View style={styles.container}>
-					<Input type="time" style={styles.time} value={time} onChange={this.changeTime.bind(this)} />
+					<Input ref="input" type="time" style={styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} />
 					<Input type="select" ref="day" style={styles.day} value={day} onChange={this.changeDay.bind(this)}>
 						<option value="today">Today</option>
 						<option value="tomorrow">Tomorrow</option>
 					</Input>
 				</View>
 				<Text style={styles.text}>
-					{error && <Text style={styles.error}>Error! You cannot post an event in the past.</Text>}
+					{error && <Text style={styles.error}>Error! {error.message}</Text>}
 				</Text>
 				<Input name="time" value={this.state.time.toJSON()} type="hidden" />
 			</View>

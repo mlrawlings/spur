@@ -137,3 +137,33 @@ exports.roundToNearest15 = function(time) {
 exports.getMsUntilNextMinute = function() {
 	return 60000 - Date.now() % 60000
 }
+
+exports.parseTime = function(string, date) {
+	var regex = /^\s*(\d+)(?:[^\w\d]+(\d+)?)?\s*(a|am|p|pm)?\s*$/
+	  , matches = regex.exec(string.toLowerCase())
+	  , result = new Date(date.getTime())
+
+	if(!matches)
+		throw new Error('Not a valid Time')
+
+	var hours = parseInt(matches[1])
+	  , minutes = parseInt(matches[2]) || 0
+
+	if(hours >= 24)
+		throw new Error('Hours can\'t be >= 24')
+
+	if(minutes >= 60)
+		throw new Error('Minutes can\'t be >= 60')
+
+	if(matches[3]) {
+		hours %= 12
+		if(matches[3][0] == 'p')
+			hours += 12
+	}
+
+	result.setHours(hours)
+	result.setMinutes(minutes)
+
+	return result
+
+}
