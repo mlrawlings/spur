@@ -164,7 +164,7 @@ class EventPage extends React.Component {
 				</Section>}
 
 				<Section style={styles.content}>
-					<AttendAndInvite event={event} user={user} />
+					<AttendAndInvite event={event} user={user} currentURL={this.props.currentURL} />
 					<Attendees style={styles.attendees} event={event} />
 					<Posts style={styles.posts} event={event} user={this.props.user} />
 				</Section>

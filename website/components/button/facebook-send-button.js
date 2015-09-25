@@ -12,14 +12,19 @@ class FacebookSendButton extends React.Component {
 		if(!/android|ios/i.test(navigator.userAgent)) {
 			FB.ui({
 				method: 'send',
-				link: window.location.href + this.props.append,
+				link: this.props.currentURL + this.props.append
 			})
 			e.preventDefault()
+		} else {
+			FB.ui({
+				method: 'share',
+				href: this.props.currentURL + this.props.append
+			})
 		}
 	}
 	render() {
 		return (
-			<Button onClick={this.onClick} style={{...styles.send, ...this.props.style}} src="/images/messenger-icon-white.png">
+			<Button onClick={this.onClick.bind(this)} style={{...styles.send, ...this.props.style}} src="/images/messenger-icon-white.png">
 				{this.props.children || 'Send'}
 			</Button>
 		)

@@ -140,12 +140,15 @@ router.on('/event/:id', function(next) {
 		if(event.description)
 			this.document.meta.push({ property:'og:description', content:event.description })
 
-		this.render(EventPage, { event:event })
+		this.render(EventPage, { event:event, currentURL:this.href })
 	}).catch(next)
 })
 
 router.on('/event/:id/invite', function(next) {
+
 	if(__SERVER__) {
+		if(/facebookexternalhit|facebot/.test(this.req.headers['user-agent'])) return this.redirect('/event/'+this.params.id)
+
 		var now = new Date()
 		  , oneYr = new Date()
 		  , invitee = this.cookies.get('invitee') || Math.random()*99999999999999
