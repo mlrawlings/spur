@@ -30,14 +30,22 @@ styles.picture = {
 }
 
 class Attendees extends React.Component {
+	getHeaderString(num, on) {
+		var count = num == 0 ? 'no' : num
+		  , noun = num == 0 ? 'one' : num == 1 ? 'person' : 'people'
+		  , verb = (on ? (num <= 1 ? 'is' : 'are') : (num <= 1 ? 'was' : 'were')) + ' going'
+		 
+		return count+' '+noun+' '+verb
+	}
 	render() {
 		var { event, style } = this.props
 		  , attendees = event.attendees
+		  , on = !event.cancelled
 		  , num = attendees.length
 		
 		return (
 			<View style={style}>
-				<Heading style={styles.going}>{(!num ? 'No one is' : num == 1 ? '1 Person is' : num + ' People are') + ' Going'}</Heading>	
+				<Heading style={styles.going}>{this.getHeaderString(num, on)}</Heading>	
 				<View style={styles.container}>
 					{attendees.map(attendee =>
 						<Link style={styles.attendee} href={'/profile/'+attendee.id}>
