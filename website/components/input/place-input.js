@@ -6,6 +6,8 @@ var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
   , locationUtil = require('../../util/location')
+  , Color = require('color')
+
 
 const UP = 38
 const DOWN = 40
@@ -166,6 +168,7 @@ class PlaceInput extends React.Component {
 		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height, ...containerStyle} = style
 		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height}
 		  , linkStyle = styles.currentLocationLink
+		  , backgroundColor = Color(style.backgroundColor || styles.container.backgroundColor)
 
 		inputStyle.padding = 2
 		linkStyle.paddingLeft = paddingLeft || padding
@@ -180,7 +183,7 @@ class PlaceInput extends React.Component {
 					<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 						{
 							this.state.loading 
-							? <Image style={styles.loadingImage} src="/images/loading-on-white.gif" />
+							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/loading-on-white.gif" : "/images/loading-on-black.gif"} />
 							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
 						}
 					</Link>

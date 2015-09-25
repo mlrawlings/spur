@@ -145,7 +145,6 @@ router.on('/event/:id', function(next) {
 })
 
 router.on('/event/:id/invite', function(next) {
-
 	if(__SERVER__) {
 		if(/facebookexternalhit|facebot/.test(this.req.headers['user-agent'])) return this.redirect('/event/'+this.params.id)
 
