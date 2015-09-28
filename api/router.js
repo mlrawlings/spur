@@ -62,18 +62,23 @@ router.delete('/auth'/*, session*/, function(req, res, next) {
 })
 
 router.get('/users/:id', function(req, res, next) {
-	r.table('users').get(req.params.id).merge(function(user) {
-		return {
-			events:r.table('moment').filter(function(event) {
-				return user('events').contains(event('id'))
-			}).orderBy(r.desc('time')).coerceTo('array')
-		}
-	}).without('email', 'location').run(connection).then(function(user) {
-		res.json(user)
-	}).catch(function(err) {
-		console.error(err)
-		next(err)
-	})
+	r.table('users').get(req.params.id).run(connection).then(function(user) {
+		if(!user)
+			return res.status(404).end('This User Does Not Exist')
+		
+		r.table('users').get(req.params.id).merge(function(user) {
+			return {
+				events:r.table('moment').filter(function(event) {
+					return user('events').contains(event('id'))
+				}).orderBy(r.desc('time')).coerceTo('array')
+			}
+		}).without('email', 'location').run(connection).then(function(user) {
+			res.json(user)
+		}).catch(function(err) {
+			next(err)
+		})
+	}).catch(next)
+
 })
 
 // Gets all moments, auto filter no past moments, none after tomorrow
@@ -117,32 +122,37 @@ router.get('/moments', function(req, res, next) {
 
 // Get moment by id
 router.get('/moments/:id', function(req, res, next) {
-	r.table('moment').get(req.params.id).merge(function(moment) {
-		return {
-			attendees:r.table('users').without('email', 'location').filter(function(user) {
-				return moment('attendees').contains(user('id'))
-			}).coerceTo('array'),
-			posts:moment('posts').map(function(post) {
-				return post.merge(function(post) {
-					return {
-						user:r.table('users').get(post('user')).without('email', 'location'),
-						comments:post('comments').map(function(comment) {
-							return comment.merge(function(comment) {
-								return {
-									user:r.db('spur').table('users').get(comment('user'))
-								}
+	r.table('moment').get(req.params.id).run(connection).then(function(moment) {
+		if(!moment)
+			return res.status(404).end('This Event Does Not Exist')
+
+		r.table('moment').get(req.params.id).merge(function(moment) {
+			return {
+				attendees:r.table('users').without('email', 'location').filter(function(user) {
+					return moment('attendees').contains(user('id'))
+				}).coerceTo('array'),
+				posts:moment('posts').map(function(post) {
+					return post.merge(function(post) {
+						return {
+							user:r.table('users').get(post('user')).without('email', 'location'),
+							comments:post('comments').map(function(comment) {
+								return comment.merge(function(comment) {
+									return {
+										user:r.db('spur').table('users').get(comment('user'))
+									}
+								})
 							})
-						})
-					}
-				})
-			}).orderBy(r.desc('time'))
-		}
-	}).run(connection).then(function(moment) {
-		res.json(moment)
-	}).catch(function(err) {
-		console.error(err)
-		next(err)
-	})
+						}
+					})
+				}).orderBy(r.desc('time'))
+			}
+		}).run(connection).then(function(moment) {
+			res.json(moment)
+		}).catch(function(err) {
+			console.error(err)
+			next(err)
+		})
+	}).catch(next)
 })
 
 // Create moment

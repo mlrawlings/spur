@@ -18,7 +18,6 @@ app.use(function(req, res, next) {
 		res.set('Access-Control-Allow-Origin', req.get('origin'))
 	}
 	res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, DELETE')
-	res.set('Content-Type', 'application/json; charset=utf-8')
 	next()
 })
 

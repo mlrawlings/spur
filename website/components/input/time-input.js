@@ -41,7 +41,7 @@ class LocationInput extends React.Component {
 		}
 	}
 	reformatTime(e) {
-		if(!this.supportsTimeInput)
+		if(!this.supportsTimeInput && !this.state.error)
 			e.target.value = timeUtil.format(this.state.time)
 	}
 	changeTime(e) {

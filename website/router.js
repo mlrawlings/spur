@@ -3,6 +3,7 @@ var Home = require('./components/home')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
+  , Four0Four = require('./components/404')
   , fb = require('../common/util/facebook')
   , kent = require('kent/router')
   , router = kent()
@@ -43,8 +44,14 @@ router.use(function(next) {
 
 router.on('/profile/:id', function(next) {
 	this.api.get('/users/'+this.params.id).then(profileUser => {
+		console.log('test')
 		this.render(Profile, { profileUser })
-	}).catch(next)
+	}).catch((e) => {
+		if(e.status == 404)
+			this.render(Four0Four, {})
+
+		next(e)
+	})
 })
 
 router.on('/', function(next) {
@@ -141,7 +148,12 @@ router.on('/event/:id', function(next) {
 			this.document.meta.push({ property:'og:description', content:event.description })
 
 		this.render(EventPage, { event:event, currentURL:this.href })
-	}).catch(next)
+	}).catch((e) => {
+		if(e.status == 404)
+			return this.render(Four0Four, {})
+
+		next(e)
+	})
 })
 
 router.on('/event/:id/invite', function(next) {
