@@ -24,80 +24,47 @@ styles.nameInput = {
 styles.addressInput = {
 	...Input.style,
 	borderWidth:0,
-	paddingTop:3,
-	paddingBottom:5,
-	fontSize:13
-}
-
-styles.bigAddressInput = {
-	...styles.addressInput,
-	height:54,
-	fontSize:15
 }
 
 class LocationInput extends React.Component {
 	constructor(props) {
 		super(props)
-		var location = this.props.location
 		
 		this.state = {
-			location: {
-				coords:location.coords
-			},
-			zoom: 14
+			place: props.place,
+			zoom: props.zoom
 		}
 	}
 	changePlace(place) {
-		var placeObject = locationUtil.getAddressComponents(place)
-		this.setState({ location:placeObject, zoom: 18 })
-
-		if(placeObject.name)
-			React.findDOMNode(this.refs.name).value = placeObject.name
-		else {
-			React.findDOMNode(this.refs.name).value = ''
-		}
-
-		this.focusName()
-	}
-	focusName() {
-		var name = React.findDOMNode(this.refs.name)
-		setTimeout(() => {
-			if(!name) return this.focusName()
-			if(!name.value && document.activeElement != name) {
-				name.focus()
-				this.focusName()
-			}
-		}, 10)
+		this.setState({ place, zoom: 18 })
+		this.props.onChange && this.props.onChange(place)
 	}
 	setCoords(coords) {
-		this.state.location.coords = coords
-		this.setState({ location:this.state.location })
-		this.focusName()
+		this.state.place.coords = coords
+		this.setState({ place:this.state.place })
 
 		locationUtil.getAddressFromCoords(coords).then(address => {
 			return locationUtil.getAddressComponents(address)
-		}).then(address => {
-			address.coords = coords
-			this.setState({ location:address })
+		}).then(place => {
+			place.coords = coords
+			this.setState({ place })
 		}).catch(window.alert)
 	}
 	render() {
-		var location = this.state.location
+		var place = this.state.place
 		  , name = this.props.name
-		  , address = location.full
-		  , addressInputStyle = address ? styles.addressInput : styles.bigAddressInput
+		  , address = place && place.full
 
 		return (
 			<View style={styles.container}>
-				{!!address && <Input ref="name" style={styles.nameInput} name={name+'[name]'} autocomplete="off" placeholder="Name this location..." />}
-				<PlaceInput style={addressInputStyle} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
-				<GoogleMap center={location.coords} zoom={this.state.zoom}>
-					<GoogleMapMarker draggable={true} position={location.coords} onDragEnd={this.setCoords.bind(this)} />
-				</GoogleMap>
-				<input type="hidden" name={name+'[street]'} value={location.street} />
-				<input type="hidden" name={name+'[citystatezip]'} value={location.citystatezip} />
-				<input type="hidden" name={name+'[coords][0]'} value={location.coords[0]}  />
-				<input type="hidden" name={name+'[coords][1]'} value={location.coords[1]}  />
+				<PlaceInput style={styles.addressInput} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
+				{place && <GoogleMap center={place.coords} zoom={this.state.zoom}>
+					<GoogleMapMarker draggable={true} position={place.coords} onDragEnd={this.setCoords.bind(this)} />
+				</GoogleMap>}
+				{place &&<input type="hidden" name={name+'[street]'} value={place.street} />}
+				{place &&<input type="hidden" name={name+'[citystatezip]'} value={place.citystatezip} />}
+				{place &&<input type="hidden" name={name+'[coords][0]'} value={place.coords[0]}  />}
+				{place &&<input type="hidden" name={name+'[coords][1]'} value={place.coords[1]}  />}
 			</View>
 		)
 	}

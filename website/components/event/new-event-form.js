@@ -33,26 +33,36 @@ styles.optional = {
 }
 
 class NewEventForm extends React.Component {
-	componentDidMount() {
-		React.findDOMNode(this.refs.name).focus()
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+	changeLocation(location) {
+		this.setState({ location })
 	}
 	render() {
+		var location = this.state.location
+
 		return (
 			<Layout user={this.props.user}>
 				<Section>
 					<form method="POST" action="/create/event" autoComplete="false">
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
-							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
+							<Input autoFocus={true} style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>When</Label>
+							<Label required={true}>Time</Label>
 							<TimeInput name="time" required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Where</Label>
-							<LocationInput name="location" location={this.props.location} required={true} />
+							<Label required={true}>{location ? 'Location Address' : 'Location'}</Label>
+							<LocationInput name="location" location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
 						</View>
+						{location && <View style={styles.field}>
+							<Label required={true}>Location Name</Label>
+							<Input name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} required={true} />
+						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
 							<CategoryInput name="category" required={true} />

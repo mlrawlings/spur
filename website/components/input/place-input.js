@@ -115,7 +115,7 @@ class PlaceInput extends React.Component {
 	}
 	makeSelection(suggestion) {
 		setTimeout(() => this.props.onChange(suggestion))
-		this.setState({ value:suggestion.formatted_address })
+		this.setState({ value:suggestion.full })
 	}
 	onKeyDown(e) {
 		var suggestions = this.state.suggestions
@@ -159,7 +159,7 @@ class PlaceInput extends React.Component {
 	}
 	currentAddressClick() {
 		locationUtil.getLocation().then((location) => {
-			this.setState({ value:location.formatted_address, loading:false })
+			this.setState({ value:location.full, loading:false })
 			this.props.onChange && this.props.onChange(location)
 		})
 	}
@@ -170,7 +170,7 @@ class PlaceInput extends React.Component {
 		  , linkStyle = styles.currentLocationLink
 		  , backgroundColor = Color(style.backgroundColor || styles.container.backgroundColor)
 
-		inputStyle.padding = 2
+		inputStyle.paddingLeft = 2
 		linkStyle.paddingLeft = paddingLeft || padding
 
 		Object.keys(inputStyle).forEach(function(style) {
@@ -191,7 +191,7 @@ class PlaceInput extends React.Component {
 						ref="input"
 						type="search" 
 						value={this.state.value} 
-						placeholder="Enter an address or place..." 
+						placeholder="Enter address or name of place..." 
 						{...props}
 						style={{...styles.input, ...inputStyle}}
 						onChange={this.onChange.bind(this)} 

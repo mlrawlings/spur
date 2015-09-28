@@ -68,8 +68,8 @@ class EventResults extends React.Component {
 	}
 	changeLocation(location) {
 		React.findDOMNode(this.refs.location).value = JSON.stringify({
-			name:location.formatted_address,
-			coords:[location.geometry.location.lat(), location.geometry.location.lng()]
+			name:location.full,
+			coords:location.coords
 		})
 		this.submitForm()
 	}
