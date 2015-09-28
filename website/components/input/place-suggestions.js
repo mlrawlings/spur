@@ -49,12 +49,12 @@ class PlaceSuggestions extends React.Component {
 						<Text style={styles.info}>{loading ? 'LOADING...' : 'No Results.  Try another search.'}</Text>
 					</View>}
 					{suggestions.map((suggestion, i) => {
-						return <View style={styles.suggestion} ref={suggestion.place_id} onMouseDown={onSelect.bind(this, suggestion)}>
+						return <View style={styles.suggestion} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion)}>
 							<Text style={styles.name}>
 								{suggestion.name}
 							</Text>
 							<Text style={styles.address}>
-								{(i == selected ? '* ' : '') + suggestion.formatted_address}
+								{(i == selected ? '* ' : '') + suggestion.full}
 							</Text>
 						</View>
 					})}

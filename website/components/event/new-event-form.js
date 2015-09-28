@@ -34,7 +34,10 @@ styles.optional = {
 
 class NewEventForm extends React.Component {
 	componentDidMount() {
-		React.findDOMNode(this.refs.name).focus()
+		React.findDOMNode(this.refs.eventName).focus()
+	}
+	changeLocation(place) {
+		React.findDOMNode(this.refs.locationName).value = place.name || ''
 	}
 	render() {
 		return (
@@ -43,15 +46,19 @@ class NewEventForm extends React.Component {
 					<form method="POST" action="/create/event" autoComplete="false">
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
-							<Input ref="name" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
+							<Input ref="eventName" style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>When</Label>
+							<Label required={true}>Time</Label>
 							<TimeInput name="time" required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Where</Label>
-							<LocationInput name="location" location={this.props.location} required={true} />
+							<Label required={true}>Location Address</Label>
+							<LocationInput name="location" location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
+						</View>
+						<View style={styles.field}>
+							<Label required={true}>Location Name</Label>
+							<Input ref="locationName" name="location[name]" type="text" placeholder="Name this place..." required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>

@@ -10,7 +10,7 @@ exports.getLocation = function() {
 		navigator.geolocation.getCurrentPosition(function(location) {
 			var coords = [location.coords.latitude, location.coords.longitude]
 			exports.getAddressFromCoords(coords).then(function(address) {
-				resolve(address)
+				resolve(locationUtil.getAddressComponents(address))
 			}).catch(reject)
 		}, reject)
 	})
@@ -53,7 +53,7 @@ exports.getBounds = function(coords, radius) {
 }
 
 exports.toGoogleLatLng = function toGoogleLatLng(coords) {
-	return new google.maps.LatLng(coords[0], coords[1])
+	return coords.google || new google.maps.LatLng(coords[0], coords[1])
 }
 
 exports.toGoogleLatLngBounds = function toGoogleLatLngBounds(bounds) {
@@ -159,7 +159,7 @@ exports.getResultsFromSearch = function(input, near) {
 			return bScore - aScore
 		})
 
-		return results.slice(0, MAX_RESULTS)
+		return results.slice(0, MAX_RESULTS).map(exports.getAddressComponents)
 	})
 }
 
@@ -271,7 +271,11 @@ exports.getAddressComponents = function(place) {
 		return parseFloat(val)
 	})
 
-	address.full = place.formatted_address
+	address.coords.google = place.geometry.location
+
+	address.full = address.street + ', ' + address.citystatezip
+
+	address.id = place.place_id
 
 	return address
 }
