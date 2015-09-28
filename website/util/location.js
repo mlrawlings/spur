@@ -10,7 +10,7 @@ exports.getLocation = function() {
 		navigator.geolocation.getCurrentPosition(function(location) {
 			var coords = [location.coords.latitude, location.coords.longitude]
 			exports.getAddressFromCoords(coords).then(function(address) {
-				resolve(locationUtil.getAddressComponents(address))
+				resolve(exports.getAddressComponents(address))
 			}).catch(reject)
 		}, reject)
 	})
