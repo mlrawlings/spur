@@ -265,7 +265,7 @@ exports.getAddressComponents = function(place) {
 		address.street = components.route || ''
 	}
 
-	address.citystatezip = components.locality + ', ' + components.administrative_area_level_1 + ' ' + components.postal_code
+	address.citystatezip = components.locality + ', ' + components.administrative_area_level_1 + ' ' + (components.postal_code||'')
 	
 	address.coords = place.geometry.location.toUrlValue().split(',').map(function(val) {
 		return parseFloat(val)
