@@ -46,6 +46,9 @@ class GoogleMap extends React.Component {
 
 		this.forceUpdate()
 	}
+	componentDidMount() {
+		this.init(this.props)
+	}
 	componentWillReceiveProps(nextProps) {
 		if(!this.map) {
 			return this.init(nextProps)
