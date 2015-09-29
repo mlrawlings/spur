@@ -167,6 +167,7 @@ class PlaceInput extends React.Component {
 		}
 	}
 	currentAddressClick() {
+		this.setState({ loading:true })
 		locationUtil.getLocation().then((location) => {
 			this.setState({ value:location.full, loading:false })
 			this.props.onChange && this.props.onChange(location)
