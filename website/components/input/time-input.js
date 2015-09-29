@@ -35,13 +35,13 @@ class LocationInput extends React.Component {
 
 		    input.type = "time"
 			
-			this.supportsTimeInput = input.type == 'time'
+			this.noTimeInputSupport = input.type != 'time'
 		} catch(e) {
-			this.supportsTimeInput = false
+			this.noTimeInputSupport = false
 		}
 	}
 	reformatTime(e) {
-		if(!this.supportsTimeInput && !this.state.error)
+		if(this.noTimeInputSupport && !this.state.error)
 			e.target.value = timeUtil.format(this.state.time)
 	}
 	changeTime(e) {
@@ -73,7 +73,7 @@ class LocationInput extends React.Component {
 		if(minutes <= 9) minutes = '0' + minutes
 
 		var time = hours + ':' + minutes
-		  , timeString = this.supportsTimeInput ? time : timeUtil.format(this.state.time)
+		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
 		  , error = this.state.error || (this.state.time < new Date() ? new Error('You cannot post an event in the past.') : null)
 
 		return (
