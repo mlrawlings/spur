@@ -52,7 +52,7 @@ class NewEventForm extends React.Component {
 							<Input autoFocus={true} style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Time</Label>
+							<Label required={true}>Start Time</Label>
 							<TimeInput name="time" required={true} />
 						</View>
 						<View style={styles.field}>
