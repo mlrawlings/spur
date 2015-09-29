@@ -44,7 +44,6 @@ router.use(function(next) {
 
 router.on('/profile/:id', function(next) {
 	this.api.get('/users/'+this.params.id).then(profileUser => {
-		console.log('test')
 		this.render(Profile, { profileUser })
 	}).catch((e) => {
 		if(e.status == 404)
@@ -70,16 +69,18 @@ router.on('/', function(next) {
 		this.cookies.set('location', this.query.location)
 	} catch(e) {}
 
-	this.api.get('/moments').query({ location, radius }).then(events => {
+	this.api.get('/events').query({ location, radius }).then(events => {
 		this.render(EventResults, { events, radius, search:this.query.q })
-	}).catch(next)
+	}).catch(function(err) {
+		next(err)
+	})
 })
 
 
 router.on('/facebook/login', function(next) {
 	if(__SERVER__) {
 		this.req.session.facebookReferrer = this.req.header('Referrer')
-		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code")
+		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code&scope=public_profile,email,user_birthday")
 	}
 
 	if(__BROWSER__) {
@@ -92,7 +93,7 @@ router.on('/facebook/login', function(next) {
 				window.user = res.user
 				this.redirect(window.location.href)
 			}).catch(next)
-		})
+		}, {scope: 'public_profile,email,user_birthday'})
 	}
 })
 
@@ -135,7 +136,7 @@ if(__SERVER__) {
 }
 
 router.on('/event/:id', function(next) {
-	this.api.get('/moments/'+this.params.id).then(event => {
+	this.api.get('/events/'+this.params.id).then(event => {
 		//if(!event) return this.render(NotFound, {}, 404)
 
 		this.document.title = event.name + ' | Spur'
@@ -172,44 +173,44 @@ router.on('/event/:id/invite', function(next) {
 			invitee = this.req.session.user.id
 	}
 
-	this.api.get('/moments/'+this.params.id+'/invite/'+invitee).then(() => {
+	this.api.get('/events/'+this.params.id+'/invite/'+invitee).then(() => {
 		
 		this.redirect('/event/'+this.params.id)
 	})
 })
 
 router.on('/event/:id/join', function(next) {
-	this.api.post('/moments/'+this.params.id+'/attendees').then(() => {
+	this.api.post('/events/'+this.params.id+'/attendees').then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
 
 router.on('/event/:id/bail', function(next) {
-	this.api.del('/moments/'+this.params.id+'/attendees').then(() => {
+	this.api.del('/events/'+this.params.id+'/attendees').then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
 
 router.on('/event/:id/cancel', function(next) {
-	this.api.post('/moments/'+this.params.id+'/cancel').send(this.body).then(() => {
+	this.api.post('/events/'+this.params.id+'/cancel').send(this.body).then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
 
 router.on('/event/:id/uncancel', function(next) {
-	this.api.post('/moments/'+this.params.id+'/uncancel').send(this.body).then(() => {
+	this.api.post('/events/'+this.params.id+'/uncancel').send(this.body).then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
 
 router.on('/event/:id/post', function(next) {
-	this.api.post('/moments/'+this.params.id+'/posts').send(this.body).then(() => {
+	this.api.post('/events/'+this.params.id+'/posts').send(this.body).then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
 
 router.on('/event/:id/posts/:pid/comment', function(next) {
-	this.api.post('/moments/'+this.params.id+'/posts/'+this.params.pid+'/comments').send(this.body).then(() => {
+	this.api.post('/events/'+this.params.id+'/posts/'+this.params.pid+'/comments').send(this.body).then(() => {
 		this.redirect('/event/'+this.params.id)
 	}).catch(next)
 })
@@ -224,7 +225,7 @@ router.on('/create/event', function(next) {
 		if(event.location.coords[1]) event.location.coords[1] = parseFloat(event.location.coords[1])
 	}
 
-	this.api.post('/moments').send(event).then(eventId => {
+	this.api.post('/events').send(event).then(eventId => {
 		this.redirect('/event/'+eventId)
 	}).catch(next)
 })

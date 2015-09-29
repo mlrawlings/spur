@@ -26,17 +26,21 @@ router.post('/auth'/*, session*/, function(req, res, next) {
 		if(!user) {
 			user = {
 				fbid:fbUser.id,
-				name: {
-					first:fbUser.first_name,
-					last:fbUser.last_name,
-					full:fbUser.name
-				},
-				gender: fbUser.gender,
-				birthday: new Date(fbUser.birthday),
-				email: fbUser.email,
-				location: JSON.parse(req.cookies.location),
+				name: {},
 				events:[]
 			}
+
+			if(fbUser.birthday) user.birthday = new Date(fbUser.birthday)
+			if(fbUser.email) user.email = fbUser.email
+			if(fbUser.first_name) user.name.first = fbUser.first_name
+			if(fbUser.last_name) user.name.last = fbUser.last_name
+			if(fbUser.name) user.name.full = fbUser.name
+			if(fbUser.gender) user.gender = fbUser.gender
+
+			if(req.cookies.location) try {
+				user.location = JSON.parse(req.cookies.location)
+			} catch(e) {}
+
 			return r.table('users').insert(user).run(connection).then(function(result) {
 				user.id = result.generated_keys[0]
 				return user
@@ -68,7 +72,7 @@ router.get('/users/:id', function(req, res, next) {
 		
 		r.table('users').get(req.params.id).merge(function(user) {
 			return {
-				events:r.table('moment').filter(function(event) {
+				events:r.table('events').filter(function(event) {
 					return user('events').contains(event('id'))
 				}).orderBy(r.desc('time')).coerceTo('array')
 			}
@@ -81,8 +85,8 @@ router.get('/users/:id', function(req, res, next) {
 
 })
 
-// Gets all moments, auto filter no past moments, none after tomorrow
-router.get('/moments', function(req, res, next) {
+// Gets all events, auto filter no past events, none after tomorrow
+router.get('/events', function(req, res, next) {
 	var now = new Date()
 	  , twentyMinutesAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()-20)
 	  , end = timeUtil.getEndOfTomorrow(now)
@@ -96,7 +100,7 @@ router.get('/moments', function(req, res, next) {
 	var containsAttendees = req.session.user ? r.row('attendees').contains(req.session.user.id) : false
 	  , isOwner = req.session.user ? r.row('owner').eq(req.session.user.id) : false
 
-	r.table('moment').getIntersecting(
+	r.table('events').getIntersecting(
 		r.circle(location, radius, {unit: 'mi'}), 
 		{ index:'locationIndex' }
 	).filter(
@@ -110,28 +114,28 @@ router.get('/moments', function(req, res, next) {
 		r.asc('time')
 	).without(
 		'locationIndex'
-	).run(connection).then(function(moments) {
-		return moments.toArray()
-	}).then(function(moments) {
-		res.json(moments)
+	).run(connection).then(function(events) {
+		return events.toArray()
+	}).then(function(events) {
+		res.json(events)
 	}).catch(function(err) {
 		console.error(err)
 		next(err)
 	})
 })
 
-// Get moment by id
-router.get('/moments/:id', function(req, res, next) {
-	r.table('moment').get(req.params.id).run(connection).then(function(moment) {
-		if(!moment)
+// Get event by id
+router.get('/events/:id', function(req, res, next) {
+	r.table('events').get(req.params.id).run(connection).then(function(event) {
+		if(!event)
 			return res.status(404).end('This Event Does Not Exist')
 
-		r.table('moment').get(req.params.id).merge(function(moment) {
+		r.table('events').get(req.params.id).merge(function(event) {
 			return {
 				attendees:r.table('users').without('email', 'location').filter(function(user) {
-					return moment('attendees').contains(user('id'))
+					return event('attendees').contains(user('id'))
 				}).coerceTo('array'),
-				posts:moment('posts').map(function(post) {
+				posts:event('posts').map(function(post) {
 					return post.merge(function(post) {
 						return {
 							user:r.table('users').get(post('user')).without('email', 'location'),
@@ -146,8 +150,8 @@ router.get('/moments/:id', function(req, res, next) {
 					})
 				}).orderBy(r.desc('time'))
 			}
-		}).run(connection).then(function(moment) {
-			res.json(moment)
+		}).run(connection).then(function(event) {
+			res.json(event)
 		}).catch(function(err) {
 			console.error(err)
 			next(err)
@@ -155,37 +159,37 @@ router.get('/moments/:id', function(req, res, next) {
 	}).catch(next)
 })
 
-// Create moment
-router.post('/moments', jsonParser, function(req, res, next) {
+// Create event
+router.post('/events', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 	
 	var now = new Date()
-	  , moment = req.body
+	  , event = req.body
 
-	if(!moment.name) throw new Error('name is required')
-	if(!moment.time) throw new Error('time is required')
-	if(!moment.location) throw new Error('location is required')
-	if(!moment.location.name) throw new Error('location.name is required')
-	if(!moment.location.street) throw new Error('location.street is required')
-	if(!moment.location.citystatezip) throw new Error('location.citystatezip is required')
-	if(!moment.location.coords) throw new Error('location.coords is required')
+	if(!event.name) throw new Error('name is required')
+	if(!event.time) throw new Error('time is required')
+	if(!event.location) throw new Error('location is required')
+	if(!event.location.name) throw new Error('location.name is required')
+	if(!event.location.street) throw new Error('location.street is required')
+	if(!event.location.citystatezip) throw new Error('location.citystatezip is required')
+	if(!event.location.coords) throw new Error('location.coords is required')
 
-	if(moment.time <= now) throw new Error('time cannot be in the past')
-	if(moment.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
+	if(event.time <= now) throw new Error('time cannot be in the past')
+	if(event.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 
-	moment.posts = []
-	moment.invitees = []
-	moment.cancelled = false
-	moment.attendees = [req.session.user.id]
-	moment.owner = req.session.user.id
-	moment.locationIndex = r.point(moment.location.coords[1], moment.location.coords[0])
+	event.posts = []
+	event.invitees = []
+	event.cancelled = false
+	event.attendees = [req.session.user.id]
+	event.owner = req.session.user.id
+	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
 
-	r.table('moment').insert(moment).run(connection).then(function(moment) {
+	r.table('events').insert(event).run(connection).then(function(event) {
 		r.table('users').get(req.session.user.id).update({ 
-			events:r.row('events').setInsert(moment.generated_keys[0]) 
+			events:r.row('events').setInsert(event.generated_keys[0]) 
 		}).run(connection).then(function() {
-			res.status(201).json(moment.generated_keys[0])
+			res.status(201).json(event.generated_keys[0])
 		})
 	}).catch(function(err) {
 		console.error(err)
@@ -210,7 +214,7 @@ router.post('/moments', jsonParser, function(req, res, next) {
 })
 
 // Invite person to an event
-router.get('/moments/:id/invite/:cid', function(req, res, next) {
+router.get('/events/:id/invite/:cid', function(req, res, next) {
 	var newInvitee = { time: new Date() }
 	if(req.session.user) {
 		newInvitee.type = 'id'
@@ -220,15 +224,15 @@ router.get('/moments/:id/invite/:cid', function(req, res, next) {
 		newInvitee.id = req.params.cid
 	}
 
-	r.table('moment').get(req.params.id).update(function(moment) {
+	r.table('events').get(req.params.id).update(function(event) {
 		return r.branch(
-			moment('invitees').contains(function(invitee) {
+			event('invitees').contains(function(invitee) {
 				return invitee('id').eq(newInvitee.id).and(invitee('type').eq(newInvitee.type))
 			}),
-			{ invitees: moment('invitees').default([newInvitee]) },
-			{ invitees: moment('invitees').append(newInvitee) }
+			{ invitees: event('invitees').default([newInvitee]) },
+			{ invitees: event('invitees').append(newInvitee) }
 		)
-	}).run(connection).then(function(moment) {
+	}).run(connection).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
@@ -236,15 +240,15 @@ router.get('/moments/:id/invite/:cid', function(req, res, next) {
 })
 
 // Cancel an event
-router.post('/moments/:id/cancel', function(req, res, next) {
+router.post('/events/:id/cancel', function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').get(req.params.id).update(function(moment) {
-		return r.branch(moment('owner').eq(req.session.user.id), {
+	r.table('events').get(req.params.id).update(function(event) {
+		return r.branch(event('owner').eq(req.session.user.id), {
 			cancelled: true
 		}, {})
-	}).run(connection).then(function(moment) {
+	}).run(connection).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
@@ -252,23 +256,23 @@ router.post('/moments/:id/cancel', function(req, res, next) {
 })
 
 // UnCancel an event
-router.post('/moments/:id/uncancel', function(req, res, next) {
+router.post('/events/:id/uncancel', function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
-	r.table('moment').get(req.params.id).update(function(moment) {
-		return r.branch(moment('owner').eq(req.session.user.id), {
+	r.table('events').get(req.params.id).update(function(event) {
+		return r.branch(event('owner').eq(req.session.user.id), {
 			cancelled: false
 		}, {})
-	}).run(connection).then(function(moment) {
+	}).run(connection).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
 	})
 })
 
-// Create a post on a moment
-router.post('/moments/:id/posts', jsonParser, function(req, res, next) {
+// Create a post on a event
+router.post('/events/:id/posts', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
@@ -280,9 +284,9 @@ router.post('/moments/:id/posts', jsonParser, function(req, res, next) {
 		id:r.row('posts').count()
 	}
 
-	r.table('moment').get(req.params.id).update({ 
+	r.table('events').get(req.params.id).update({ 
 		posts:r.row('posts').append(post) 
-	}).run(connection).then(function(moment) {
+	}).run(connection).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
@@ -291,7 +295,7 @@ router.post('/moments/:id/posts', jsonParser, function(req, res, next) {
 })
 
 // Create a comment on a post
-router.post('/moments/:mid/posts/:pid/comments', jsonParser, function(req, res, next) {
+router.post('/events/:mid/posts/:pid/comments', jsonParser, function(req, res, next) {
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
@@ -303,11 +307,11 @@ router.post('/moments/:mid/posts/:pid/comments', jsonParser, function(req, res, 
 		time:new Date()
 	}
 
-	r.table('moment').get(req.params.mid).update({
+	r.table('events').get(req.params.mid).update({
 		posts:r.row('posts').changeAt(postIndex, r.row('posts').nth(postIndex).merge(function(post) {
 			return { comments:post('comments').append(comment) }
 		}))
-	}).run(connection).then(function(moment) {
+	}).run(connection).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
@@ -316,12 +320,12 @@ router.post('/moments/:mid/posts/:pid/comments', jsonParser, function(req, res, 
 })
 
 // I'm in
-router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
+router.post('/events/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
 	Promise.all([
-		r.table('moment').get(req.params.id).update({ 
+		r.table('events').get(req.params.id).update({ 
 			attendees:r.row('attendees').setInsert(req.session.user.id) 
 		}).run(connection),
 		r.table('users').get(req.session.user.id).update({ 
@@ -336,18 +340,18 @@ router.post('/moments/:id/attendees'/*, session*/, function(req, res, next){
 })
 
 // I'm out
-router.delete('/moments/:id/attendees'/*, session*/, function(req, res, next){
+router.delete('/events/:id/attendees'/*, session*/, function(req, res, next){
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 
 	Promise.all([
-		r.table('moment').get(req.params.id).update({ 
+		r.table('events').get(req.params.id).update({ 
 			attendees:r.row('attendees').setDifference([req.session.user.id]) 
 		}).run(connection),
 		r.table('users').get(req.session.user.id).update({ 
 			events:r.row('events').setDifference([req.params.id]) 
 		}).run(connection)
-	]).then(function(moment) {
+	]).then(function(event) {
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
