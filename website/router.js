@@ -145,8 +145,8 @@ router.on('/event/:id', function(next) {
 		this.document.meta.push({ property:'og:title', content:event.name })
 		this.document.meta.push({ property:'og:url', content:this.href })
 		
-		if(event.description)
-			this.document.meta.push({ property:'og:description', content:event.description })
+		if(event.details)
+			this.document.meta.push({ property:'og:description', content:event.details })
 
 		this.render(EventPage, { event:event, currentURL:this.href })
 	}).catch((e) => {

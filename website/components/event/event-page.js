@@ -79,7 +79,7 @@ styles.details = {
 	paddingBottom:20
 }
 
-styles.description = {
+styles.detailsText = {
 	flex: 1
 }
 
@@ -155,10 +155,10 @@ class EventPage extends React.Component {
 					</View>
 				</Section>
 				
-				{event.description && <Section style={styles.details}>
-					<View style={styles.description}>
-						<Heading>Description</Heading>
-						<Text>{event.description}</Text>
+				{event.details && <Section style={styles.details}>
+					<View style={styles.detailsText}>
+						<Heading>Details</Heading>
+						<Text>{event.details}</Text>
 					</View>
 				</Section>}
 
