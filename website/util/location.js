@@ -273,7 +273,7 @@ exports.getAddressComponents = function(place) {
 
 	address.coords.google = place.geometry.location
 
-	address.full = address.street + ', ' + address.citystatezip
+	address.full = (address.street && address.street + ', ') + address.citystatezip
 
 	address.id = place.place_id
 
