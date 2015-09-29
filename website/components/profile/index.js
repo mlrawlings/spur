@@ -50,7 +50,7 @@ class Profile extends React.Component {
 					{user && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
 				</Section>
 
-				<EventList events={events} location={this.props.location} />
+				<EventList events={events} location={this.props.location} noEventsText={((user && profileUser.id == user.id) ? 'You have ' : profileUser.name.first + ' has') + ' not gone to any events yet.'} />
 			</Layout>
 		)
 	}

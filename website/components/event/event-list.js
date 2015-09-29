@@ -45,12 +45,15 @@ class EventList extends React.Component {
 							<EventItem event={event} key={event.id} location={location} />
 						]
 					}
-				}) : (
-					user ? <Text style={styles.noEvents}>
-						There are currently no events nearby.  Try increasing your radius or <Link style={styles.createLink} href="/create/event">create your own event</Link>.
-					</Text> : <Text style={styles.noEvents}>
-						There are currently no events nearby.  Try increasing your radius.
-					</Text>
+				}) : (this.props.noEventsText ? (
+						<Text style={styles.noEvents}>
+							{this.props.noEventsText}
+						</Text>
+					) :	(user ? <Text style={styles.noEvents}>
+							There are currently no events nearby.  Try increasing your radius or <Link style={styles.createLink} href="/create/event">create your own event</Link>.
+						</Text> : <Text style={styles.noEvents}>
+							There are currently no events nearby.  Try increasing your radius.
+						</Text>)
 				)}
 			</Section>
 		)
