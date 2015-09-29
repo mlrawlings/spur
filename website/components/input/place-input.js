@@ -56,6 +56,7 @@ class PlaceInput extends React.Component {
 			loading:false,
 			value:props.defaultValue
 		}
+		this.callNum = 0
 	}
 	getTimeRemaining() {
 		var timeSince = Date.now()-this.lastRequest
@@ -80,24 +81,32 @@ class PlaceInput extends React.Component {
 		this.setState({ loading:true })
 
 		this.timeout = setTimeout(() => {
+			var localCallNum = ++this.callNum
 			value = this.state.value.trim()
 			this.searching = true
 			Promise.race([
 				locationUtil.getResultsFromSearch(value, this.props.location.coords).then((suggestions) => {
+					if(localCallNum != this.callNum) return
+
 					this.setState({ suggestions, selected:0, loading:false })
 					this.searching = false
 					this.lastRequest = Date.now()
+					if(value != this.state.value.trim()) {
+						this.getSuggestions(this.state.value.trim())
+					}
 				}),
 				new Promise((resolve, reject) => {
 					setTimeout(() => {
 						reject('timeout')
-					}, 1000)
+					}, 1200)
 				})
 			]).catch((e) => {
+				if(localCallNum != this.callNum) return
+
 				console.error(e)
 				this.lastRequest = Date.now()+1500
 				this.searching = false
-				this.getSuggestions()
+				this.getSuggestions(this.state.value.trim())
 			})
 		}, waitTime)
 	}

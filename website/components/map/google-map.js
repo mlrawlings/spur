@@ -2,6 +2,7 @@ var React = require('react/addons')
   , Marker = require('./google-map-marker')
   , Image = require('../core/image')
   , View = require('../core/view')
+  , detect = require('../../util/detect')
 
 var styles = {}
 
@@ -30,6 +31,7 @@ class GoogleMap extends React.Component {
 		this.map = new google.maps.Map(mapNode, {
 			zoom: props.zoom,
 			streetViewControl: false,
+			draggable:detect.hasMouse(),
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 				mapTypeIds:[google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.ROADMAP] 
@@ -43,9 +45,6 @@ class GoogleMap extends React.Component {
 		}
 
 		this.forceUpdate()
-	}
-	componentDidMount() {
-		this.init(this.props)
 	}
 	componentWillReceiveProps(nextProps) {
 		if(!this.map) {

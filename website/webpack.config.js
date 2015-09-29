@@ -32,5 +32,6 @@ module.exports = {
 	externals: {
 		react:'React',
 		'react/addons':'React'
-	}
+	},
+	devtool:'inline-source-map'
 }
