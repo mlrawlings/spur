@@ -68,7 +68,7 @@ class NewEventForm extends React.Component {
 							<TextArea name="details" style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
-							<Button type="submit">Create Event</Button>
+							<Button src="/images/create.png" type="submit">Create Event</Button>
 						</View>
 					</form>
 				</Section>

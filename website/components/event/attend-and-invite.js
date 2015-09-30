@@ -54,7 +54,7 @@ class AttendAndInvite extends React.Component {
 		if(event.cancelled) return isOwner ? <View style={{...styles.attend, ...style}}>
 			<Heading>This event is cancelled</Heading>
 			<View style={styles.buttons}>
-				<Button style={styles.uncancel} href={'/event/'+event.id+'/uncancel'}>
+				<Button style={styles.uncancel} src="/images/uncancel.png" href={'/event/'+event.id+'/uncancel'}>
 					UnCancel
 				</Button>
 			</View>
@@ -72,11 +72,11 @@ class AttendAndInvite extends React.Component {
 		if(!attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>
 			<View style={styles.buttons}>
-				<Button ref="joinButton" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
+				<Button ref="joinButton" src="/images/join.png" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
 					Join
 				</Button>
 				<FacebookSendButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</FacebookSendButton>
-				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
+				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
 			</View>
@@ -85,11 +85,11 @@ class AttendAndInvite extends React.Component {
 		if(attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>You are going!</Heading>
 			<View style={styles.buttons}>
-				<Button style={styles.bail} href={'/event/'+event.id+'/bail'}>
+				<Button style={styles.bail} src="/images/bail.png" href={'/event/'+event.id+'/bail'}>
 					Bail
 				</Button>
 				<FacebookSendButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</FacebookSendButton>
-				{isOwner && <Button style={styles.cancel} href={'/event/'+event.id+'/cancel'}>
+				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
 			</View>

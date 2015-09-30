@@ -41,7 +41,7 @@ class PostForm extends React.Component {
 			<form style={styles.form} action={'/event/'+event.id+'/post'} method="POST">
 				<TextArea ref="message" style={styles.message} name="message" placeholder="Write something..." />
 				<View style={styles.bar}>
-					<Button onClick={this.submitPost.bind(this)} type="submit">Post</Button>
+					<Button src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 				</View>
 			</form>
 		)

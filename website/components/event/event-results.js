@@ -101,7 +101,7 @@ class EventResults extends React.Component {
 					</form>
 					<View style={styles.spacer} />
 					{user && <View style={styles.buttonContainer}>
-						<Button href="/create/event">Create an event</Button>
+						<Button src="/images/create.png" href="/create/event">Create an event</Button>
 					</View>}
 				</Section>
 
