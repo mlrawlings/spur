@@ -38,6 +38,7 @@ app.use(function(next) {
 			coords:[37.253354,-79.9572075]
 		}
 	}).then(() => {
+		this.cookies.set('radius', JSON.stringify(this.props.radius))
 		this.cookies.set('location', JSON.stringify(this.props.location))
 		next()
 	}).catch(next)
