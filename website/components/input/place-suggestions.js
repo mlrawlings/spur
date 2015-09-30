@@ -1,4 +1,5 @@
 var React = require('react')
+  , Image = require('../core/image')
   , Link = require('../core/link')
   , View = require('../core/view')
   , Text = require('../core/text')
@@ -8,11 +9,15 @@ var styles = {}
 styles.container = {
 	position:'absolute',
 	top:0,
-	left:0,
-	width:'100%',
+	left:-1,
+	right:-1,
 	zIndex:10,
+	borderLeftWidth:1,
+	borderLeftColor:'#ddd',
+	borderRightWidth:1,
+	borderRightColor:'#ddd',
 	borderBottomWidth:1,
-	borderBottomColor:'#ddd'
+	borderBottomColor:'#ddd',
 }
 
 styles.suggestion = {
@@ -21,7 +26,14 @@ styles.suggestion = {
 	borderTopColor:'#ddd',
 	backgroundColor:'#fff',
 	cursor:'pointer',
-	opacity:0.95
+	opacity:0.95,
+	flexDirection:'row',
+	alignItems:'center'
+}
+
+styles.suggestionSelected = {
+	...styles.suggestion,
+	backgroundColor:'#eee'
 }
 
 styles.name = {
@@ -38,6 +50,11 @@ styles.info = {
 	color:'#666'
 }
 
+styles.pin = {
+	width:15,
+	marginRight:10,
+}
+
 class PlaceSuggestions extends React.Component {
 	render() {
 		var { loading, suggestions, onSelect, selected } = this.props
@@ -50,13 +67,19 @@ class PlaceSuggestions extends React.Component {
 					</View>}
 					{suggestions.map((suggestion, i) => {
 						var hasName = !!suggestion.name
-						return <View style={styles.suggestion} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion)}>
-							<Text style={styles.name}>
-								{hasName ? suggestion.name : suggestion.street}
-							</Text>
-							<Text style={styles.address}>
-								{(i == selected ? '* ' : '') + (hasName ? suggestion.full : suggestion.citystatezip)}
-							</Text>
+						  , suggestionStyles = i == selected ? styles.suggestionSelected : styles.suggestion
+						  , pinIconSrc = '/images/pin-'+(i == selected ? 'red' : 'grey')+'.png'
+
+						return <View style={suggestionStyles} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion, i)}>
+							<Image style={styles.pin} src={pinIconSrc} />
+							<View>
+								<Text style={styles.name}>
+									{hasName ? suggestion.name : suggestion.street}
+								</Text>
+								<Text style={styles.address}>
+									{hasName ? suggestion.full : suggestion.citystatezip}
+								</Text>
+							</View>
 						</View>
 					})}
 				</View>

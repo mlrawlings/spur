@@ -114,6 +114,10 @@ class PlaceInput extends React.Component {
 		this.setState({ focused:true })
 	}
 	onBlur() {
+		var { suggestions, selected } = this.state
+		if(suggestions.length) {
+			this.makeSelection(suggestions[selected], selected)
+		}
 		this.setState({ focused:false })
 	}
 	onChange(e) {
@@ -122,9 +126,9 @@ class PlaceInput extends React.Component {
 		this.lastChange = Date.now()
 		this.getSuggestions(value.trim(), Math.max(400, 1000-e.target.value.length*100))
 	}
-	makeSelection(suggestion) {
+	makeSelection(suggestion, i) {
 		setTimeout(() => this.props.onChange(suggestion))
-		this.setState({ value:suggestion.full })
+		this.setState({ value:suggestion.full, selected:i })
 	}
 	onKeyDown(e) {
 		var suggestions = this.state.suggestions
