@@ -13,7 +13,7 @@ app.use(function(req, res, next) {
 	res.set('Access-Control-Allow-Headers', 'Content-Type')
 	res.set('Access-Control-Allow-Credentials', 'true')
 	if(process.env.NODE_ENV == 'production') {
-		res.set('Access-Control-Allow-Origin', config.webserver.protocol + '://' + config.webserver.host + ':' + config.webserver.port)
+		res.set('Access-Control-Allow-Origin', config.webserver.protocol + '://' + config.webserver.host)
 	} else {
 		res.set('Access-Control-Allow-Origin', req.get('origin'))
 	}
