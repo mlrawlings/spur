@@ -290,7 +290,7 @@ exports.getMapImageUrl = function(location) {
 		center:locationString,
 		size:'600x315',
 		scale:2,
-		maptype:'terrain',
+		maptype:'roadmap',
 		markers:locationString
 	})
 }
