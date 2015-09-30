@@ -26,7 +26,9 @@ styles.normal = {
 }
 
 styles.wrapper = {
-	flexDirection:'row'
+	flexDirection:'row',
+	alignItems:'center',
+	flex:1
 }
 
 styles.active = {
@@ -48,22 +50,21 @@ styles.text = {
 }
 
 styles.textWithIcon = {
-	paddingLeft:6,
-	paddingRight:6,
+	...styles.text,
 	marginLeft:8,
-	color:'#fff'
 }
 
 class Button extends React.Component {
 	render() {
 		var { style, styleActive, src, children, ...props } = this.props
 		  , tag = this.props.href ? 'a' : 'button'
+		  , textStyles = { ...(src ? styles.textWithIcon : styles.text), color:style && style.color || styles.text.color }
 
 		return (
 			<Touchable tag={tag} {...props} style={{ ...styles.normal, ...style}} styleActive={{ ...styles.active, ...styleActive}}>
 				<View style={styles.wrapper}>
-				{src && <Image style={styles.image} src={src} />}
-				{children && <Text style={src ? styles.textWithIcon : styles.text}>{children}</Text>}
+					{src && <Image style={styles.image} src={src} />}
+					{children && <Text style={textStyles}>{children}</Text>}
 				</View>
 			</Touchable>
 		)

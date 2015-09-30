@@ -18,10 +18,10 @@ styles.form = {
 }
 
 styles.commentButton = {
-	marginLeft: 10,
-	marginRight: 0,
-	marginTop: 2,
-	marginBottom: 2,
+	backgroundColor:'transparent',
+	color:'#04beca',
+	borderWidth:0,
+	borderBottomWidth:0,
 	padding: 5
 }
 
@@ -32,13 +32,22 @@ styles.image = {
 	borderRadius:4
 }
 
+styles.messageContainer = {
+	borderWidth:1,
+	borderColor:'#ddd',
+	backgroundColor:'#fff',
+	flexDirection:'row',
+	flex:1,
+}
+
 styles.message = {
 	flex:1,
 	minHeight:35,
 	padding:8,
-	borderWidth:1,
-	borderColor:'#ddd',
-	fontSize:13
+	borderWidth:0,
+	fontSize:13,
+	backgroundColor:'transparent',
+	resize:'none'
 }
 
 class Comment extends React.Component {
@@ -66,8 +75,10 @@ class Comment extends React.Component {
 				<Link href={'/profile/'+user.id}>
 					<Image style={styles.image} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
 				</Link>
-				<TextArea ref="name" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
-				<Button style={styles.commentButton} type="submit">Send</Button>
+				<View style={styles.messageContainer}>
+					<TextArea ref="name" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
+					<Button style={styles.commentButton} type="submit">Send</Button>
+				</View>
 			</form>
 		)
 	}
