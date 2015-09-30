@@ -150,6 +150,8 @@ class PlaceInput extends React.Component {
 		  , selected = this.state.selected
 		  , currentSuggestion = suggestions[selected]
 
+		this.setState({ hoverCurrentLocation:false })
+
 		if(e.which == UP) {
 			this.setState({ selected:(numSuggestions+selected-1)%numSuggestions || 0 })
 			e.preventDefault()
