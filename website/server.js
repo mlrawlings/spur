@@ -23,7 +23,9 @@ app.use(function(next) {
 		return next()
 	}
 
-	locationUtil.getLocationFromIp(this.req.ip).then(location => {
+	var ip = this.req.get('X-Real-IP') || this.req.ip
+
+	locationUtil.getLocationFromIp(ip).then(location => {
 		this.props.location = location
 
 		if(!location.coords[0]) this.props.location = {
