@@ -26,12 +26,6 @@ styles.titleInput = {
 	fontSize:24
 }
 
-styles.optional = {
-	fontSize:11,
-	color:'#aaa',
-	marginLeft:8
-}
-
 class NewEventForm extends React.Component {
 	constructor(props) {
 		super(props)
@@ -60,15 +54,15 @@ class NewEventForm extends React.Component {
 							<LocationInput name="location" location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
 						</View>
 						{location && <View style={styles.field}>
-							<Label required={true}>Location Name</Label>
-							<Input name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} required={true} />
+							<Label>Location Name</Label>
+							<Input name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
 						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
 							<CategoryInput name="category" required={true} />
 						</View>
 						<View style={styles.field}>
-							<Label required={true}>Additional Details <Text style={styles.optional}>(optional)</Text></Label>
+							<Label>Additional Details</Label>
 							<TextArea name="details" style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>

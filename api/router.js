@@ -170,7 +170,6 @@ router.post('/events', jsonParser, function(req, res, next) {
 	if(!event.name) throw new Error('name is required')
 	if(!event.time) throw new Error('time is required')
 	if(!event.location) throw new Error('location is required')
-	if(!event.location.name) throw new Error('location.name is required')
 	if(!event.location.street) throw new Error('location.street is required')
 	if(!event.location.citystatezip) throw new Error('location.citystatezip is required')
 	if(!event.location.coords) throw new Error('location.coords is required')
