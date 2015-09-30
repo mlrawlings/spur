@@ -1,4 +1,5 @@
-var GeoPoint = require('geopoint')
+var qs = require('qs')
+  , GeoPoint = require('geopoint')
   , placeAutocompleteService
   , placeService
   , geocoder
@@ -278,4 +279,18 @@ exports.getAddressComponents = function(place) {
 	address.id = place.place_id
 
 	return address
+}
+
+exports.getMapImageUrl = function(location) {
+	location = location.coords || location
+
+	var locationString = location[0]+','+location[1]
+
+	return 'https://maps.googleapis.com/maps/api/staticmap?' + qs.stringify({
+		center:locationString,
+		size:'600x315',
+		scale:2,
+		maptype:'terrain',
+		markers:locationString
+	})
 }

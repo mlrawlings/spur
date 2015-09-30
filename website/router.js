@@ -8,6 +8,7 @@ var Home = require('./components/home')
   , kent = require('kent/router')
   , router = kent()
   , config = require('../common/config')
+  , locationUtil = require('./util/location')
 
 router.use(function(next) {
 
@@ -141,7 +142,9 @@ router.on('/event/:id', function(next) {
 
 		this.document.title = event.name + ' | Spur'
 
-
+		this.document.meta.push({ property:'og:image', content:locationUtil.getMapImageUrl(event.location) })
+		this.document.meta.push({ property:'og:image:width', content:1200 })
+		this.document.meta.push({ property:'og:image:height', content:630 })
 		this.document.meta.push({ property:'og:title', content:event.name })
 		this.document.meta.push({ property:'og:url', content:this.href })
 		
