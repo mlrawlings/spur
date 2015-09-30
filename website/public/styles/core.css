@@ -27,6 +27,11 @@ body {
 	margin:0;
 }
 
+input, textarea, select {
+	-webkit-appearance: none;
+	border-radius:0;
+}
+
 #app {
 	-webkit-flex: 1;
 	-moz-flex: 1;
