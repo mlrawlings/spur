@@ -16,7 +16,7 @@ app.use(kentReact())
 
 app.use(function(next) {
 	this.props.user = this.req.session.user
-	this.props.radius = parseFloat(this.cookies.get('radius')) || 5
+	this.props.radius = parseFloat(this.cookies.get('radius')) || 10
 
 	if(this.cookies.get('location')) {
 		this.props.location = JSON.parse(this.cookies.get('location'))
