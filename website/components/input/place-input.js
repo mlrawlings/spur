@@ -57,8 +57,7 @@ styles.inputContainer = {
 
 styles.input = {
 	backgroundColor:'transparent',
-	borderWidth:0,
-	flex:1
+	borderWidth:0
 }
 
 class PlaceInput extends React.Component {
