@@ -53,7 +53,7 @@ class LocationInput extends React.Component {
 			
 			this.noTimeInputSupport = input.type != 'time'
 		} catch(e) {
-			this.noTimeInputSupport = false
+			this.noTimeInputSupport = true
 		}
 	}
 	reformatTime(e) {
