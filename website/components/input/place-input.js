@@ -35,9 +35,23 @@ styles.currentLocationImage = {
 	marginRight:8
 }
 
+styles.currentLocationText = {
+	position:'absolute',
+	top:0,
+	left:0,
+	width:'100%',
+	height:'100%',
+	backgroundColor:'#fff',
+	justifyContent:'center',
+}
+
 styles.loadingImage = {
 	width: 15,
 	marginRight:8
+}
+
+styles.inputContainer = {
+	flex:1
 }
 
 styles.input = {
@@ -158,22 +172,15 @@ class PlaceInput extends React.Component {
 		clearTimeout(this.timeout)
 	}
 	currentAddressMouseOver() {
-		var domNode = React.findDOMNode(this.refs.input)
-		this.inputValue = this.state.value
-		this.inputSelection = document.activeElement == domNode && [domNode.selectionStart, domNode.selectionEnd]
-		this.setState({ value:'Use Current Location' })
+		this.setState({ hoverCurrentLocation:true })
 	}
 	currentAddressMouseOut() {
-		var domNode = React.findDOMNode(this.refs.input)
-		if(this.state.value == 'Use Current Location') {
-			this.setState({ value:this.inputValue })
-			if(this.inputSelection) domNode.setSelectionRange(...this.inputSelection)
-		}
+		this.setState({ hoverCurrentLocation:false })
 	}
 	currentAddressClick() {
-		this.setState({ loading:true })
+		this.setState({ detecting:true })
 		locationUtil.getLocation().then((location) => {
-			this.setState({ value:location.full, loading:false })
+			this.setState({ value:location.full, loading:false, detecting:false })
 			this.props.onChange && this.props.onChange(location)
 		})
 	}
@@ -196,22 +203,29 @@ class PlaceInput extends React.Component {
 				<View style={{ ...styles.container, ...containerStyle}}>
 					<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 						{
-							this.state.loading 
+							this.state.loading || this.state.detecting
 							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/loading-on-white.gif" : "/images/loading-on-black.gif"} />
 							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
 						}
 					</Link>
-					<Input 
-						ref="input"
-						type="search" 
-						value={this.state.value} 
-						placeholder="Enter address or name of place..." 
-						{...props}
-						style={{...styles.input, ...inputStyle}}
-						onChange={this.onChange.bind(this)} 
-						onFocus={this.onFocus.bind(this)} 
-						onBlur={this.onBlur.bind(this)} 
-						onKeyDown={this.onKeyDown.bind(this)} />
+					<View style={styles.inputContainer}>
+						<Input 
+							ref="input"
+							type="search" 
+							value={this.state.value} 
+							placeholder="Enter address or name of place..." 
+							{...props}
+							style={{...styles.input, ...inputStyle}}
+							onChange={this.onChange.bind(this)} 
+							onFocus={this.onFocus.bind(this)} 
+							onBlur={this.onBlur.bind(this)} 
+							onKeyDown={this.onKeyDown.bind(this)} />
+						{(this.state.hoverCurrentLocation || this.state.detecting) && 
+							<View style={styles.currentLocationText}>
+								{(this.state.detecting ? 'Detecting' : 'Use') +' Current Location'}
+							</View>
+						}
+					</View>
 				</View>
 				{this.state.focused && this.state.value && <PlaceSuggestions 
 					suggestions={this.state.suggestions} 
