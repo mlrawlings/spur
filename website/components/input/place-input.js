@@ -133,6 +133,8 @@ class PlaceInput extends React.Component {
 		var { suggestions, selected } = this.state
 		if(suggestions.length) {
 			this.makeSelection(suggestions[selected], selected)
+		} else {
+			this.props.onError && this.props.onError(new Error('Please type an address and then select a location from the search results.'))
 		}
 		this.setState({ focused:false })
 	}
@@ -170,7 +172,7 @@ class PlaceInput extends React.Component {
 		}
 	}
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.value != this.props.value) {
+		if(nextProps.value && nextProps.value != this.props.value) {
 			this.setState({ value:nextProps.value })
 		}
 	}
@@ -186,7 +188,7 @@ class PlaceInput extends React.Component {
 	currentAddressClick() {
 		this.setState({ detecting:true })
 		locationUtil.getLocation().then((location) => {
-			this.setState({ value:location.full, loading:false, detecting:false, hoverCurrentLocation:false })
+			this.setState({ value:location.full, suggestions:[location], loading:false, detecting:false, hoverCurrentLocation:false })
 			this.props.onChange && this.props.onChange(location)
 		})
 	}

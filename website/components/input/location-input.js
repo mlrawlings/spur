@@ -14,6 +14,17 @@ styles.container = {
 	borderColor:'#ccc'
 }
 
+styles.containerWithError = {
+	borderWidth:1,
+	borderColor:'#c00'
+}
+
+styles.errorText = {
+	fontSize:12,
+	fontWeight:600,
+	color:'#c00'
+}
+
 styles.nameInput = {
 	borderWidth:0,
 	borderBottomColor:'#eee',
@@ -64,8 +75,12 @@ class LocationInput extends React.Component {
 			drug: false 
 		}
 	}
+	onError(error) {
+		this.setState({ place:null, error })
+		this.props.onChange && this.props.onChange(null)
+	}
 	changePlace(place) {
-		this.setState({ place, zoom: 18 })
+		this.setState({ place, zoom: 18, error:null })
 		this.props.onChange && this.props.onChange(place)
 	}
 	hideDragMessage() {
@@ -83,26 +98,29 @@ class LocationInput extends React.Component {
 		}).catch(window.alert)
 	}
 	render() {
-		var { place, drug } = this.state
+		var { place, drug, error } = this.state
 		  , name = this.props.name
 		  , address = place && place.full
 
 		return (
-			<View style={styles.container}>
-				<PlaceInput style={styles.addressInput} value={address} onChange={this.changePlace.bind(this)} location={this.props.location} />
-				{place && <View>
-					<GoogleMap center={place.coords} zoom={this.state.zoom}>
-						<GoogleMapMarker draggable={true} position={place.coords} onDragStart={this.hideDragMessage.bind(this)} onDragEnd={this.setCoords.bind(this)} />
-					</GoogleMap>
-					{!drug && <View style={styles.dragInstructions}>
-						<View style={styles.dragArrow} />
-						<Text style={styles.dragInstructionsText}>Drag the pin to the exact location</Text>
+			<View>
+				<View style={error ? styles.containerWithError : styles.container}>
+					<PlaceInput style={styles.addressInput} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
+					{place && <View>
+						<GoogleMap center={place.coords} zoom={this.state.zoom}>
+							<GoogleMapMarker draggable={true} position={place.coords} onDragStart={this.hideDragMessage.bind(this)} onDragEnd={this.setCoords.bind(this)} />
+						</GoogleMap>
+						{!drug && <View style={styles.dragInstructions}>
+							<View style={styles.dragArrow} />
+							<Text style={styles.dragInstructionsText}>Drag the pin to the exact location</Text>
+						</View>}
 					</View>}
-				</View>}
-				{place &&<input type="hidden" name={name+'[street]'} value={place.street} />}
-				{place &&<input type="hidden" name={name+'[citystatezip]'} value={place.citystatezip} />}
-				{place &&<input type="hidden" name={name+'[coords][0]'} value={place.coords[0]}  />}
-				{place &&<input type="hidden" name={name+'[coords][1]'} value={place.coords[1]}  />}
+					{place &&<input type="hidden" name={name+'[street]'} value={place.street} />}
+					{place &&<input type="hidden" name={name+'[citystatezip]'} value={place.citystatezip} />}
+					{place &&<input type="hidden" name={name+'[coords][0]'} value={place.coords[0]}  />}
+					{place &&<input type="hidden" name={name+'[coords][1]'} value={place.coords[1]}  />}
+				</View>
+				{error &&<Text style={styles.errorText}>{error.message}</Text>}
 			</View>
 		)
 	}

@@ -34,7 +34,7 @@ class NewEventForm extends React.Component {
 	changeLocation(location) {
 		this.setState({ location })
 		var node = React.findDOMNode(this.refs.locationName)
-		if(node) node.value = location.name || ''
+		if(node) node.value = location && location.name || ''
 	}
 	render() {
 		var location = this.state.location
