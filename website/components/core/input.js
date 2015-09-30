@@ -8,7 +8,8 @@ styles.input = {
 	borderWidth:1,
 	borderStyle:'solid',
 	borderColor:'#ccc',
-	backgroundColor:'#fff'
+	backgroundColor:'#fff',
+	color:'#444'
 }
 
 class Input extends React.Component {

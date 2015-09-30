@@ -43,6 +43,7 @@ styles.currentLocationText = {
 	height:'100%',
 	backgroundColor:'#fff',
 	justifyContent:'center',
+	color:Input.style.color
 }
 
 styles.loadingImage = {
@@ -190,10 +191,15 @@ class PlaceInput extends React.Component {
 	}
 	render() {
 		var { value, style, onChange, ...props } = this.props
-		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height, ...containerStyle} = style
-		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, height}
+		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, color, height, ...containerStyle} = style
+		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, color, height}
 		  , linkStyle = styles.currentLocationLink
 		  , backgroundColor = Color(style.backgroundColor || styles.container.backgroundColor)
+		  , currentLocationTextStyles = { 
+		  		...styles.currentLocationText, 
+		  		backgroundColor:style.backgroundColor || styles.currentLocationText.backgroundColor,
+		  		color:style.color || styles.currentLocationText.color
+		  	}
 
 		inputStyle.paddingLeft = 2
 		linkStyle.paddingLeft = paddingLeft || padding
@@ -225,7 +231,7 @@ class PlaceInput extends React.Component {
 							onBlur={this.onBlur.bind(this)} 
 							onKeyDown={this.onKeyDown.bind(this)} />
 						{(this.state.hoverCurrentLocation || this.state.detecting) && 
-							<View style={styles.currentLocationText}>
+							<View style={currentLocationTextStyles}>
 								{(this.state.detecting ? 'Detecting' : 'Use') +' Current Location'}
 							</View>
 						}
