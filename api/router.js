@@ -168,11 +168,13 @@ router.post('/events', jsonParser, function(req, res, next) {
 	  , event = req.body
 
 	if(!event.name) throw new Error('name is required')
+	if(event.name.length > 64) throw new Error('name is too long (max 64 characters)')
 	if(!event.time) throw new Error('time is required')
 	if(!event.location) throw new Error('location is required')
 	if(!event.location.street) throw new Error('location.street is required')
 	if(!event.location.citystatezip) throw new Error('location.citystatezip is required')
 	if(!event.location.coords) throw new Error('location.coords is required')
+	if(event.location.name && event.location.name.length > 48) throw new Error('location.name is too long (max 48 characters)')
 
 	if(event.time <= now) throw new Error('time cannot be in the past')
 	if(event.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')

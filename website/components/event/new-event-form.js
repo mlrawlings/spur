@@ -45,7 +45,7 @@ class NewEventForm extends React.Component {
 					<form method="POST" action="/create/event" autoComplete="false">
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
-							<Input autoFocus={true} style={styles.titleInput} name="name" type="text" placeholder="Name this event..." required={true} />
+							<Input style={styles.titleInput} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Start Time</Label>
@@ -57,7 +57,7 @@ class NewEventForm extends React.Component {
 						</View>
 						{location && <View style={styles.field}>
 							<Label>Location Name</Label>
-							<Input ref="locationName" name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
+							<Input ref="locationName" maxLength={48} name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
 						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
