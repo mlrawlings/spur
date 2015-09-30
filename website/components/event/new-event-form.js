@@ -33,6 +33,8 @@ class NewEventForm extends React.Component {
 	}
 	changeLocation(location) {
 		this.setState({ location })
+		var node = React.findDOMNode(this.refs.locationName)
+		if(node) node.value = location.name || ''
 	}
 	render() {
 		var location = this.state.location
@@ -55,7 +57,7 @@ class NewEventForm extends React.Component {
 						</View>
 						{location && <View style={styles.field}>
 							<Label>Location Name</Label>
-							<Input name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
+							<Input ref="locationName" name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
 						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
