@@ -10,8 +10,22 @@ styles.container = {
 	flexDirection:'row'
 }
 
+styles.time = {
+
+}
+
+styles.timeWithError = {
+	...styles.time,
+	borderColor:'#c00'
+}
+
 styles.day = {
 	borderLeftWidth:0
+}
+
+styles.dayWithError = {
+	...styles.day,
+	borderColor:'#c00'
 }
 
 styles.text = {
@@ -19,7 +33,9 @@ styles.text = {
 }
 
 styles.error = {
-	color:'#c00'
+	color:'#c00',
+	fontSize:12,
+	fontWeight:600
 }
 
 class LocationInput extends React.Component {
@@ -79,8 +95,8 @@ class LocationInput extends React.Component {
 		return (
 			<View>
 				<View style={styles.container}>
-					<Input ref="input" type="time" style={styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} />
-					<Input type="select" ref="day" style={styles.day} value={day} onChange={this.changeDay.bind(this)}>
+					<Input ref="input" type="time" style={error ? styles.timeWithError : styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} />
+					<Input type="select" ref="day" style={error ? styles.dayWithError : styles.day} value={day} onChange={this.changeDay.bind(this)}>
 						<option value="today">Today</option>
 						<option value="tomorrow">Tomorrow</option>
 					</Input>
