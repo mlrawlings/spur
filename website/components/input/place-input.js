@@ -126,6 +126,7 @@ class PlaceInput extends React.Component {
 		}, waitTime)
 	}
 	onFocus() {
+		setTimeout(() => React.findDOMNode(this.refs.input).select())
 		this.setState({ focused:true })
 	}
 	onBlur() {
