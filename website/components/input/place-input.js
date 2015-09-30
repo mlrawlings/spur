@@ -148,7 +148,6 @@ class PlaceInput extends React.Component {
 		var suggestions = this.state.suggestions
 		  , numSuggestions = suggestions.length
 		  , selected = this.state.selected
-		  , currentSuggestion = suggestions[selected]
 
 		this.setState({ hoverCurrentLocation:false })
 
@@ -161,7 +160,10 @@ class PlaceInput extends React.Component {
 			e.preventDefault()
 		}
 		if(e.which == ENTER) {
-			this.makeSelection(currentSuggestion)
+			if(suggestions.length) {
+				this.makeSelection(suggestions[selected], selected)
+				React.findDOMNode(this.refs.input).blur()
+			}
 			e.preventDefault()
 		}
 	}
