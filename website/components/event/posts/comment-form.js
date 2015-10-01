@@ -4,6 +4,7 @@ var React = require('react')
   , Link = require('../../core/link')
   , Button = require('../../core/button')
   , TextArea = require('react-textarea-autosize')
+  , scroll = __BROWSER__ && require('scroll')
 
 const ENTER = 13
 
@@ -23,6 +24,10 @@ styles.commentButton = {
 	borderWidth:0,
 	borderBottomWidth:0,
 	padding: 5
+}
+styles.commentButtonDisabled = {
+	...styles.commentButton,
+	color:'#ccc'
 }
 
 styles.image = {
@@ -51,33 +56,49 @@ styles.message = {
 }
 
 class Comment extends React.Component {
-	handleEnter(e) {
-		if(e.which == ENTER) {
-			e.preventDefault()
-
-			if(e.target.value)
-				app.submit(React.findDOMNode(this.refs.form))
+	constructor(props) {
+		super(props)
+		this.state = {
+			hasValue:false
 		}
 	}
-	onCommentSubmit(e) {
-		if(!React.findDOMNode(this.refs.name).value)
-			e.preventDefault()
+	handleEnter(e) {
+		if(e.which == ENTER) {
+			this.submitComment(e)
+		}
+		this.setState({ hasValue:!!e.target.value })
+	}
+	submitComment(e) {
+		var message = React.findDOMNode(this.refs.message)
+		  , form = React.findDOMNode(this.refs.form)
+		
+		if(React.findDOMNode(this.refs.message).value) app.submit(form).then(() => {
+			var distance = form.getBoundingClientRect().bottom
+			  , difference = distance-window.innerHeight
+			
+			if(difference > 0)
+				scroll.top(document.body, window.scrollY+difference, { duration:difference })
+			
+			form.reset()
+			this.setState({ hasValue:false })
+		})
+
+		e.preventDefault()
 	}
 	render() {
-		var event = this.props.event
-		  , post = this.props.post
-		  , user = this.props.user
+		var { event, post, user } = this.props
+		  , { hasValue } = this.state
 
 		if(!user) return false
 
 		return (
-			<form style={styles.form} onSubmit={this.onCommentSubmit.bind(this)} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
+			<form style={styles.form} onSubmit={this.submitComment.bind(this)} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
 				<Link href={'/profile/'+user.id}>
 					<Image style={styles.image} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
 				</Link>
 				<View style={styles.messageContainer}>
-					<TextArea ref="name" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
-					<Button style={styles.commentButton} type="submit">Send</Button>
+					<TextArea ref="message" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
+					<Button style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
 				</View>
 			</form>
 		)

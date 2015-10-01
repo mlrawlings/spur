@@ -2,6 +2,7 @@ var React = require('react')
   , Button = require('../../core/button')
   , View = require('../../core/view')
   , TextArea = require('react-textarea-autosize')
+  , scroll = __BROWSER__ && require('scroll')
 
 var styles = {}
 
@@ -25,23 +26,45 @@ styles.bar = {
 	backgroundColor: '#f4f4f4',
 	alignItems: 'flex-end'
 }
+styles.buttonDisabled = {
+	opacity:0.5,
+	backgroundColor:'#999'
+}
 
 class PostForm extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			hasValue:false
+		}
+	}
+	onKeyDown(e) {
+		this.setState({ hasValue:!!e.target.value })
+	}
 	submitPost(e) {
-		if(!React.findDOMNode(this.refs.message).value)
-			e.preventDefault()
+		var message = React.findDOMNode(this.refs.message)
+		  , form = React.findDOMNode(this.refs.form)
+		
+		if(React.findDOMNode(this.refs.message).value) app.submit(form).then(() => {
+			var distance = form.getBoundingClientRect().bottom
+			scroll.top(document.body, window.scrollY+distance, { duration:distance })
+			form.reset()
+			this.setState({ hasValue:false })
+		})
+
+		e.preventDefault()
 	}
 	render() {
-		var event = this.props.event
-		  , user = this.props.user
+		var { event, user } = this.props
+		  , { hasValue } = this.state
 
 		if(!user) return false
 
 		return (
-			<form style={styles.form} action={'/event/'+event.id+'/post'} method="POST">
-				<TextArea ref="message" style={styles.message} name="message" placeholder="Write something..." />
+			<form ref="form" style={styles.form} action={'/event/'+event.id+'/post'} method="POST">
+				<TextArea ref="message" style={styles.message} name="message" placeholder="Write something..." onKeyDown={this.onKeyDown.bind(this)} />
 				<View style={styles.bar}>
-					<Button src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
+					<Button style={hasValue ? styles.buttonActive : styles.buttonDisabled} src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 				</View>
 			</form>
 		)
