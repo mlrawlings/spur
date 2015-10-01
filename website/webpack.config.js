@@ -1,6 +1,8 @@
 var webpack = require('webpack')
   , path = require('path')
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
 module.exports = {
 	entry: __dirname+'/client.js',
 	output: {
@@ -22,7 +24,7 @@ module.exports = {
 			__BROWSER__:true,
 			__SERVER__:false,
 			'process.env': {
-				NODE_ENV: process.env.NODE_ENV || '"development"'
+				NODE_ENV: '"'+process.env.NODE_ENV+'"'
 			}
 		})
 	],
@@ -33,5 +35,5 @@ module.exports = {
 		react:'React',
 		'react/addons':'React'
 	},
-	devtool:'inline-source-map'
+	devtool:'source-map'
 }
