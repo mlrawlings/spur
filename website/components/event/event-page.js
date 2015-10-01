@@ -45,7 +45,7 @@ styles.time = {
 }
 
 styles.nameAndTime = {
-	flex:1,
+	flex:100,
 	minWidth:300,
 	paddingTop:10,
 	paddingBottom:10
@@ -54,7 +54,7 @@ styles.nameAndTime = {
 styles.location = {
 	alignItems:'flex-end',
 	textAlign: 'right',
-	flexGrow:0.01,
+	flexGrow:1,
 	marginLeft:20,
 	paddingTop:10,
 	paddingBottom:10
