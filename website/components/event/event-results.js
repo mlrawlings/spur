@@ -37,18 +37,23 @@ styles.field = {
 	padding:0
 }
 
+styles.addressField = {
+	...styles.field,
+	width:250
+}
+
 styles.form = {
 	maxWidth:'100%',
 	paddingTop:8,
-	paddingBottom:8
+	paddingBottom:8,
+	alignItems: 'center',
+	justifyContent: 'center',
+	flexWrap: 'wrap',
+	flexDirection: 'row'
 }
 
 styles.text = {
-	color:'#eee',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	flexWrap:'wrap'
+	color:'#eee'
 }
 
 styles.spacer = {
@@ -79,9 +84,6 @@ class EventResults extends React.Component {
 	render() {
 		var { events, user, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
-		  , addressField = {...styles.field }
-
-		addressField.width = 250
 
 		return (
 			<Layout user={this.props.user}>
@@ -89,15 +91,13 @@ class EventResults extends React.Component {
 					<form style={styles.form} ref="form" action="/" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
-							<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
-								{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
-							</select>
-							of
-							<Text style={styles.googlePlaceWrapper}>
-								<PlaceInput style={addressField} location={location} defaultValue={location.name} onChange={this.changeLocation.bind(this)} />
-							</Text>
-							<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 						</Text>
+						<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
+							{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
+						</select>
+						<Text style={styles.text}>of</Text>
+						<PlaceInput style={styles.addressField} location={location} defaultValue={location.name} onChange={this.changeLocation.bind(this)} />
+						<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 					</form>
 					<View style={styles.spacer} />
 					{user && <View style={styles.buttonContainer}>
