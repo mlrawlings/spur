@@ -58,11 +58,11 @@ styles.text = {
 }
 
 styles.spacer = {
-	flex:1
+	flex:100
 }
 
 styles.buttonContainer = {
-	flexGrow:0.01,
+	flexGrow:1,
 	alignItems:'center',
 	paddingTop:8,
 	paddingBottom:8
