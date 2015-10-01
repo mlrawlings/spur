@@ -4,10 +4,10 @@ var React = require('react')
   , Label = require('../layout/label')
   , LocationInput = require('../input/location-input')
   , CategoryInput = require('../input/category-input')
-  , TextArea = require('react-textarea-autosize')
   , TimeInput = require('../input/time-input')
   , Input = require('../core/input')
   , Button = require('../core/button')
+  , Form = require('../core/form')
   , View = require('../core/view')
   , Text = require('../core/text')
 
@@ -42,7 +42,7 @@ class NewEventForm extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section>
-					<form method="POST" action="/create/event" autoComplete="false">
+					<Form action="/create/event">
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
 							<Input style={styles.titleInput} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
@@ -65,12 +65,12 @@ class NewEventForm extends React.Component {
 						</View>
 						<View style={styles.field}>
 							<Label>Additional Details</Label>
-							<TextArea name="details" style={Input.style} placeholder="Anthing else people need to know..." />
+							<Input type="textarea" name="details" style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
 							<Button src="/images/create.png" type="submit">Create Event</Button>
 						</View>
-					</form>
+					</Form>
 				</Section>
 			</Layout>
 		)

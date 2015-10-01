@@ -8,6 +8,7 @@ var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
   , Link = require('../core/link')
+  , Form = require('../core/form')
 
 var styles = {}
 
@@ -88,17 +89,17 @@ class EventResults extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section style={styles.results}>
-					<form style={styles.form} ref="form" action="/" method="GET">
+					<Form style={styles.form} ref="form" action="/" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 						</Text>
-						<select ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
+						<Input type="select" ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
 							{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
-						</select>
+						</Input>
 						<Text style={styles.text}>of</Text>
 						<PlaceInput style={styles.addressField} location={location} defaultValue={location.name} onChange={this.changeLocation.bind(this)} />
 						<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
-					</form>
+					</Form>
 					<View style={styles.spacer} />
 					{user && <View style={styles.buttonContainer}>
 						<Button src="/images/create.png" href="/create/event">Create an event</Button>

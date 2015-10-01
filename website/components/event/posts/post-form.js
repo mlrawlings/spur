@@ -1,7 +1,8 @@
 var React = require('react')
   , Button = require('../../core/button')
   , View = require('../../core/view')
-  , TextArea = require('react-textarea-autosize')
+  , Input = require('../../core/input')
+  , Form = require('../../core/form')
   , scroll = __BROWSER__ && require('scroll')
 
 var styles = {}
@@ -61,12 +62,12 @@ class PostForm extends React.Component {
 		if(!user) return false
 
 		return (
-			<form ref="form" style={styles.form} action={'/event/'+event.id+'/post'} method="POST">
-				<TextArea ref="message" style={styles.message} name="message" placeholder="Write something..." onKeyDown={this.onKeyDown.bind(this)} />
+			<Form ref="form" style={styles.form} action={'/event/'+event.id+'/post'}>
+				<Input type="textarea" ref="message" style={styles.message} name="message" placeholder="Write something..." onKeyDown={this.onKeyDown.bind(this)} />
 				<View style={styles.bar}>
 					<Button style={hasValue ? styles.buttonActive : styles.buttonDisabled} src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 				</View>
-			</form>
+			</Form>
 		)
 	}
 }

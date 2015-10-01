@@ -1,4 +1,5 @@
 var React = require('react')
+  , TextArea = require('react-textarea-autosize')
   , prefix = require('auto-prefixer')
 
 var styles = {}
@@ -17,7 +18,7 @@ class Input extends React.Component {
 		var { style, type, ...props } = this.props
 		
 		if(type == 'textarea')
-			return <textarea {...props} style={prefix({ ...styles.input, ...style })} />
+			return <TextArea {...props} style={prefix({ ...styles.input, ...style })} />
 		
 		if(type == 'select')
 			return <select {...props} style={prefix({ ...styles.input, ...style })} />

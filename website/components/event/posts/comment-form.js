@@ -3,7 +3,8 @@ var React = require('react')
   , View = require('../../core/view')
   , Link = require('../../core/link')
   , Button = require('../../core/button')
-  , TextArea = require('react-textarea-autosize')
+  , Input = require('../../core/input')
+  , Form = require('../../core/form')
   , scroll = __BROWSER__ && require('scroll')
 
 const ENTER = 13
@@ -92,15 +93,15 @@ class Comment extends React.Component {
 		if(!user) return false
 
 		return (
-			<form style={styles.form} onSubmit={this.submitComment.bind(this)} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'} method="POST">
+			<Form style={styles.form} onSubmit={this.submitComment.bind(this)} ref="form" action={'/event/'+event.id+'/posts/'+post.id+'/comment'}>
 				<Link href={'/profile/'+user.id}>
 					<Image style={styles.image} src={'https://graph.facebook.com/'+user.fbid+'/picture'} />
 				</Link>
 				<View style={styles.messageContainer}>
-					<TextArea ref="message" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
+					<Input type="textarea" ref="message" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
 					<Button style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
 				</View>
-			</form>
+			</Form>
 		)
 	}
 }
