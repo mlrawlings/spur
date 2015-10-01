@@ -102,7 +102,7 @@ input, textarea, select {
 
 #app img, 
 #app span {
-	display:inline-block;
+	display:block;
 
 	box-sizing: border-box;
 	position: relative;
@@ -114,9 +114,8 @@ input, textarea, select {
 	color:#444;
 }
 
-#app a > span, 
-#app span > a, 
-#app span > span {
+#app span a, 
+#app span span {
 	display:inline;
 	color:inherit;
 }
