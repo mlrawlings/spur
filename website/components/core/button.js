@@ -28,7 +28,7 @@ styles.normal = {
 styles.wrapper = {
 	flexDirection:'row',
 	alignItems:'center',
-	flex:1
+	flexGrow:1
 }
 
 styles.active = {

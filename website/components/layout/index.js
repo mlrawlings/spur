@@ -6,7 +6,7 @@ var React = require('react')
 var styles = {}
 
 styles.container = {
-	flex:1
+	flexGrow:1
 }
 
 class Layout extends React.Component {
