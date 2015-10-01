@@ -216,7 +216,7 @@ class PlaceInput extends React.Component {
 					<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 						{
 							this.state.loading || this.state.detecting
-							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/loading-on-white.gif" : "/images/loading-on-black.gif"} />
+							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/black-tail-spin.svg" : "/images/white-tail-spin.svg"} />
 							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
 						}
 					</Link>

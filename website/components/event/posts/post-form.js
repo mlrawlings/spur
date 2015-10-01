@@ -40,24 +40,28 @@ class PostForm extends React.Component {
 		}
 	}
 	onKeyDown(e) {
-		this.setState({ hasValue:!!e.target.value })
+		var message = React.findDOMNode(this.refs.message)
+		setTimeout(() => this.setState({ hasValue:!!message.value }))
 	}
 	submitPost(e) {
 		var message = React.findDOMNode(this.refs.message)
 		  , form = React.findDOMNode(this.refs.form)
 		
-		if(React.findDOMNode(this.refs.message).value) app.submit(form).then(() => {
-			var distance = form.getBoundingClientRect().bottom
-			scroll.top(document.body, window.scrollY+distance, { duration:distance })
-			form.reset()
-			this.setState({ hasValue:false })
-		})
+		if(React.findDOMNode(this.refs.message).value) {
+			this.setState({ loading:true })
+			app.submit(form).then(() => {
+				var distance = form.getBoundingClientRect().bottom
+				scroll.top(document.body, window.scrollY+distance, { duration:distance })
+				form.reset()
+				this.setState({ hasValue:false, loading:false })
+			})
+		}
 
 		e.preventDefault()
 	}
 	render() {
 		var { event, user } = this.props
-		  , { hasValue } = this.state
+		  , { hasValue, loading } = this.state
 
 		if(!user) return false
 
@@ -65,7 +69,7 @@ class PostForm extends React.Component {
 			<Form ref="form" style={styles.form} action={'/event/'+event.id+'/post'}>
 				<Input type="textarea" ref="message" style={styles.message} name="message" placeholder="Write something..." onKeyDown={this.onKeyDown.bind(this)} />
 				<View style={styles.bar}>
-					<Button style={hasValue ? styles.buttonActive : styles.buttonDisabled} src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
+					<Button loading={loading} style={hasValue ? styles.buttonActive : styles.buttonDisabled} src="/images/post.png" onClick={this.submitPost.bind(this)} type="submit">Post</Button>
 				</View>
 			</Form>
 		)

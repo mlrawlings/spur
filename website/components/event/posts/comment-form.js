@@ -67,28 +67,33 @@ class Comment extends React.Component {
 		if(e.which == ENTER) {
 			this.submitComment(e)
 		}
-		this.setState({ hasValue:!!e.target.value })
+
+		var message = React.findDOMNode(this.refs.message)
+		setTimeout(() => this.setState({ hasValue:!!message.value }))
 	}
 	submitComment(e) {
 		var message = React.findDOMNode(this.refs.message)
 		  , form = React.findDOMNode(this.refs.form)
 		
-		if(React.findDOMNode(this.refs.message).value) app.submit(form).then(() => {
-			var distance = form.getBoundingClientRect().bottom
-			  , difference = distance-window.innerHeight
-			
-			if(difference > 0)
-				scroll.top(document.body, window.scrollY+difference, { duration:difference })
-			
-			form.reset()
-			this.setState({ hasValue:false })
-		})
+		if(React.findDOMNode(this.refs.message).value) {
+			this.setState({ loading:true })
+			app.submit(form).then(() => {
+				var distance = form.getBoundingClientRect().bottom
+				  , difference = distance-window.innerHeight
+				
+				if(difference > 0)
+					scroll.top(document.body, window.scrollY+difference, { duration:difference })
+				
+				form.reset()
+				this.setState({ hasValue:false, loading:false })
+			})
+		}
 
 		e.preventDefault()
 	}
 	render() {
 		var { event, post, user } = this.props
-		  , { hasValue } = this.state
+		  , { hasValue, loading } = this.state
 
 		if(!user) return false
 
@@ -99,7 +104,7 @@ class Comment extends React.Component {
 				</Link>
 				<View style={styles.messageContainer}>
 					<Input type="textarea" ref="message" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
-					<Button style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
+					<Button loading={loading} style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
 				</View>
 			</Form>
 		)

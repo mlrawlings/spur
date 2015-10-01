@@ -3,6 +3,7 @@ var React = require('react')
   , Image = require('./image')
   , Text = require('./text')
   , View = require('./view')
+  , Color = require('color')
 
 var styles = {}
 
@@ -43,6 +44,21 @@ styles.image = {
 	height:20
 }
 
+styles.loadingContainer = {
+	position: 'absolute',
+	top: 0,
+	left: 0,
+	height: '100%',
+	width: '100%',
+	justifyContent: 'center',
+	alignItems: 'center'
+}
+
+styles.loadingContainerLeft = {
+	...styles.loadingContainer,
+	alignItems:'flex-start'
+}
+
 styles.text = {
 	paddingLeft:6,
 	paddingRight:6,
@@ -55,16 +71,42 @@ styles.textWithIcon = {
 }
 
 class Button extends React.Component {
-	render() {
-		var { style, styleActive, src, children, ...props } = this.props
-		  , tag = this.props.href ? 'a' : 'button'
-		  , textStyles = { ...(src ? styles.textWithIcon : styles.text), color:style && style.color || styles.text.color }
+	constructor(props) {
+		super(props)
 
+		this.state = {}
+	}
+	onClick(e) {
+		if(this.props.onClick)
+			this.props.onClick(e)
+
+		if(!e.defaultPrevented && this.props.href) {
+			e.preventDefault()
+			app.navigate(this.props.href).then(() => {
+				this.setState({ loading:false })
+			})
+
+			this.setState({ loading:true })
+		}
+	}
+	render() {
+		var { style, styleActive, src, children, onClick, ...props } = this.props
+		  , tag = this.props.href ? 'a' : 'button'
+		  , loading = this.state.loading || this.props.loading
+		  , textColor = Color(style && style.color || styles.text.color)
+		  , imageStyles = loading ? { ...styles.image, opacity:0 } : styles.image
+		  , textStyles = src ? styles.textWithIcon : loading ? { ...styles.text, opacity:0 } : styles.text
+
+		textStyles = { ...textStyles, color:textColor.hexString() }
+		  
 		return (
-			<Touchable tag={tag} {...props} style={{ ...styles.normal, ...style}} styleActive={{ ...styles.active, ...styleActive}}>
+			<Touchable tag={tag} {...props} onClick={this.onClick.bind(this)} style={{ ...styles.normal, ...style}} styleActive={{ ...styles.active, ...styleActive}}>
 				<View style={styles.wrapper}>
-					{src && <Image style={styles.image} src={src} />}
+					{src && <Image ref="image" style={imageStyles} src={src} />}
 					{children && <Text style={textStyles}>{children}</Text>}
+					{loading && <View style={src ? styles.loadingContainerLeft : styles.loadingContainer}>
+						<Image style={styles.image} src={textColor.luminosity() > 0.8 ? "/images/white-tail-spin.svg" : "/images/black-tail-spin.svg"} />
+					</View>}
 				</View>
 			</Touchable>
 		)
