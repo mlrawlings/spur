@@ -111,15 +111,7 @@
 			.alertify-button:hover,
 			.alertify-button:active,
 			.alertify-button:visited {
-				background: none;
-				text-decoration: none;
-				border: none;
-				/* line-height and font-size for input button */
-				line-height: 1.5;
-				font-size: 100%;
-				display: inline-block;
-				cursor: pointer;
-				margin-left: 5px;
+
 			}
 
 @media only screen and (max-width: 680px) {
