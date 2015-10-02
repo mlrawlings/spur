@@ -22,7 +22,7 @@ router.use(function(next) {
 		'/scripts/alertify.js-0.3.11/lib/alertify.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
-		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
+		{ src:'https://connect.facebook.net/en_US/sdk.js', async:true },
         'https://maps.google.com/maps/api/js?sensor=false&libraries=places',
 		'/dist/client.js'
 	]
