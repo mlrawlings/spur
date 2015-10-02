@@ -1,0 +1,82 @@
+/**
+ * Default Look and Feel
+ */
+.alertify {
+	background: #FFF;
+	border: none;
+	border-radius: 4px;
+	box-shadow: 0 3px 3px rgba(0,0,0,.3);
+	-webkit-background-clip: padding;     /* Safari 4? Chrome 6? */
+	   -moz-background-clip: padding;     /* Firefox 3.6 */
+	        background-clip: padding-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+
+.alertify h1 {
+	font-weight: 600;
+	margin:0;
+	padding:0;
+}
+
+.alertify-message {
+	font-size: 1.25em;
+}
+	.alertify-text {
+		border: 1px solid #CCC;
+		padding: 10px;
+		border-radius: 4px;
+	}
+	.alertify-button {
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 600;
+		font-size: 14px;
+		text-align: center;
+		padding: 8px 20px 5px;
+		border-width: 0px 0px 3px;
+		border-radius: 4px;
+		border-bottom-color: rgba(0, 0, 0, 0.2);
+		text-decoration: none;
+		cursor: pointer;
+		background-color: rgb(4, 190, 202);
+		color: #fff;
+		position: relative;
+	}
+	.alertify-button:hover,
+	.alertify-button:focus {
+		outline: none;
+	}
+	.alertify-button:focus {
+		
+	}
+	.alertify-button:active {
+		top:2px;
+		padding-bottom: 8px;
+		border-bottom-width: 0;
+		outline:none;
+	}
+		.alertify-button-cancel,
+		.alertify-button-cancel:hover,
+		.alertify-button-cancel:focus {
+			
+		}
+		.alertify-button-ok,
+		.alertify-button-ok:hover,
+		.alertify-button-ok:focus {
+			
+		}
+
+.alertify-log {
+	background: #1F1F1F;
+	background: rgba(0,0,0,.9);
+	padding: 15px;
+	border-radius: 4px;
+	color: #FFF;
+	text-shadow: -1px -1px 0 rgba(0,0,0,.5);
+}
+	.alertify-log-error {
+		background: #FE1A00;
+		background: rgba(254,26,0,.9);
+	}
+	.alertify-log-success {
+		background: #5CB811;
+		background: rgba(92,184,17,.9);
+	}

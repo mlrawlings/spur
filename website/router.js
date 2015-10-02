@@ -19,6 +19,7 @@ router.use(function(next) {
 	]
 
 	this.document.scripts = [
+		'/scripts/alertify.js-0.3.11/lib/alertify.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
@@ -29,7 +30,9 @@ router.use(function(next) {
 	this.document.styles = [
 		'https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
 		'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
-		'/styles/core.css'
+		'/styles/core.css',
+		'/scripts/alertify.js-0.3.11/themes/alertify.core.css',
+		'/scripts/alertify.js-0.3.11/themes/alertify.default.css'
 	]
 
 	this.document.meta = [

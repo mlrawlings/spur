@@ -44,7 +44,7 @@ styles.cancel = {
 
 class AttendAndInvite extends React.Component {
 	onJoin(e) {
-		alert('Remember to check back to see if any details have changed!')
+		alertify.alert('<h1>See you there!</h1><p>Remember to check back for changed details</p>')
 	}
 	render() {
 		var { event, user, style } = this.props
