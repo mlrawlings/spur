@@ -36,6 +36,10 @@ class NewEventForm extends React.Component {
 		var node = React.findDOMNode(this.refs.locationName)
 		if(node) node.value = location && location.name || ''
 	}
+	preventSubmit(e) {
+		if(e.keyCode == 13)
+			e.preventDefault()
+	}
 	render() {
 		var location = this.state.location
 
@@ -45,11 +49,11 @@ class NewEventForm extends React.Component {
 					<Form action="/create/event">
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
-							<Input style={styles.titleInput} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
+							<Input style={styles.titleInput} onKeyDown={this.preventSubmit.bind(this)} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Start Time</Label>
-							<TimeInput name="time" required={true} />
+							<TimeInput name="time" onKeyDown={this.preventSubmit.bind(this)} required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>{location ? 'Location Address' : 'Location'}</Label>
@@ -57,7 +61,7 @@ class NewEventForm extends React.Component {
 						</View>
 						{location && <View style={styles.field}>
 							<Label>Location Name</Label>
-							<Input ref="locationName" maxLength={48} name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
+							<Input ref="locationName" onKeyDown={this.preventSubmit.bind(this)} maxLength={48} name="location[name]" type="text" defaultValue={location.name} placeholder={"Add name, apartment #, field..."} />
 						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
@@ -65,7 +69,7 @@ class NewEventForm extends React.Component {
 						</View>
 						<View style={styles.field}>
 							<Label>Additional Details</Label>
-							<Input type="textarea" name="details" style={Input.style} placeholder="Anthing else people need to know..." />
+							<Input type="textarea" onKeyDown={this.preventSubmit.bind(this)} name="details" style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
 							<Button src="/images/create.png" type="submit">Create Event</Button>
