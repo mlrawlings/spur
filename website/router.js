@@ -84,7 +84,7 @@ router.on('/', function(next) {
 router.on('/facebook/login', function(next) {
 	if(__SERVER__) {
 		this.req.session.facebookReferrer = this.req.header('Referrer')
-		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code&scope=public_profile,email,user_birthday")
+		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code&scope=public_profile,email")
 	}
 
 	if(__BROWSER__) {
@@ -97,7 +97,7 @@ router.on('/facebook/login', function(next) {
 				window.user = res.user
 				this.redirect(window.location.href)
 			}).catch(next)
-		}, {scope: 'public_profile,email,user_birthday'})
+		}, {scope: 'public_profile,email'})
 	}
 })
 
