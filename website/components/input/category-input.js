@@ -26,8 +26,12 @@ styles.block = {
 	alignItems:'center'
 }
 
-styles.input = {
-	display:'none'
+styles.hiddenInput = {
+	position:'absolute',
+	bottom:0,
+	left:0,
+	zIndex:-1,
+	opacity:0
 }
 
 styles.label = {
@@ -84,7 +88,15 @@ class CategoryInput extends React.Component {
 						</View>
 					)
 				})}
-				<input {...this.props} type="hidden" value={this.state.value} />
+				<select {...this.props} style={styles.hiddenInput} value={this.state.value}>
+					<option></option>
+					{Object.keys(categories).map((key) => {
+						var category = categories[key]
+						return (
+							<option key={key} value={key}>{category.name}</option>
+						)
+					})}
+				</select>
 			</View>
 		)
 	}

@@ -133,6 +133,7 @@ class PlaceInput extends React.Component {
 		if(suggestions.length) {
 			this.makeSelection(suggestions[selected], selected)
 		} else {
+			React.findDOMNode(this.refs.input).setCustomValidity('Please type an address and then select a location from the search results.')
 			this.props.onError && this.props.onError(new Error('Please type an address and then select a location from the search results.'))
 		}
 		this.setState({ focused:false })
@@ -146,6 +147,7 @@ class PlaceInput extends React.Component {
 	makeSelection(suggestion, i) {
 		setTimeout(() => this.props.onChange(suggestion))
 		this.setState({ value:suggestion.full, selected:i })
+		React.findDOMNode(this.refs.input).setCustomValidity('')
 	}
 	onKeyDown(e) {
 		var suggestions = this.state.suggestions
@@ -189,6 +191,7 @@ class PlaceInput extends React.Component {
 		locationUtil.getLocation().then((location) => {
 			this.setState({ value:location.full, suggestions:[location], loading:false, detecting:false, hoverCurrentLocation:false })
 			this.props.onChange && this.props.onChange(location)
+			React.findDOMNode(this.refs.input).setCustomValidity('')
 		})
 	}
 	render() {

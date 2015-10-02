@@ -91,11 +91,14 @@ class LocationInput extends React.Component {
 		var time = hours + ':' + minutes
 		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
 		  , error = this.state.error || (this.state.time < new Date() ? new Error('You cannot post an event in the past.') : null)
+		  , timeInput = React.findDOMNode(this.refs.time)
+
+		timeInput && timeInput.setCustomValidity(error && error.message || '')
 
 		return (
 			<View>
 				<View style={styles.container}>
-					<Input ref="input" type="time" style={error ? styles.timeWithError : styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} onKeyDown={this.props.onKeyDown.bind(this)} />
+					<Input ref="time" type="time" style={error ? styles.timeWithError : styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} onKeyDown={this.props.onKeyDown.bind(this)} />
 					<Input type="select" ref="day" style={error ? styles.dayWithError : styles.day} value={day} onChange={this.changeDay.bind(this)}>
 						<option value="today">Today</option>
 						<option value="tomorrow">Tomorrow</option>
