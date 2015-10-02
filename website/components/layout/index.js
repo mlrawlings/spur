@@ -10,6 +10,9 @@ styles.container = {
 }
 
 class Layout extends React.Component {
+	componentDidMount() {
+		window.user = this.props.user
+	}
 	render() {
 		var { children, ...props} = this.props
 		return (
