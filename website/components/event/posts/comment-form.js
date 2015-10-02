@@ -71,6 +71,9 @@ class Comment extends React.Component {
 		var message = React.findDOMNode(this.refs.message)
 		setTimeout(() => this.setState({ hasValue:!!message.value }))
 	}
+	refocus() {
+		React.findDOMNode(this.refs.message).focus()
+	}
 	submitComment(e) {
 		var message = React.findDOMNode(this.refs.message)
 		  , form = React.findDOMNode(this.refs.form)
@@ -104,7 +107,7 @@ class Comment extends React.Component {
 				</Link>
 				<View style={styles.messageContainer}>
 					<Input type="textarea" ref="message" style={styles.message} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Write a comment..." />
-					<Button loading={loading} style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
+					<Button onClick={this.refocus.bind(this)} loading={loading} style={hasValue ? styles.commentButton : styles.commentButtonDisabled} type="submit">Send</Button>
 				</View>
 			</Form>
 		)
