@@ -27,16 +27,6 @@ app.use(function(next) {
 
 	locationUtil.getLocationFromIp(ip).then(location => {
 		this.props.location = location
-
-		if(!location.coords[0]) this.props.location = {
-			name:'Roanoke, VA',
-			coords:[37.253354,-79.9572075]
-		}
-	}).catch(() => {
-		this.props.location = {
-			name:'Roanoke, VA',
-			coords:[37.253354,-79.9572075]
-		}
 	}).then(() => {
 		this.cookies.set('radius', JSON.stringify(this.props.radius))
 		this.cookies.set('location', JSON.stringify(this.props.location))

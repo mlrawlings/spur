@@ -20,6 +20,7 @@ router.use(function(next) {
 
 	this.document.scripts = [
 		'/scripts/alertify.js-0.3.11/lib/alertify.min.js',
+		'/scripts/browser-update.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
 		{ src:'//connect.facebook.net/en_US/sdk.js', async:true },
