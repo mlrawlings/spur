@@ -9,7 +9,7 @@ styles.send = {
 
 class FacebookSendButton extends React.Component {
 	onClick(e) {
-		if(!/android|ios/i.test(navigator.userAgent)) {
+		if(!/android|iPad|iPhone|iPod/i.test(navigator.userAgent)) {
 			FB.ui({
 				method: 'send',
 				link: this.props.currentURL + this.props.append
