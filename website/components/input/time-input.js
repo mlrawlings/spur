@@ -63,14 +63,18 @@ class LocationInput extends React.Component {
 	changeTime(e) {
 		try {
 			var time = timeUtil.parseTime(e.target.value, this.state.time)
+			  , isPast = time < new Date()
 
-			this.setState({ time, error:null })
+			this.setState({ time, isPast, badFormat:null })
+			React.findDOMNode(this.refs.time).setCustomValidity(isPast ? 'The start time cannot be in the past.' : '')
 		} catch(e) {
-			this.setState({ error:e })
+			this.setState({ badFormat:e, isPast:false })
+			React.findDOMNode(this.refs.time).setCustomValidity(e.message)
 		}
 	}
 	changeDay(e) {
 		var time = this.state.time
+		  , isPast
 
 		if(e.target.value == 'tomorrow')
 			time.setDate(time.getDate() + 1)
@@ -78,7 +82,9 @@ class LocationInput extends React.Component {
 		if(e.target.value == 'today')
 			time.setDate(time.getDate() - 1)
 
-		this.setState({ time })
+		isPast = time < new Date()
+		this.setState({ time, isPast })
+		React.findDOMNode(this.refs.time).setCustomValidity(isPast ? 'The start time cannot be in the past.' : '')
 	}
 	render() {
 		var hours = this.state.time.getHours()
@@ -90,10 +96,7 @@ class LocationInput extends React.Component {
 
 		var time = hours + ':' + minutes
 		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
-		  , error = this.state.error || (this.state.time < new Date() ? new Error('You cannot post an event in the past.') : null)
-		  , timeInput = React.findDOMNode(this.refs.time)
-
-		timeInput && timeInput.setCustomValidity(error && error.message || '')
+		  , error = this.state.isPast ? 'The start time cannot be in the past.' : this.state.badFormat && this.state.badFormat.message
 
 		return (
 			<View>
@@ -105,7 +108,7 @@ class LocationInput extends React.Component {
 					</Input>
 				</View>
 				<Text style={styles.text}>
-					{error && <Text style={styles.error}>Error! {error.message}</Text>}
+					{error && <Text style={styles.error}>Error! {error}</Text>}
 				</Text>
 				<Input name="time" value={this.state.time.toJSON()} type="hidden" />
 			</View>
