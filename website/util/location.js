@@ -109,11 +109,13 @@ exports.getResultsFromSearch = function(input, near) {
 	return exports.searchMultiple(searches, input, bounds).then(results => 
 		Promise.all(
 			results.map(result => 
-				result.formatted_address && result.address_components 
+				result && result.formatted_address && result.address_components 
 					? result 
-					: exports.getPlace(result.place_id)
+					: exports.getPlace(result.place_id).catch(()=>null)
 			)
 		)
+	).then(results =>
+		results.filter(result => result && result.geometry)
 	).then(results => {
 		var terms = input.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ').split(' ')
 		results = results.filter((result) => {
@@ -123,6 +125,8 @@ exports.getResultsFromSearch = function(input, near) {
 			  , bScore = 0
 			  , aAddress = a.formatted_address.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ')
 			  , bAddress = b.formatted_address.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ')
+			  , aName = a.name ? a.name.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ') : ''
+			  , bName = b.name ? b.name.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ') : ''
 
 			if(bounds.contains(a.geometry.location)) {
 				aScore += 10
@@ -136,6 +140,12 @@ exports.getResultsFromSearch = function(input, near) {
 				}
 				if(bAddress.indexOf(term) != -1) {
 					bScore++
+				}
+				if(aName.indexOf(term) != -1) {
+					aScore+=2
+				}
+				if(bName.indexOf(term) != -1) {
+					bScore+=2
 				}
 			})
 			if((a.types||[]).indexOf('locality') != -1) {
@@ -195,7 +205,13 @@ exports.placesAutocomplete = function(input, bounds) {
 
 		placeAutocompleteService.getPlacePredictions({ input, bounds }, (results, status) => {
 			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				Promise.all(results.slice(0, 4).map(result => exports.getPlace(result.place_id))).then(results => {
+				Promise.all(
+					results.slice(0, 4).map(result =>
+						exports.getPlace(result.place_id).catch(()=>null)
+					)
+				).then(results =>
+					results.filter(result => result && result.geometry)
+				).then(results => {
 					completions[input] = results
 					resolve(results)
 				})

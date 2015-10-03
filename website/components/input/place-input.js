@@ -14,6 +14,7 @@ const DOWN = 40
 const ENTER = 13
 
 const MIN_TIME_BETWEEN_REQUESTS = 500
+const ERROR_MESSAGE = 'Please type an address and then select a location from the search results.'
 
 var styles = {}
 
@@ -112,7 +113,7 @@ class PlaceInput extends React.Component {
 				new Promise((resolve, reject) => {
 					setTimeout(() => {
 						reject('timeout')
-					}, 1200)
+					}, 10000)
 				})
 			]).catch((e) => {
 				if(localCallNum != this.callNum) return
@@ -129,14 +130,21 @@ class PlaceInput extends React.Component {
 		this.setState({ focused:true })
 	}
 	onBlur() {
-		var { suggestions, selected } = this.state
+		var { loading, focused, suggestions, selected } = this.state
+
+		if(focused) this.setState({ focused:false })
+
+		if(loading) {
+			setTimeout(this.onBlur.bind(this), 10)
+			return React.findDOMNode(this.refs.input).setCustomValidity(ERROR_MESSAGE)
+		}
+
 		if(suggestions.length) {
 			this.makeSelection(suggestions[selected], selected)
 		} else {
-			React.findDOMNode(this.refs.input).setCustomValidity('Please type an address and then select a location from the search results.')
-			this.props.onError && this.props.onError(new Error('Please type an address and then select a location from the search results.'))
+			React.findDOMNode(this.refs.input).setCustomValidity(ERROR_MESSAGE)
+			this.props.onError && this.props.onError(new Error(ERROR_MESSAGE))
 		}
-		this.setState({ focused:false })
 	}
 	onChange(e) {
 		var value = e.target.value
@@ -165,10 +173,7 @@ class PlaceInput extends React.Component {
 			e.preventDefault()
 		}
 		if(e.which == ENTER) {
-			if(suggestions.length) {
-				this.makeSelection(suggestions[selected], selected)
-				React.findDOMNode(this.refs.input).blur()
-			}
+			React.findDOMNode(this.refs.input).blur()
 			e.preventDefault()
 		}
 	}
