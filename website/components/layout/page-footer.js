@@ -1,5 +1,6 @@
 var React = require('react')
   , Section = require('./section')
+  , Link = require('../core/link')
   , Text = require('../core/text')
 
 var styles = {}
@@ -18,12 +19,18 @@ styles.copyright = {
 	color:'#999'
 }
 
+styles.privacy = {
+	textDecoration:'underline',
+	marginLeft:8
+}
+
 class PageFooter extends React.Component {
 	render() {
 		return (
 			<Section style={styles.footer}>
 				<Text style={styles.copyright}>
-					Made with &hearts; by Embark in Roanoke, VA
+					Made with &hearts; by Embark in Roanoke, VA. 
+					<Link style={styles.privacy} href="https://www.iubenda.com/privacy-policy/922529">Privacy Policy</Link>
 				</Text>
 			</Section>
 		)
