@@ -7,6 +7,8 @@ var kent = require('kent/server')
   , api = require('../api/client')
   , fb = require('../common/util/facebook')
 
+app.set('trust proxy', true)
+
 app.serve(__dirname+'/public')
 app.serve(__dirname+'/dist', { mount:'/dist'})
 
@@ -23,9 +25,7 @@ app.use(function(next) {
 		return next()
 	}
 
-	var ip = this.req.get('X-Real-IP') || this.req.ip
-
-	locationUtil.getLocationFromIp(ip).then(location => {
+	locationUtil.getLocationFromIp(this.req.ip).then(location => {
 		this.props.location = location
 	}).then(() => {
 		this.cookies.set('radius', JSON.stringify(this.props.radius))
