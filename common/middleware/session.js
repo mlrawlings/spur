@@ -9,7 +9,8 @@ module.exports = session({
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
-		httpOnly: false
+		httpOnly: false,
+		domain: config.domain
 	},
 	store: new RedisStore(config.redis)
 })

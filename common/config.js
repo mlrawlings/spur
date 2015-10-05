@@ -3,14 +3,27 @@ var merge = require('deep-assign')
 
 if(process.env.NODE_ENV == 'production') {
 	/* PRODUCTION */
+	config.domain = '.tryspur.com'
+
+	config.rethink = {
+		host: 'localhost',
+		port: 28015,
+		db: 'spur'
+	}
+
+	config.redis = {
+		host: 'localhost',
+		port: 6379
+	}
+
 	config.api = {
-		protocol: 'http',
-		host: 'api.tryspur.com',
+		protocol: __SERVER__ ? 'http' : 'https',
+		host: __SERVER__ ? 'localhost' : 'www.tryspur.com',
 		port: 7788
 	}
 
 	config.webserver = {
-		protocol: 'http',
+		protocol: 'https',
 		host: 'www.tryspur.com',
 		port: 7787
 	}
@@ -20,10 +33,19 @@ if(process.env.NODE_ENV == 'production') {
 		appSecret: __SERVER__ && 'dd4dabdb7190bf9a91550729a39c7e34',
 		version: 'v2.3'
 	}
+
+	if(process.env.PROD_TYPE == 'staging') {
+		/* STAGING */
+		config.rethink.db = 'spur-dev'
+		config.api.host = __SERVER__ ? 'localhost' : 'dev.tryspur.com',
+		config.webserver.host = 'dev.tryspur.com'
+	}
 }
 
 if(process.env.NODE_ENV === 'development') {
 	/* DEVELOPMENT */
+	config.domain = '.embark.ws'
+
 	config.rethink = {
 		host: 'local.embark.ws',
 		port: 28015,

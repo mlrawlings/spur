@@ -1,7 +1,4 @@
-global.__SERVER__ = true
-global.__BROWSER__ = false
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-
+require('./environment')
 require('./babel')
 require('./log')
 if(!process.argv[2] || process.argv[2] === 'api') require('./api/server')

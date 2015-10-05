@@ -1,7 +1,7 @@
 var webpack = require('webpack')
   , path = require('path')
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+require('../environment')
 
 module.exports = {
 	entry: __dirname+'/client.js',
@@ -24,7 +24,8 @@ module.exports = {
 			__BROWSER__:true,
 			__SERVER__:false,
 			'process.env': {
-				NODE_ENV: '"'+process.env.NODE_ENV+'"'
+				NODE_ENV: '"'+process.env.NODE_ENV+'"',
+				PROD_TYPE: '"'+process.env.PROD_TYPE+'"'
 			}
 		})
 	],
