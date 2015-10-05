@@ -27,7 +27,8 @@ module.exports = {
 				NODE_ENV: '"'+process.env.NODE_ENV+'"',
 				PROD_TYPE: '"'+process.env.PROD_TYPE+'"'
 			}
-		})
+		}),
+		new webpack.IgnorePlugin(/^(geoip-lite)/)
 	],
 	resolveLoader: {
 		root:path.join(__dirname, '../node_modules')
