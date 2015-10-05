@@ -9,8 +9,24 @@ var kent = require('kent/server')
 
 app.set('trust proxy', true)
 
+if(process.env.NODE_ENV == 'development') {
+	var webpack = require('webpack')
+	  , webpackConfig = require('./webpack.config.js')
+	  , compiler = webpack(webpackConfig)
+
+	app.connect(require('webpack-dev-middleware')(compiler, {
+		noInfo: true,
+		publicPath: webpackConfig.output.publicPath
+	}))
+
+	console.log(webpackConfig.output.publicPath)
+
+	app.connect(require('webpack-hot-middleware')(compiler))
+} else {
+	app.serve(__dirname+'/dist', { mount:'/dist'})
+}
+
 app.serve(__dirname+'/public')
-app.serve(__dirname+'/dist', { mount:'/dist'})
 
 app.connect(session)
 
