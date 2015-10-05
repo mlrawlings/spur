@@ -1,5 +1,4 @@
-var Home = require('./components/home')
-  , Profile = require('./components/profile')
+var Profile = require('./components/profile')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
