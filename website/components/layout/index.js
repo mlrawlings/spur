@@ -1,6 +1,7 @@
 var React = require('react')
   , PageHeader = require('./page-header')
   , PageFooter = require('./page-footer')
+  , OutdatedBrowser = require('./outdated-browser')
   , View = require('../core/view')
 
 var styles = {}
@@ -17,6 +18,7 @@ class Layout extends React.Component {
 		var { children, ...props} = this.props
 		return (
 			<View style={styles.container}>
+				<OutdatedBrowser />
 				<PageHeader {...props} />
 				<View style={styles.container}>{children}</View>
 				<PageFooter />

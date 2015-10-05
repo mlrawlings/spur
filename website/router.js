@@ -31,6 +31,7 @@ router.use(function(next) {
 		'https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600',
 		'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
 		'/styles/core.css',
+		'/styles/outdatedbrowser.css',
 		'/scripts/alertify.js-0.3.11/themes/alertify.core.css',
 		'/scripts/alertify.js-0.3.11/themes/alertify.default.css'
 	]

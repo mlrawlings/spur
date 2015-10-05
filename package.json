@@ -29,6 +29,7 @@
     "kent": "^1.1.1",
     "kent-react": "^1.0.1",
     "methods": "^1.1.1",
+    "outdated-browser-rework": "^1.0.0",
     "qs": "^5.0.0",
     "react": "^0.13.3",
     "react-textarea-autosize": "^2.5.1",
