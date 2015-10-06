@@ -193,10 +193,15 @@ class PlaceInput extends React.Component {
 	}
 	currentAddressClick() {
 		this.setState({ detecting:true })
-		locationUtil.getLocation().then((location) => {
+		locationUtil.getLocation().then(location => {
 			this.setState({ value:location.full, suggestions:[location], loading:false, detecting:false, hoverCurrentLocation:false })
 			this.props.onChange && this.props.onChange(location)
 			React.findDOMNode(this.refs.input).setCustomValidity('')
+		}).catch(e => {
+			if(e.constructor.name === 'PositionError') {
+				this.setState({ detecting:false, hoverCurrentLocation:false })
+				alert('You have geolocation disabled. We can\'t detect your location until you enable it.')
+			}
 		})
 	}
 	render() {
