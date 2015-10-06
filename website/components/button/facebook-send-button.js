@@ -23,6 +23,12 @@ class FacebookSendButton extends React.Component {
 		}
 	}
 	render() {
+		if(typeof navigator != 'undefined') {
+			if(/android|iPad|iPhone|iPod/i.test(navigator.userAgent)) {
+				return false
+			}
+		}
+
 		return (
 			<Button onClick={this.onClick.bind(this)} style={{...styles.send, ...this.props.style}} src="/images/messenger-icon-white.png">
 				{this.props.children || 'Send'}
