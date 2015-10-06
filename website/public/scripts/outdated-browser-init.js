@@ -6,7 +6,7 @@
 
 	outdatedBrowser({
 	    browserSupport: {
-	        'Chrome': 44, // 21 Includes Chrome for mobile devices
+	        'Chrome': 21, // 21 Includes Chrome for mobile devices
 	        'IE': 10,
 	        'Safari': 6.1,
 	        'Mobile Safari': 7.1,
