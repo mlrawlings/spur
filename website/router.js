@@ -18,6 +18,9 @@ router.use(function(next) {
 	]
 
 	this.document.scripts = [
+		'/scripts/ua-parser.min.js',
+		'/scripts/outdated-browser.js',
+		'/scripts/outdated-browser-init.js',
 		'/scripts/alertify.js-0.3.11/lib/alertify.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-with-addons.min.js',
