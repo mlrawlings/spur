@@ -19,8 +19,6 @@ if(process.env.NODE_ENV == 'development') {
 		publicPath: webpackConfig.output.publicPath
 	}))
 
-	console.log(webpackConfig.output.publicPath)
-
 	app.connect(require('webpack-hot-middleware')(compiler))
 } else {
 	app.serve(__dirname+'/dist', { mount:'/dist'})
