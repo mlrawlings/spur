@@ -13,6 +13,7 @@ var React = require('react')
   , Link = require('../core/link')
   , timeUtil = require('../../util/time')
   , categories = require('../../data/categories')
+  , scroll = __BROWSER__ && require('scroll')
 
 var styles = {}
 
@@ -114,6 +115,10 @@ styles.cancelledText = {
 }
 
 class EventPage extends React.Component {
+	onEventBannerClick() {
+		var distance = React.findDOMNode(this.refs.eventBanner).getBoundingClientRect().top
+		scroll.top(document.body, window.scrollY+distance, { duration:distance })
+	}
 	render() {
 		var event = this.props.event
 		  , user = this.props.user
@@ -132,7 +137,7 @@ class EventPage extends React.Component {
 				</GoogleMap>
 
 				<Section style={bannerStyles}>
-					<EventBanner horizontal={true} event={event} location={this.props.location} />
+					<EventBanner ref="eventBanner" onClick={this.onEventBannerClick.bind(this)} horizontal={true} event={event} location={this.props.location} />
 				</Section>
 
 

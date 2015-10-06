@@ -96,7 +96,7 @@ class EventBanner extends React.Component {
 		  , color = category.color
 
 		return (
-			<View style={{ ...styles[direction].banner(color), ...style }}>
+			<View onClick={this.props.onClick} style={{ ...styles[direction].banner(color), ...style }}>
 				<View style={styles[direction].category(color)}>
 					<Text style={styles.categoryText}>{category.name}</Text>
 				</View>
