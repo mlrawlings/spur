@@ -83,10 +83,29 @@ class EventResults extends React.Component {
 		this.submitForm()
 	}
 	focusPlaceInput() {
-		var distance = React.findDOMNode(this.refs.section).getBoundingClientRect().top
-		scroll.top(document.body, window.scrollY+distance, { duration:Math.abs(distance) })
-
 		this.refs.placeInput.focus()
+		this.ensureScroll()
+	}
+	ensureScroll() {
+		// This is stupid, but so are mobile devices.  
+		// We need to try to scroll multiple times because 
+		// of browser chrome appearing/disappearing and the 
+		// phone trying to scroll to the input on its own.
+		setTimeout(() => {
+			setTimeout(() => {
+				setTimeout(() => {
+					this.scrollToSearch()
+				}, this.scrollToSearch()+200)
+			}, this.scrollToSearch()+100)
+		}, this.scrollToSearch()+10)
+	}
+	scrollToSearch() {
+		var distance = React.findDOMNode(this.refs.section).getBoundingClientRect().top
+		  , duration = Math.abs(distance)
+		
+		scroll.top(document.body, window.scrollY+distance, { duration })
+
+		return duration
 	}
 	componentWillReceiveProps(nextProps) {
 		React.findDOMNode(this.refs.radius).value = nextProps.radius
