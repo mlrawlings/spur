@@ -89,13 +89,6 @@ class LocationInput extends React.Component {
 	setCoords(coords) {
 		this.state.place.coords = coords
 		this.setState({ place:this.state.place })
-
-		locationUtil.getAddressFromCoords(coords).then(address => {
-			return locationUtil.getAddressComponents(address)
-		}).then(place => {
-			place.coords = coords
-			this.setState({ place })
-		}).catch(window.alert)
 	}
 	render() {
 		var { place, drug, error } = this.state
