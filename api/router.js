@@ -161,7 +161,6 @@ router.get('/events/:id', function(req, res, next) {
 
 // Create event
 router.post('/events', jsonParser, function(req, res, next) {
-	console.log('post event')
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 	
