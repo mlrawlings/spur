@@ -82,6 +82,17 @@ class LocationInput extends React.Component {
 	changePlace(place) {
 		this.setState({ place, zoom: 18, error:null })
 		this.props.onChange && this.props.onChange(place)
+		if(!place.street) {
+			locationUtil.getAddressFromCoords(place.coords).then(address => {
+				return locationUtil.getAddressComponents(address)
+			}).then(p => {
+				place.street = p.street
+				place.citystatezip = p.citystatezip
+				place.full = p.full
+				this.setState({ place })
+				this.refs.placeInput.setState({ value:place.full })
+			}).catch(window.alert)
+		}
 	}
 	hideDragMessage() {
 		this.setState({ drug:true })
@@ -98,7 +109,7 @@ class LocationInput extends React.Component {
 		return (
 			<View>
 				<View style={error ? styles.containerWithError : styles.container}>
-					<PlaceInput style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
+					<PlaceInput ref="placeInput" style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
 					{place && <View>
 						<GoogleMap center={place.coords} zoom={this.state.zoom}>
 							<GoogleMapMarker draggable={true} position={place.coords} onDragStart={this.hideDragMessage.bind(this)} onDragEnd={this.setCoords.bind(this)} />
