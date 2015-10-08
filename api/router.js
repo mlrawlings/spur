@@ -161,6 +161,7 @@ router.get('/events/:id', function(req, res, next) {
 
 // Create event
 router.post('/events', jsonParser, function(req, res, next) {
+	console.log('post event')
 	if(!req.session.user)
 		return res.status(401).end('Not Logged In')
 	
@@ -187,7 +188,7 @@ router.post('/events', jsonParser, function(req, res, next) {
 	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
 
 	r.table('events').insert(event).run(connection).then(function(event) {
-		r.table('users').get(req.session.user.id).update({ 
+		return r.table('users').get(req.session.user.id).update({ 
 			events:r.row('events').setInsert(event.generated_keys[0]) 
 		}).run(connection).then(function() {
 			res.status(201).json(event.generated_keys[0])
