@@ -39,7 +39,7 @@ router.use(function(next) {
 	]
 
 	this.document.meta = [
-		{ name:'viewport', content:'width=device-width, initial-scale=1' },
+		{ name:'viewport', content:'width=device-width, initial-scale=1, maximum-scale=1' },
 		{ property:'og:site_name', content:'Spur' },
 		{ property:'fb:app_id', content:config.facebook.appId },
 		{ property:'og:locale', content:'en_US' },
