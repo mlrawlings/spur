@@ -17,24 +17,6 @@ exports.getLocation = function() {
 	})
 }
 
-if(__SERVER__) {
-	exports.getLocationFromIp = function(ip) {
-		return new Promise(function(resolve, reject) {
-			var geo = require('geoip-lite').lookup(ip)
-
-			if(!geo) return resolve({
-				name:'Boston MA',
-				coords:[42.364506, -71.038887]
-			})
-
-			resolve({
-				name:geo.city +', ' + geo.region,
-				coords:geo.ll
-			})
-		})
-	}
-}
-
 exports.getDistanceBetween = function(coords1, coords2, inKilometers) {
 	var start = new GeoPoint(coords1[0], coords1[1])
 	  , end = new GeoPoint(coords2[0], coords2[1])
@@ -102,7 +84,7 @@ exports.getAddressFromCoords = function(coords) {
 }
 
 exports.getResultsFromSearch = function(input, near) {
-	var bounds = exports.toGoogleLatLngBounds(exports.getBounds(near, 20))
+	var bounds = near && exports.toGoogleLatLngBounds(exports.getBounds(near, 20))
 	  , searches = [exports.placeSearch, exports.placesAutocomplete]
 
 	//perhaps also search without the partial term.  only if no results?
@@ -128,10 +110,10 @@ exports.getResultsFromSearch = function(input, near) {
 			  , aName = a.name ? a.name.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ') : ''
 			  , bName = b.name ? b.name.toLowerCase().replace(/[^\w\s]/g, '').replace(/[_\s]+/g, ' ') : ''
 
-			if(bounds.contains(a.geometry.location)) {
+			if(bounds && bounds.contains(a.geometry.location)) {
 				aScore += 10
 			}
-			if(bounds.contains(b.geometry.location)) {
+			if(bounds && bounds.contains(b.geometry.location)) {
 				bScore += 10
 			}
 			terms.forEach((term) => {
@@ -154,7 +136,7 @@ exports.getResultsFromSearch = function(input, near) {
 			if((b.types||[]).indexOf('locality') != -1) {
 				bScore--
 			}
-			if(aScore == bScore) {
+			if(near && aScore == bScore) {
 				var aPoint = new GeoPoint(a.geometry.location.lat(), a.geometry.location.lng())
 				  , bPoint = new GeoPoint(a.geometry.location.lat(), a.geometry.location.lng())
 				  , mePoint = new GeoPoint(near[0], near[1])

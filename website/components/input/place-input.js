@@ -100,7 +100,7 @@ class PlaceInput extends React.Component {
 			value = this.state.value.trim()
 			this.searching = true
 			Promise.race([
-				locationUtil.getResultsFromSearch(value, this.props.location.coords).then((suggestions) => {
+				locationUtil.getResultsFromSearch(value, this.props.location && this.props.location.coords).then((suggestions) => {
 					if(localCallNum != this.callNum) return
 
 					this.setState({ suggestions, selected:0, loading:false })
@@ -118,7 +118,7 @@ class PlaceInput extends React.Component {
 			]).catch((e) => {
 				if(localCallNum != this.callNum) return
 
-				console.error(e)
+				console.error(e.stack)
 				this.lastRequest = Date.now()+1500
 				this.searching = false
 				this.getSuggestions(this.state.value.trim())
@@ -204,6 +204,9 @@ class PlaceInput extends React.Component {
 			}
 		})
 	}
+	focus() {
+		React.findDOMNode(this.refs.input).focus()
+	}
 	render() {
 		var { value, style, onChange, ...props } = this.props
 		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, color, height, ...containerStyle} = style
@@ -238,7 +241,7 @@ class PlaceInput extends React.Component {
 							ref="input"
 							type="search" 
 							value={this.state.value} 
-							placeholder="Enter address or name of place..." 
+							placeholder="Enter address or place..." 
 							{...props}
 							style={{...styles.input, ...inputStyle}}
 							onChange={this.onChange.bind(this)} 

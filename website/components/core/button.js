@@ -40,7 +40,7 @@ styles.active = {
 }
 
 styles.image = {
-	width:20,
+	width:'auto',
 	height:20
 }
 

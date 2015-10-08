@@ -109,12 +109,12 @@ class EventBanner extends React.Component {
 						<Image style={styles.icon} src="/images/clock-white.png" />
 						<TimeUntil style={styles.detailText} time={event.time} />
 					</View>
-					<View style={styles.detail}>
+					{location && <View style={styles.detail}>
 						<Image style={styles.icon} src="/images/white-pin.png" />
 						<Text style={styles.detailText}>
 							{locationUtil.getDistanceBetween(event.location.coords, location.coords)}
 						</Text>
-					</View>
+					</View>}
 				</View>
 			</View>
 		)

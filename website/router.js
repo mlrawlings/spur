@@ -62,7 +62,7 @@ router.on('/profile/:id', function(next) {
 
 router.on('/', function(next) {
 	var radius = parseFloat(this.query.radius) || this.props.radius
-	  , location = this.props.location.coords.join(',')
+	  , location = this.props.location && this.props.location.coords.join(',')
 
 	if(radius != this.props.radius) {
 		this.cookies.set('radius', radius)
@@ -76,11 +76,16 @@ router.on('/', function(next) {
 		this.cookies.set('location', this.query.location)
 	} catch(e) {}
 
-	this.api.get('/events').query({ location, radius }).then(events => {
-		this.render(EventResults, { events, radius, search:this.query.q })
-	}).catch(function(err) {
-		next(err)
-	})
+	if(location) {
+		this.api.get('/events').query({ location, radius }).then(events => {
+			this.render(EventResults, { events, radius, search:this.query.q })
+		}).catch(function(err) {
+			next(err)
+		})
+	} else {
+		this.render(EventResults, { events:[], radius, search:this.query.q })
+	}
+		
 })
 
 

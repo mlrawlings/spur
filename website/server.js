@@ -36,16 +36,9 @@ app.use(function(next) {
 
 	if(this.cookies.get('location')) {
 		this.props.location = JSON.parse(this.cookies.get('location'))
-		return next()
 	}
 
-	locationUtil.getLocationFromIp(this.req.ip).then(location => {
-		this.props.location = location
-	}).then(() => {
-		this.cookies.set('radius', JSON.stringify(this.props.radius))
-		this.cookies.set('location', JSON.stringify(this.props.location))
-		next()
-	}).catch(next)
+	next()
 })
 
 app.use(function(next) {

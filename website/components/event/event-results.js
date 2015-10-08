@@ -3,6 +3,7 @@ var React = require('react')
   , Section = require('../layout/section')
   , PlaceInput = require('../input/place-input')
   , EventList = require('./event-list')
+  , GetLocation = require('./get-location')
   , Button = require('../core/button')
   , Input = require('../core/input')
   , View = require('../core/view')
@@ -73,11 +74,15 @@ class EventResults extends React.Component {
 		app.submit(React.findDOMNode(this.refs.form))
 	}
 	changeLocation(location) {
+		this.refs.placeInput.setState({ value:location.full })
 		React.findDOMNode(this.refs.location).value = JSON.stringify({
 			name:location.full,
 			coords:location.coords
 		})
 		this.submitForm()
+	}
+	focusPlaceInput() {
+		this.refs.placeInput.focus()
 	}
 	componentWillReceiveProps(nextProps) {
 		React.findDOMNode(this.refs.radius).value = nextProps.radius
@@ -97,7 +102,7 @@ class EventResults extends React.Component {
 							{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
 						</Input>
 						<Text style={styles.text}>of</Text>
-						<PlaceInput style={styles.addressField} location={location} defaultValue={location.name} onChange={this.changeLocation.bind(this)} />
+						<PlaceInput ref="placeInput" style={styles.addressField} location={location} defaultValue={location && location.name} onChange={this.changeLocation.bind(this)} />
 						<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 					</Form>
 					<View style={styles.spacer} />
@@ -106,7 +111,11 @@ class EventResults extends React.Component {
 					</View>}
 				</Section>
 
-				<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
+				{this.props.location ? 
+					<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
+					: <GetLocation onDetect={this.changeLocation.bind(this)} onEnter={this.focusPlaceInput.bind(this)} />
+				}
+				
 			</Layout>
 		)
 	}
