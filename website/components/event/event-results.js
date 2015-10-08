@@ -10,6 +10,7 @@ var React = require('react')
   , Text = require('../core/text')
   , Link = require('../core/link')
   , Form = require('../core/form')
+  , scroll = __BROWSER__ && require('scroll')
 
 var styles = {}
 
@@ -82,6 +83,9 @@ class EventResults extends React.Component {
 		this.submitForm()
 	}
 	focusPlaceInput() {
+		var distance = React.findDOMNode(this.refs.section).getBoundingClientRect().top
+		scroll.top(document.body, window.scrollY+distance, { duration:Math.abs(distance) })
+
 		this.refs.placeInput.focus()
 	}
 	componentWillReceiveProps(nextProps) {
@@ -93,7 +97,7 @@ class EventResults extends React.Component {
 
 		return (
 			<Layout user={this.props.user}>
-				<Section style={styles.results}>
+				<Section ref="section" style={styles.results}>
 					<Form style={styles.form} ref="form" action="/" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }

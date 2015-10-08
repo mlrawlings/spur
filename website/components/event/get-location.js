@@ -23,25 +23,29 @@ styles.letUsKnow = {
 }
 
 styles.buttonContainer = {
+	flexWrap:'wrap',
 	flexDirection: 'row',
 	alignItems: 'center',
 	justifyContent: 'center',
-	marginTop: 40,
+	marginTop: 30,
 	marginBottom: 5
 }
 
-styles.detectLocation = {
+styles.button = {
 	fontSize: 16,
+	marginTop: 10,
 	marginLeft: 5,
-	marginRight: 5,
+	marginRight: 5
+}
+
+styles.detectLocation = {
+	...styles.button,
 	backgroundColor: '#555',
-	color: 'white'
+	color: '#fff'
 }
 
 styles.enterLocation = {
-	fontSize: 16,
-	marginLeft: 5,
-	marginRight: 5,
+	...styles.button,
 	backgroundColor: '#ccc',
 	color: '#444'
 }

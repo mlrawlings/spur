@@ -85,7 +85,7 @@ class Comment extends React.Component {
 				  , difference = distance-window.innerHeight
 				
 				if(difference > 0)
-					scroll.top(document.body, window.scrollY+difference, { duration:difference })
+					scroll.top(document.body, window.scrollY+difference, { duration:Math.abs(difference) })
 				
 				form.reset()
 				this.setState({ hasValue:false, loading:false })

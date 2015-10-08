@@ -10,14 +10,15 @@ var styles = {}
 styles.container = {
 	flexDirection:'row',
 	flexWrap:'wrap',
+	width: '100%',
 	borderWidth:1,
 	borderStyle:'solid',
 	borderColor:'#ccc'
 }
 
 styles.block = {
-	width:'25%',
 	minWidth:140,
+	flexBasis:140,
 	flexGrow:1,
 	height:80,
 	padding:15,

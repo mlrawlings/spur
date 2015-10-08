@@ -22,8 +22,9 @@ styles.item = {
 
 styles.summary = {
 	backgroundColor:'#fff',
-	flex:1.5,
+	flexGrow:1.5,
 	minWidth:'60%',
+	maxWidth:'100%',
 	padding:15
 }
 
@@ -40,7 +41,7 @@ styles.details = {
 styles.banner = {
 	minWidth:200,
 	width:'50%',
-	flex:1,
+	flexGrow:1,
 	minHeight:60
 }
 

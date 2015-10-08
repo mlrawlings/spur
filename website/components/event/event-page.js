@@ -46,7 +46,7 @@ styles.time = {
 }
 
 styles.nameAndTime = {
-	flex:100,
+	flexGrow:100,
 	minWidth:300,
 	paddingTop:10,
 	paddingBottom:10
@@ -81,7 +81,7 @@ styles.details = {
 }
 
 styles.detailsText = {
-	flex: 1
+	flexGrow: 1
 }
 
 styles.content = {
@@ -117,7 +117,7 @@ styles.cancelledText = {
 class EventPage extends React.Component {
 	onEventBannerClick() {
 		var distance = React.findDOMNode(this.refs.eventBanner).getBoundingClientRect().top
-		scroll.top(document.body, window.scrollY+distance, { duration:distance })
+		scroll.top(document.body, window.scrollY+distance, { duration:Math.abs(distance) })
 	}
 	render() {
 		var event = this.props.event

@@ -51,7 +51,7 @@ class PostForm extends React.Component {
 			this.setState({ loading:true })
 			app.submit(form).then(() => {
 				var distance = form.getBoundingClientRect().bottom
-				scroll.top(document.body, window.scrollY+distance, { duration:distance })
+				scroll.top(document.body, window.scrollY+distance, { duration:Math.abs(distance) })
 				form.reset()
 				this.setState({ hasValue:false, loading:false })
 			})

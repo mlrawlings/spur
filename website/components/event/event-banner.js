@@ -71,7 +71,7 @@ styles.horizontal.banner = (backgroundColor) => ({
 styles.horizontal.category = () => ({
 	...styles.section, 
 	justifyContent:'flex-start',
-	flex:2,
+	flexGrow:2,
 	minWidth:200,
 	paddingTop:5,
 	paddingBottom:5,
@@ -80,7 +80,7 @@ styles.horizontal.category = () => ({
 styles.horizontal.details = () => ({
 	...styles.section, 
 	minWidth:230,
-	flex:1,
+	flexGrow:1,
 	paddingTop:5,
 	paddingBottom:5,
 	justifyContent:'space-between'
