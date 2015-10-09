@@ -57,7 +57,7 @@ class NewEventForm extends React.Component {
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>{location ? 'Location Address' : 'Location'}</Label>
-							<LocationInput name="location" location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
+							<LocationInput name="location" noDetect={true} location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
 						</View>
 						{location && <View style={styles.field}>
 							<Label>Location Name</Label>

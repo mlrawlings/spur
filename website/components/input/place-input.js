@@ -219,8 +219,10 @@ class PlaceInput extends React.Component {
 		  		color:style.color || styles.currentLocationText.color
 		  	}
 
-		inputStyle.paddingLeft = 2
-		linkStyle.paddingLeft = paddingLeft || padding
+		if(!this.props.noDetect) {
+			inputStyle.paddingLeft = 2
+			linkStyle.paddingLeft = paddingLeft || padding
+		}
 
 		Object.keys(inputStyle).forEach(function(style) {
 			if(inputStyle[style] === undefined) delete inputStyle[style]
@@ -229,13 +231,13 @@ class PlaceInput extends React.Component {
 		return (
 			<View>
 				<View style={{ ...styles.container, ...containerStyle}}>
-					<Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
+					{this.props.noDetect ? null : <Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 						{
 							this.state.loading || this.state.detecting
 							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/black-tail-spin.svg" : "/images/white-tail-spin.svg"} />
 							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
 						}
-					</Link>
+					</Link>}
 					<View style={styles.inputContainer}>
 						<Input 
 							ref="input"

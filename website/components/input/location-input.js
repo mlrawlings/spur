@@ -109,7 +109,7 @@ class LocationInput extends React.Component {
 		return (
 			<View>
 				<View style={error ? styles.containerWithError : styles.container}>
-					<PlaceInput ref="placeInput" style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
+					<PlaceInput ref="placeInput" noDetect={this.props.noDetect} style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
 					{place && <View>
 						<GoogleMap center={place.coords} zoom={this.state.zoom}>
 							<GoogleMapMarker draggable={true} position={place.coords} onDragStart={this.hideDragMessage.bind(this)} onDragEnd={this.setCoords.bind(this)} />
