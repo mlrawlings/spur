@@ -3,6 +3,7 @@ var React = require('react')
   , Link = require('../core/link')
   , View = require('../core/view')
   , Text = require('../core/text')
+  , Touchable = require('../core/touchable')
 
 var styles = {}
 
@@ -18,6 +19,7 @@ styles.container = {
 	borderRightColor:'#ddd',
 	borderBottomWidth:1,
 	borderBottomColor:'#ddd',
+	overflow:'hidden'
 }
 
 styles.suggestion = {
@@ -36,6 +38,10 @@ styles.suggestionSelected = {
 	backgroundColor:'#eee'
 }
 
+styles.suggestionHover = {
+	backgroundColor:'#ddd'
+}
+
 styles.name = {
 	fontWeight:600,
 }
@@ -51,8 +57,10 @@ styles.info = {
 }
 
 styles.pin = {
+	height: 24,
 	width:15,
 	marginRight:10,
+	flexShrink: 0
 }
 
 class PlaceSuggestions extends React.Component {
@@ -70,7 +78,7 @@ class PlaceSuggestions extends React.Component {
 						  , suggestionStyles = i == selected ? styles.suggestionSelected : styles.suggestion
 						  , pinIconSrc = '/images/pin-'+(i == selected ? 'red' : 'grey')+'.png'
 
-						return <View style={suggestionStyles} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion, i)}>
+						return <Touchable style={suggestionStyles} styleHover={styles.suggestionHover} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion, i)}>
 							<Image style={styles.pin} src={pinIconSrc} />
 							<View>
 								<Text style={styles.name}>
@@ -80,7 +88,7 @@ class PlaceSuggestions extends React.Component {
 									{hasName ? suggestion.full : suggestion.citystatezip}
 								</Text>
 							</View>
-						</View>
+						</Touchable>
 					})}
 				</View>
 			</View>
