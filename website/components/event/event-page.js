@@ -48,6 +48,7 @@ styles.time = {
 styles.nameAndTime = {
 	flexGrow:100,
 	minWidth:300,
+	maxWidth: '100%',
 	paddingTop:10,
 	paddingBottom:10
 }
@@ -81,7 +82,8 @@ styles.details = {
 }
 
 styles.detailsText = {
-	flexGrow: 1
+	flexGrow: 1,
+	maxWidth: '100%'
 }
 
 styles.content = {
