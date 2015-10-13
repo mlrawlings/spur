@@ -69,18 +69,40 @@ router.get('/users/:id', function(req, res, next) {
 	r.table('users').get(req.params.id).run(connection).then(function(user) {
 		if(!user)
 			return res.status(404).end('This User Does Not Exist')
-		
-		r.table('users').get(req.params.id).merge(function(user) {
-			return {
-				events:r.table('events').filter(function(event) {
-					return user('events').contains(event('id'))
-				}).orderBy(r.desc('time')).coerceTo('array')
-			}
-		}).without('email', 'location').run(connection).then(function(user) {
-			res.json(user)
-		}).catch(function(err) {
-			next(err)
-		})
+
+		if(!req.session.user) {
+			r.table('users').get(req.params.id).merge(function(user) {
+				return { events:[] }
+			}).without('email', 'location').run(connection).then(function(user) {
+				res.json(user)
+			}).catch(function(err) {
+				next(err)
+			})
+		} else if(req.session.user.id == req.params.id) {
+			r.table('users').get(req.params.id).merge(function(user) {
+				return {
+					events:r.table('events').filter(function(event) {
+						return user('events').contains(event('id'))
+					}).orderBy(r.desc('time')).coerceTo('array')
+				}
+			}).without('email', 'location').run(connection).then(function(user) {
+				res.json(user)
+			}).catch(function(err) {
+				next(err)
+			})
+		} else {
+			r.table('users').get(req.params.id).merge(function(user) {
+				return {
+					events:r.table('events').filter(function(event) {
+						return user('events').contains(event('id')).and(r.table('users').get(req.session.user.id)('events').contains(event('id')))
+					}).orderBy(r.desc('time')).coerceTo('array')
+				}
+			}).without('email', 'location').run(connection).then(function(user) {
+				res.json(user)
+			}).catch(function(err) {
+				next(err)
+			})
+		}
 	}).catch(next)
 
 })
