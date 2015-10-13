@@ -41,8 +41,9 @@ styles.error = {
 class LocationInput extends React.Component {
 	constructor(props) {
 		super(props)
+		console.log(props.defaultValue)
 		this.state = {
-			time: timeUtil.anHourFromNow(true)
+			time: props.defaultValue || timeUtil.anHourFromNow(true)
 		}
 	}
 	componentWillMount() {

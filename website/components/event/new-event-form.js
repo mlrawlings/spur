@@ -29,7 +29,7 @@ styles.titleInput = {
 class NewEventForm extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {}
+		this.state = { location:props.event && props.event.location }
 	}
 	changeLocation(location) {
 		this.setState({ location })
@@ -42,22 +42,23 @@ class NewEventForm extends React.Component {
 	}
 	render() {
 		var location = this.state.location
+		  , event = this.props.event
 
 		return (
 			<Layout user={this.props.user}>
 				<Section>
-					<Form action="/create/event">
+					<Form action={event ? '/event/'+event.id+'/edit' : '/create/event'}>
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
-							<Input style={styles.titleInput} onKeyDown={this.preventSubmit.bind(this)} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
+							<Input style={styles.titleInput} defaultValue={event && event.name} onKeyDown={this.preventSubmit.bind(this)} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>Start Time</Label>
-							<TimeInput name="time" onKeyDown={this.preventSubmit.bind(this)} required={true} />
+							<TimeInput name="time" defaultValue={event && event.time} onKeyDown={this.preventSubmit.bind(this)} required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>{location ? 'Location Address' : 'Location'}</Label>
-							<LocationInput name="location" noDetect={true} location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
+							<LocationInput name="location" noDetect={true} defaultValue={location} location={this.props.location} required={true} onChange={this.changeLocation.bind(this)} />
 						</View>
 						{location && <View style={styles.field}>
 							<Label>Location Name</Label>
@@ -65,14 +66,14 @@ class NewEventForm extends React.Component {
 						</View>}
 						<View style={styles.field}>
 							<Label required={true}>Category</Label>
-							<CategoryInput name="category" required={true} />
+							<CategoryInput name="category" defaultValue={event && event.category} required={true} />
 						</View>
 						<View style={styles.field}>
 							<Label>Additional Details</Label>
-							<Input type="textarea" name="details" style={Input.style} placeholder="Anthing else people need to know..." />
+							<Input type="textarea" name="details" defaultValue={event && event.details} style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
 						<View style={styles.actions}>
-							<Button src="/images/create.png" type="submit">Create Event</Button>
+							<Button src="/images/create.png" type="submit">{event ? 'Save Event' : 'Create Event'}</Button>
 						</View>
 					</Form>
 				</Section>

@@ -171,6 +171,32 @@ router.on('/event/:id', function(next) {
 	})
 })
 
+router.on('/event/:id/edit', function(next) {
+	var event = this.body
+
+	if(!event || !event.name) {
+		return this.api.get('/events/'+this.params.id).then(event => {
+			this.document.title = event.name + ' | Spur'
+			
+			this.render(NewEventForm, { event:event })
+		}).catch((e) => {
+			if(e.status == 404)
+				return this.render(Four0Four, {})
+
+			next(e)
+		})
+	} else {
+		if(event.location && event.location.coords) {
+			if(event.location.coords[0]) event.location.coords[0] = parseFloat(event.location.coords[0])
+			if(event.location.coords[1]) event.location.coords[1] = parseFloat(event.location.coords[1])
+		}
+	
+		this.api.put('/events/'+this.params.id).send(event).then(() => {
+			this.redirect('/event/'+this.params.id)
+		}).catch(next)
+	}
+})
+
 router.on('/event/:id/invite', function(next) {
 	if(__SERVER__) {
 		if(/facebookexternalhit|facebot/.test(this.req.headers['user-agent'])) return this.redirect('/event/'+this.params.id)
