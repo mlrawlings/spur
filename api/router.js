@@ -131,7 +131,7 @@ router.get('/events', function(req, res, next) {
 			r.row('cancelled').ne(true)
 			.or(containsAttendees)
 			.or(isOwner)
-		)
+		).and(r.row('private').ne(true))
 	).orderBy(
 		r.asc('time')
 	).without(

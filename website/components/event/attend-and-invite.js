@@ -14,6 +14,12 @@ styles.attend = {
 	marginBottom: 30
 }
 
+styles.privateText = {
+	fontSize: 12,
+	color: '#666',
+	fontWeight: '600'
+}
+
 styles.header = {
 	textTransform:'none',
 	color:'#444',
@@ -79,11 +85,16 @@ class AttendAndInvite extends React.Component {
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
+				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
+					Edit
+				</Button>}
 			</View>
 		</View>
 
 		if(attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>You are going!</Heading>
+		{isOwner && event.private && <Text style={styles.privateText}>This event is invite only, share it with your friends!</Text>}
+					
 			<View style={styles.buttons}>
 				<Button style={styles.bail} src="/images/bail.png" href={'/event/'+event.id+'/bail'}>
 					Bail
@@ -91,6 +102,9 @@ class AttendAndInvite extends React.Component {
 				<FacebookSendButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</FacebookSendButton>
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
+				</Button>}
+				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
+					Edit
 				</Button>}
 			</View>
 		</View>

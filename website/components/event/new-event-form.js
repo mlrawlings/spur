@@ -69,6 +69,13 @@ class NewEventForm extends React.Component {
 							<CategoryInput name="category" defaultValue={event && event.category} required={true} />
 						</View>
 						<View style={styles.field}>
+							<Label required={true}>Who can come?</Label>
+							<Input name="private" required={true} type="select" defaultValue={event && event.private}>
+								<option value={false}>Anyone | Makes it public to the Spur Community.</option>
+								<option value={true}>Invite only | Share your event link with friends.</option>
+							</Input>
+						</View>
+						<View style={styles.field}>
 							<Label>Additional Details</Label>
 							<Input type="textarea" name="details" defaultValue={event && event.details} style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>

@@ -127,6 +127,7 @@ class EventPage extends React.Component {
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
 		  , titleStyles = { ...styles.title }
+		  , isOwner = user && user.id == event.owner
 
 		return (
 			<Layout user={this.props.user}>
@@ -141,7 +142,6 @@ class EventPage extends React.Component {
 				<Section style={bannerStyles}>
 					<EventBanner ref="eventBanner" onClick={this.onEventBannerClick.bind(this)} horizontal={true} event={event} location={this.props.location} />
 				</Section>
-
 
 				<Section style={styles.summary}>
 					<View style={styles.nameAndTime}>

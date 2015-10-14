@@ -190,6 +190,8 @@ router.on('/event/:id/edit', function(next) {
 			if(event.location.coords[0]) event.location.coords[0] = parseFloat(event.location.coords[0])
 			if(event.location.coords[1]) event.location.coords[1] = parseFloat(event.location.coords[1])
 		}
+
+		event.private = JSON.parse(event.private)
 	
 		this.api.put('/events/'+this.params.id).send(event).then(() => {
 			this.redirect('/event/'+this.params.id)
@@ -264,6 +266,8 @@ router.on('/create/event', function(next) {
 		if(event.location.coords[0]) event.location.coords[0] = parseFloat(event.location.coords[0])
 		if(event.location.coords[1]) event.location.coords[1] = parseFloat(event.location.coords[1])
 	}
+	
+	event.private = JSON.parse(event.private)
 
 	this.api.post('/events').send(event).then(eventId => {
 		this.redirect('/event/'+eventId)
