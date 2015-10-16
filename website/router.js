@@ -176,6 +176,8 @@ router.on('/event/:id/edit', function(next) {
 
 	if(!event || !event.name) {
 		return this.api.get('/events/'+this.params.id).then(event => {
+			if(event.time <= new Date()) return this.redirect('/event/'+this.params.id)
+			
 			this.document.title = event.name + ' | Spur'
 			
 			this.render(NewEventForm, { event:event })

@@ -10,8 +10,22 @@ var React = require('react')
   , Form = require('../core/form')
   , View = require('../core/view')
   , Text = require('../core/text')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
+
+styles.timesDivider = {
+	margin: 10,
+	marginTop: 31,
+	fontSize:12,
+	color:'#aaa'
+}
+
+styles.fieldset = {
+	flexDirection: 'row',
+	flexWrap: 'wrap',
+	maxWidth: '100%'
+}
 
 styles.field = {
 	marginBottom:30,
@@ -26,10 +40,26 @@ styles.titleInput = {
 	fontSize:24
 }
 
+styles.toggleEndTime = {
+	marginLeft: 5,
+	textDecoration: 'underline',
+	color: 'rgb(4, 165, 180)',
+	cursor: 'pointer'
+}
+
 class NewEventForm extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { location:props.event && props.event.location }
+		var { event } = props
+		this.state = { 
+			location:event && event.location, 
+			time:event && event.time || timeUtil.anHourFromNow(true),
+			hasEnd:!!(event && event.endTime),
+			showEndTime: !!(event && event.endTime) ? true : false
+		}
+	}
+	changeTime(time) {
+		this.setState({ time })
 	}
 	changeLocation(location) {
 		this.setState({ location })
@@ -40,10 +70,19 @@ class NewEventForm extends React.Component {
 		if(e.keyCode == 13)
 			e.preventDefault()
 	}
+	addEndTime() {
+		this.setState({ showEndTime:true })
+	}
+	removeEndTime() {
+		this.setState({ showEndTime:false })
+	}
 	render() {
-		var location = this.state.location
+		var { location, time } = this.state
 		  , event = this.props.event
+		  , defaultEndTime = new Date(time)
 
+		defaultEndTime = this.state.hasEnd ? event.endTime : new Date(defaultEndTime.setHours(defaultEndTime.getHours()+1))
+		
 		return (
 			<Layout user={this.props.user}>
 				<Section>
@@ -52,9 +91,23 @@ class NewEventForm extends React.Component {
 							<Label required={true}>Event Name</Label>
 							<Input style={styles.titleInput} defaultValue={event && event.name} onKeyDown={this.preventSubmit.bind(this)} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
 						</View>
-						<View style={styles.field}>
-							<Label required={true}>Start Time</Label>
-							<TimeInput name="time" defaultValue={event && event.time} onKeyDown={this.preventSubmit.bind(this)} required={true} />
+						<View style={styles.fieldset}>
+							<View style={styles.field}>
+								<Label required={true}>Start Time 
+									{this.state.showEndTime || (this.state.showEndTime && this.state.hasEnd) ? 
+										<Text style={styles.toggleEndTime} onClick={this.removeEndTime.bind(this)}>Remove End Time</Text> :
+										<Text style={styles.toggleEndTime} onClick={this.addEndTime.bind(this)}>Need an End Time?</Text>
+									}
+								</Label>
+								<TimeInput name="time" defaultValue={time} err="The start time cannot be in the past." display="relative" onChange={this.changeTime.bind(this)} onKeyDown={this.preventSubmit.bind(this)} required={true} />
+							</View>
+							{this.state.showEndTime || (this.state.showEndTime && this.state.hasEnd) ? 
+								[<Text style={styles.timesDivider}>to</Text>,
+								<View style={styles.field}>
+									<Label required={true}>End Time</Label>
+									<TimeInput name="endTime" err="The end time must be after the start time." defaultValue={defaultEndTime} startTime={time} display="duration" onKeyDown={this.preventSubmit.bind(this)} />
+								</View>] : ''
+							}
 						</View>
 						<View style={styles.field}>
 							<Label required={true}>{location ? 'Location Address' : 'Location'}</Label>

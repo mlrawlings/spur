@@ -56,6 +56,7 @@ class AttendAndInvite extends React.Component {
 		var { event, user, style } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , isOwner = user && user.id == event.owner
+		  , canEdit = isOwner && event.time >= new Date()
 
 		if(event.cancelled) return isOwner ? <View style={{...styles.attend, ...style}}>
 			<Heading>This event is cancelled</Heading>
@@ -85,7 +86,7 @@ class AttendAndInvite extends React.Component {
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
-				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
+				{canEdit && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
 					Edit
 				</Button>}
 			</View>
@@ -103,7 +104,7 @@ class AttendAndInvite extends React.Component {
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
-				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
+				{canEdit && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/edit'}>
 					Edit
 				</Button>}
 			</View>

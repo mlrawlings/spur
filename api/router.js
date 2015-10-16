@@ -196,6 +196,10 @@ function validateEvent(event) {
 
 	if(event.time <= now) throw new Error('time cannot be in the past')
 	if(event.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
+	
+	if(event.endTime && event.endTime < event.time) throw new Error('endTime cannot be before start time')
+
+	if(!event.endTime) event.endTime = null
 
 	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
 	
