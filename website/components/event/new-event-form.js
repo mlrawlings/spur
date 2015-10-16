@@ -94,17 +94,17 @@ class NewEventForm extends React.Component {
 						<View style={styles.fieldset}>
 							<View style={styles.field}>
 								<Label required={true}>Start Time 
-									{this.state.showEndTime || (this.state.showEndTime && this.state.hasEnd) ? 
-										<Text style={styles.toggleEndTime} onClick={this.removeEndTime.bind(this)}>Remove End Time</Text> :
-										<Text style={styles.toggleEndTime} onClick={this.addEndTime.bind(this)}>Need an End Time?</Text>
-									}
+									{(!this.state.showEndTime && this.state.hasEnd) && 
+										<Text style={styles.toggleEndTime} onClick={this.addEndTime.bind(this)}>Need an End Time?</Text>}
 								</Label>
 								<TimeInput name="time" defaultValue={time} err="The start time cannot be in the past." display="relative" onChange={this.changeTime.bind(this)} onKeyDown={this.preventSubmit.bind(this)} required={true} />
 							</View>
 							{this.state.showEndTime || (this.state.showEndTime && this.state.hasEnd) ? 
 								[<Text style={styles.timesDivider}>to</Text>,
 								<View style={styles.field}>
-									<Label required={true}>End Time</Label>
+									<Label required={true}>End Time
+										<Text style={styles.toggleEndTime} onClick={this.removeEndTime.bind(this)}>Remove End Time</Text>
+									</Label>
 									<TimeInput name="endTime" err="The end time must be after the start time." defaultValue={defaultEndTime} startTime={time} display="duration" onKeyDown={this.preventSubmit.bind(this)} />
 								</View>] : ''
 							}

@@ -45,6 +45,12 @@ styles.time = {
 	textTransform:'lowercase'
 }
 
+styles.endTime = {
+	fontSize: 9,
+	color: '#888',
+	textTransform:'lowercase'
+}
+
 styles.nameAndTime = {
 	flexGrow:100,
 	minWidth:300,
@@ -128,6 +134,10 @@ class EventPage extends React.Component {
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
 		  , titleStyles = { ...styles.title }
 		  , isOwner = user && user.id == event.owner
+		  , startTimeClass = timeUtil.getTimeClass(event.time)
+		  , endTimeClass = event.endTime && timeUtil.getTimeClass(event.endTime)
+		  , sameTimeClassEndTime = startTimeClass == endTimeClass ? (' - '+timeUtil.format(event.endTime)) : ''
+		  , diffTimeClassEndTime = startTimeClass == endTimeClass ? '' : (timeUtil.format(event.endTime) + ' ' + endTimeClass)
 
 		return (
 			<Layout user={this.props.user}>
@@ -150,8 +160,11 @@ class EventPage extends React.Component {
 						</Text>
 						<Text>{event.invited}</Text>
 						<Text style={styles.time}>
-							{'@ ' + timeUtil.format(event.time) + ' ' + timeUtil.getTimeClass(event.time)}
+							{timeUtil.format(event.time) + sameTimeClassEndTime + ' ' + timeUtil.getTimeClass(event.time)}
 						</Text>
+						{diffTimeClassEndTime && <Text style={styles.endTime}>
+							{'until '+diffTimeClassEndTime}
+						</Text>}
 					</View>
 					<View style={styles.location}>
 						<Link href={"http://maps.google.com?daddr="+event.location.coords[0]+','+event.location.coords[1]}>
