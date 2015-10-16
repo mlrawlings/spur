@@ -37,15 +37,16 @@ styles.navLink = {
 	textTransform: 'uppercase',
 	paddingTop:8,
 	paddingBottom:8,
-	paddingLeft:16,
-	paddingRight:16,
+	paddingLeft:'4%',
+	paddingRight:'4%',
+	lineHeight:1.6,
 	height:40,
 	color:'#555',
 	textDecoration: 'none'
 }
 
 styles.login = {
-	marginLeft:16
+	marginLeft:'4%'
 }
 
 class Header extends React.Component {
@@ -58,6 +59,7 @@ class Header extends React.Component {
 					<Image style={styles.logo} src="/images/spur-logo.png" />
 				</Link>
 				<View style={styles.nav}>
+					<Link href="/events" style={styles.navLink}>Nearby</Link>
 					<FacebookLoginButton style={styles.login} user={user} avatar={true} />
 				</View>
 			</Section>

@@ -18,7 +18,7 @@ styles.container = {
 
 styles.block = {
 	minWidth:140,
-	flexBasis:140,
+	flexBasis:150,
 	flexGrow:1,
 	height:80,
 	padding:15,

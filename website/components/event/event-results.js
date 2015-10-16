@@ -115,7 +115,7 @@ class EventResults extends React.Component {
 		  , radii = [1, 3, 5, 10, 25, 50]
 
 		return (
-			<Layout user={this.props.user}>
+			<Layout user={user}>
 				<Section ref="section" style={styles.results}>
 					<Form style={styles.form} ref="form" action="/" method="GET">
 						<Text style={styles.text}>
@@ -138,7 +138,6 @@ class EventResults extends React.Component {
 					<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
 					: <GetLocation onDetect={this.changeLocation.bind(this)} onEnter={this.focusPlaceInput.bind(this)} />
 				}
-				
 			</Layout>
 		)
 	}

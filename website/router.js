@@ -1,4 +1,5 @@
 var Profile = require('./components/profile')
+  , Home = require('./components/home')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
   , NewEventForm = require('./components/event/new-event-form')
@@ -61,6 +62,10 @@ router.on('/profile/:id', function(next) {
 })
 
 router.on('/', function(next) {
+	this.render(Home)
+})
+
+router.on('/events', function(next) {
 	var radius = parseFloat(this.query.radius) || this.props.radius
 	  , location = this.props.location && this.props.location.coords.join(',')
 

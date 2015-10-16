@@ -24,14 +24,16 @@ styles.logo = {
 
 styles.tagline = {
 	fontWeight:300,
-	fontSize:40,
-	color:'#fff'
+	fontSize:35,
+	color:'#fff',
+	textAlign:'center'
 }
 
-styles.action = {
-	marginTop:16,
+styles.about = {
 	fontSize:20,
-	fontWeight:400
+	color:'#fff',
+	textAlign:'center',
+	marginTop:20
 }
 
 class Hero extends React.Component {
@@ -40,7 +42,10 @@ class Hero extends React.Component {
 			<Section style={styles.hero}>
 				<Image style={styles.logo} src="/images/spur-text-white.png" alt="spur" />
 				<Text style={styles.tagline}>live in the moment</Text>
-				<Button style={styles.action} href="/events">Find Nearby Events!</Button>
+				<Text style={styles.about}>
+					Easily discover, create, and share spontaneous events.  
+					Hang out with friends and meet people while doing stuff you love.
+				</Text>
 			</Section>
 		)
 	}

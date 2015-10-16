@@ -3,15 +3,17 @@ var React = require('react')
   , Hero = require('./hero')
   , DownloadAndShare = require('./download-and-share')
   , Video = require('./video')
-  , EventList = require('../event/event-list')
+  , About = require('./about')
+  , Section = require('../layout/section')
+  , Text = require('../core/text')
 
 class Home extends React.Component {
 	render() {
 		return (
 			<Layout user={this.props.user}>
-		    	<Hero />			
-				<DownloadAndShare />
-				<Video />
+		    	<Hero />	
+				<DownloadAndShare />		
+				<About user={this.props.user} />
 			</Layout>
 		)
 	}
