@@ -8,7 +8,7 @@ styles.default = {
 }
 
 styles.active = {
-	opacity:0.8
+	opacity:0.6
 }
 
 class Link extends React.Component {
