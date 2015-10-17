@@ -81,12 +81,14 @@ class Button extends React.Component {
 			this.props.onClick(e)
 
 		if(!e.defaultPrevented && this.props.href) {
-			e.preventDefault()
-			app.navigate(this.props.href).then(() => {
-				this.setState({ loading:false })
-			})
-
-			this.setState({ loading:true })
+			var navigation = app.navigate(this.props.href)
+			if(navigation) {
+				navigation.then(() => {
+					this.setState({ loading:false })
+				})
+				e.preventDefault()
+				this.setState({ loading:true })
+			}
 		}
 	}
 	render() {
