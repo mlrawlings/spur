@@ -117,7 +117,7 @@ class EventResults extends React.Component {
 		return (
 			<Layout user={user}>
 				<Section ref="section" style={styles.results}>
-					<Form style={styles.form} ref="form" action="/" method="GET">
+					<Form style={styles.form} ref="form" action="/events" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 						</Text>
