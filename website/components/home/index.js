@@ -1,7 +1,7 @@
 var React = require('react')
   , Layout = require('../layout')
   , Hero = require('./hero')
-  , DownloadAndShare = require('./download-and-share')
+  , AppLinks = require('./app-links')
   , Video = require('./video')
   , About = require('./about')
   , Section = require('../layout/section')
@@ -12,7 +12,7 @@ class Home extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 		    	<Hero />	
-				<DownloadAndShare />		
+				<AppLinks />		
 				<About user={this.props.user} />
 			</Layout>
 		)

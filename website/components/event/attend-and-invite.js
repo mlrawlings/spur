@@ -4,7 +4,7 @@ var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
   , FacebookLoginButton = require('../button/facebook-login-button')
-  , FacebookSendButton = require('../button/facebook-send-button')
+  , ShareButton = require('../button/share-button')
 
 var styles = {}
 
@@ -75,7 +75,7 @@ class AttendAndInvite extends React.Component {
 				<Button ref="joinButton" src="/images/join.png" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
 					Join
 				</Button>
-				<FacebookSendButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</FacebookSendButton>
+				<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
@@ -88,7 +88,7 @@ class AttendAndInvite extends React.Component {
 				<Button style={styles.bail} src="/images/bail.png" href={'/event/'+event.id+'/bail'}>
 					Bail
 				</Button>
-				<FacebookSendButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</FacebookSendButton>
+				<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}

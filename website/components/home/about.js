@@ -5,6 +5,7 @@ var React = require('react')
   , View = require('../core/view')
   , Link = require('../core/link')
   , Text = require('../core/text')
+  , ShareButton = require('../button/share-button')
 
 var styles = {}
 
@@ -34,7 +35,8 @@ styles.action = {
 	backgroundColor:'#fff',
 	marginTop:10,
 	borderWidth:1,
-	borderColor:'#ddd'
+	borderColor:'#ddd',
+	cursor:'pointer'
 }
 
 styles.actionBanner = {
@@ -49,6 +51,10 @@ styles.actionBanner = {
 styles.actionCreate = {
 	...styles.actionBanner,
 	backgroundColor:'#0DBD6F'
+}
+styles.actionShare = {
+	...styles.actionBanner,
+	backgroundColor:'#3c4f62'
 }
 styles.actionNearby = {
 	...styles.actionBanner,
@@ -83,8 +89,12 @@ class About extends React.Component {
 						<Text style={styles.actionText}>Spur something awesome!</Text>
 						<View style={styles.actionCreate}>Create an event</View>
 					</Link>}
+					<ShareButton type={Link} style={styles.action}>
+						<Text style={styles.actionText}>Share with your friends!</Text>
+						<View style={styles.actionShare}>Share</View>
+					</ShareButton>
 					<Link href="/events" style={styles.action}>
-						<Text style={styles.actionText}>See what&apos;s happening near you!</Text>
+						<Text style={styles.actionText}>See what&apos;s happening nearby!</Text>
 						<View style={styles.actionNearby}>Nearby Events</View>
 					</Link>
 					<Link href="mailto:spur@embarkweb.com" style={styles.action}>

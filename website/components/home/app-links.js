@@ -47,30 +47,29 @@ styles.linkInactive = {
 }
 
 styles.linkImage = {
-	height:'100%'
+	height:45
 }
 
 styles.linkText = {
 	color:'#fff',
 	fontWeight:300,
-	fontSize:25,
+	fontSize:22,
 	paddingLeft:20,
 	paddingRight:20
 }
 
-class DownloadAndShare extends React.Component {
+class AppLinks extends React.Component {
 	render() {
 		return (
 			<Section style={styles.container}>
 				<Text style={styles.heading}>Coming Soon to Your Mobile Device for <Text style={styles.free}>Free</Text></Text>
 				<View style={styles.links}>
-					<View style={styles.linkInactive}><Image style={styles.linkImage} src="/images/app-store.png" /></View>
-					<View style={styles.linkInactive}><Image style={styles.linkImage} src="/images/google-play.png" /></View>
-					{/*<Link style={styles.link}><Text style={styles.linkText}>Share</Text></Link>*/}
+					<Link style={styles.linkInactive}><Image style={styles.linkImage} src="/images/app-store.png" /></Link>
+					<Link style={styles.linkInactive}><Image style={styles.linkImage} src="/images/google-play.png" /></Link>
 				</View>
 			</Section>
 		)
 	}
 }
 
-module.exports = DownloadAndShare
+module.exports = AppLinks
