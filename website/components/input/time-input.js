@@ -2,6 +2,7 @@ var React = require('react')
   , Input = require('../core/input')
   , View = require('../core/view')
   , Text = require('../core/text')
+  , TimeUntil = require('../format/time-until')
   , timeUtil = require('../../util/time')
 
 var styles = {}
@@ -29,7 +30,8 @@ styles.dayWithError = {
 }
 
 styles.text = {
-	fontSize:13
+	fontSize:12,
+	color:'#777'
 }
 
 styles.error = {
@@ -42,7 +44,7 @@ class LocationInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			time: timeUtil.anHourFromNow(true)
+			time: props.defaultValue
 		}
 	}
 	componentWillMount() {
@@ -56,6 +58,15 @@ class LocationInput extends React.Component {
 			this.noTimeInputSupport = __BROWSER__
 		}
 	}
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.startTime != this.props.startTime) {
+			// IMPORTANT: if the onChange event for this component causes
+			// a new startTime to be passed, this.state.time will not have 
+			// updated yet and isPast will be calulated for the previous 
+			// value and not the current value.
+			this.setState({ isPast:this.state.time <= (nextProps.startTime || new Date()) })
+		}
+	}
 	reformatTime(e) {
 		if(this.noTimeInputSupport && !this.state.error)
 			e.target.value = timeUtil.format(this.state.time)
@@ -63,17 +74,18 @@ class LocationInput extends React.Component {
 	changeTime(e) {
 		try {
 			var time = timeUtil.parseTime(e.target.value, this.state.time)
-			  , isPast = time < new Date()
+			  , isPast = time <= (this.props.startTime || new Date())
 
 			this.setState({ time, isPast, badFormat:null })
-			React.findDOMNode(this.refs.time).setCustomValidity(isPast ? 'The start time cannot be in the past.' : '')
+			this.props.onChange && this.props.onChange(time)
+			React.findDOMNode(this.refs.time).setCustomValidity(isPast ? this.props.err : '')
 		} catch(e) {
 			this.setState({ badFormat:e, isPast:false })
 			React.findDOMNode(this.refs.time).setCustomValidity(e.message)
 		}
 	}
 	changeDay(e) {
-		var time = this.state.time
+		var time = new Date(this.state.time)
 		  , isPast
 
 		if(e.target.value == 'tomorrow')
@@ -82,24 +94,27 @@ class LocationInput extends React.Component {
 		if(e.target.value == 'today')
 			time.setDate(time.getDate() - 1)
 
-		isPast = time < new Date()
+		isPast = time <= (this.props.startTime || new Date())
 		this.setState({ time, isPast })
-		React.findDOMNode(this.refs.time).setCustomValidity(isPast ? 'The start time cannot be in the past.' : '')
+		this.props.onChange && this.props.onChange(time)
+		React.findDOMNode(this.refs.time).setCustomValidity(isPast ? this.props.err : '')
 	}
 	render() {
-		var hours = this.state.time.getHours()
-		  , minutes = this.state.time.getMinutes()
-		  , day = this.state.time.getDate() == new Date().getDate() ? 'today' : 'tomorrow'
+		var hours = this.state.time && this.state.time.getHours()
+		  , minutes = this.state.time && this.state.time.getMinutes()
+		  , day = this.state.time && this.state.time.getDate() == new Date().getDate() ? 'today' : 'tomorrow'
+		  , display = this.props.display
 
 		if(hours <= 9) hours = '0' + hours
 		if(minutes <= 9) minutes = '0' + minutes
 
 		var time = hours + ':' + minutes
 		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
-		  , error = this.state.isPast ? 'The start time cannot be in the past.' : this.state.badFormat && this.state.badFormat.message
+		  , error = this.state.isPast ? this.props.err : this.state.badFormat && this.state.badFormat.message
 
 		return (
 			<View>
+
 				<View style={styles.container}>
 					<Input ref="time" type="time" style={error ? styles.timeWithError : styles.time} defaultValue={timeString} onBlur={this.reformatTime.bind(this)} onChange={this.changeTime.bind(this)} onKeyDown={this.props.onKeyDown.bind(this)} />
 					<Input type="select" ref="day" style={error ? styles.dayWithError : styles.day} value={day} onChange={this.changeDay.bind(this)}>
@@ -108,9 +123,13 @@ class LocationInput extends React.Component {
 					</Input>
 				</View>
 				<Text style={styles.text}>
-					{error && <Text style={styles.error}>Error! {error}</Text>}
+					{error 
+						? <Text style={styles.error}>Error! {error}</Text>
+						: display == 'relative' 
+							? <Text><TimeUntil time={this.state.time} /> from now</Text>
+							: <Text>{timeUtil.getRelativeTimeString(this.state.time, this.props.startTime)} long</Text>}
 				</Text>
-				<Input name="time" value={this.state.time.toJSON()} type="hidden" />
+				{!error && <Input name={this.props.name} value={this.state.time && this.state.time.toJSON()} type="hidden" />}
 			</View>
 		)
 	}

@@ -14,6 +14,12 @@ styles.attend = {
 	marginBottom: 30
 }
 
+styles.privateText = {
+	fontSize: 12,
+	color: '#666',
+	fontWeight: '600'
+}
+
 styles.header = {
 	textTransform:'none',
 	color:'#444',
@@ -42,6 +48,11 @@ styles.cancel = {
 	marginLeft:5
 }
 
+styles.edit = {
+	marginLeft:5,
+	backgroundColor: 'rgb(213, 146, 1)'
+}
+
 class AttendAndInvite extends React.Component {
 	onJoin(e) {
 		alertify.alert('<h1>See you there!</h1><p>Check back a bit before the event starts and make sure you haven\'t missed any updates.</p>')
@@ -50,6 +61,10 @@ class AttendAndInvite extends React.Component {
 		var { event, user, style } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , isOwner = user && user.id == event.owner
+		  , canEdit = isOwner && event.time >= new Date()
+		  , maxedAttendees = event.max && event.attendees.length >= parseInt(event.max)
+		  , spotsRemaining = (event.max && event.max - event.attendees.length)
+		  , spotsReaminingText = spotsRemaining + (spotsRemaining == 1 ? ' spot' : ' spots') + ' remaining...'
 
 		if(event.cancelled) return isOwner ? <View style={{...styles.attend, ...style}}>
 			<Heading>This event is cancelled</Heading>
@@ -71,11 +86,19 @@ class AttendAndInvite extends React.Component {
 		
 		if(!attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>Want to go?</Heading>
+			{spotsRemaining && <Text style={styles.privateText}>{spotsReaminingText}</Text>}
+			{maxedAttendees && <Text style={styles.privateText}>Attendees have hit the max!</Text>}
 			<View style={styles.buttons}>
-				<Button ref="joinButton" src="/images/join.png" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
-					Join
-				</Button>
-				<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>
+				{maxedAttendees || 
+					[<Button ref="joinButton" src="/images/join.png" href={'/event/'+event.id+'/join'} onClick={this.onJoin.bind(this)}>
+						Join
+					</Button>,
+					<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>]
+				}
+
+				{canEdit && <Button style={styles.edit} src="/images/edit.png" href={'/event/'+event.id+'/edit'}>
+					Edit
+				</Button>}
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}
@@ -84,11 +107,21 @@ class AttendAndInvite extends React.Component {
 
 		if(attending) return <View style={{...styles.attend, ...style}}>
 			<Heading>You are going!</Heading>
+			{maxedAttendees && <Text style={styles.privateText}>Attendees have hit the max!</Text>}
+			{!maxedAttendees && isOwner && event.private && <Text style={styles.privateText}>This event is invite only, share it with your friends!</Text>}
+			
 			<View style={styles.buttons}>
 				<Button style={styles.bail} src="/images/bail.png" href={'/event/'+event.id+'/bail'}>
 					Bail
 				</Button>
-				<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>
+
+				{maxedAttendees || 
+					<ShareButton style={styles.invite} append="/invite" currentURL={this.props.currentURL}>Invite a Friend</ShareButton>
+				}
+				
+				{canEdit && <Button style={styles.edit} src="/images/edit.png" href={'/event/'+event.id+'/edit'}>
+					Edit
+				</Button>}
 				{isOwner && <Button style={styles.cancel} src="/images/cancel.png" href={'/event/'+event.id+'/cancel'}>
 					Cancel
 				</Button>}

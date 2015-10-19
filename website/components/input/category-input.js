@@ -61,7 +61,7 @@ styles.check = {
 class CategoryInput extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { value:props.value }
+		this.state = { value:props.defaultValue }
 	}
 	selectCategory(value) {
 		this.setState({ value })

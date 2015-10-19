@@ -131,6 +131,8 @@ router.get('/events', function(req, res, next) {
 			r.row('cancelled').ne(true)
 			.or(containsAttendees)
 			.or(isOwner)
+		).and(
+			r.row('private').ne(true)
 		)
 	).orderBy(
 		r.asc('time')
@@ -181,14 +183,10 @@ router.get('/events/:id', function(req, res, next) {
 	}).catch(next)
 })
 
-// Create event
-router.post('/events', jsonParser, function(req, res, next) {
-	if(!req.session.user)
-		return res.status(401).end('Not Logged In')
-	
+function validateEvent(event) {
 	var now = new Date()
-	  , event = req.body
 
+	if(!event) throw new Error('No event object')
 	if(!event.name) throw new Error('name is required')
 	if(event.name.length > 64) throw new Error('name is too long (max 64 characters)')
 	if(!event.time) throw new Error('time is required')
@@ -200,13 +198,51 @@ router.post('/events', jsonParser, function(req, res, next) {
 
 	if(event.time <= now) throw new Error('time cannot be in the past')
 	if(event.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
+	
+	if(event.endTime && event.endTime < event.time) throw new Error('endTime cannot be before start time')
+
+	if(!event.endTime) event.endTime = null
+
+	if(event.max && event.max < 2) throw new Error('event max attendees cannot be less than 2')
+	if(!event.max) {
+		event.max = null
+	} else {
+		event.max = parseInt(event.max)
+	}
+
+	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
+	
+	return event
+}
+
+// Edit event by id
+router.put('/events/:id', jsonParser, function(req, res, next) {
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
+
+	var event = validateEvent(req.body)
+
+	r.table('events').get(req.params.id).update(function(oldEvent) {
+		return r.branch(oldEvent('owner').eq(req.session.user.id), event, {})
+	}).run(connection).then(function(event) {
+		res.status(204).end()
+	}).catch(function(err) {
+		next(err)
+	})
+})
+
+// Create event
+router.post('/events', jsonParser, function(req, res, next) {
+	if(!req.session.user)
+		return res.status(401).end('Not Logged In')
+	
+	var event = validateEvent(req.body)
 
 	event.posts = []
 	event.invitees = []
 	event.cancelled = false
 	event.attendees = [req.session.user.id]
 	event.owner = req.session.user.id
-	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
 
 	r.table('events').insert(event).run(connection).then(function(event) {
 		return r.table('users').get(req.session.user.id).update({ 

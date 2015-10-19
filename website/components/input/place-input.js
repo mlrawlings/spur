@@ -67,9 +67,10 @@ class PlaceInput extends React.Component {
 		this.state = {
 			focused:false,
 			selected:0,
-			suggestions:[],
+			suggestions:props.defaultValue ? [props.defaultValue] : [],
 			loading:false,
-			value:props.defaultValue
+			value:props.defaultValue && props.defaultValue.full,
+			location:props.defaultValue
 		}
 		this.callNum = 0
 	}
@@ -238,6 +239,7 @@ class PlaceInput extends React.Component {
 							: <Image style={styles.currentLocationImage} src="/images/current-location.png" />
 						}
 					</Link>}
+
 					<View style={styles.inputContainer}>
 						<Input 
 							ref="input"

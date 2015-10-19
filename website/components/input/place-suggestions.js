@@ -77,8 +77,8 @@ class PlaceSuggestions extends React.Component {
 						var hasName = !!suggestion.name
 						  , suggestionStyles = i == selected ? styles.suggestionSelected : styles.suggestion
 						  , pinIconSrc = '/images/pin-'+(i == selected ? 'red' : 'grey')+'.png'
-
-						return <Touchable style={suggestionStyles} styleHover={styles.suggestionHover} ref={suggestion.id} onMouseDown={onSelect.bind(this, suggestion, i)}>
+						
+						return <Touchable style={suggestionStyles} styleHover={styles.suggestionHover} ref={suggestion.id} onMouseDownCapture={onSelect.bind(this, suggestion, i)}>
 							<Image style={styles.pin} src={pinIconSrc} />
 							<View>
 								<Text style={styles.name}>
