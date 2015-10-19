@@ -136,9 +136,10 @@ class EventPage extends React.Component {
 		  , isOwner = user && user.id == event.owner
 		  , startTimeClass = timeUtil.getTimeClass(event.time)
 		  , endTimeClass = event.endTime && timeUtil.getTimeClass(event.endTime)
-		  , sameTimeClassEndTime = startTimeClass == endTimeClass ? (' - '+timeUtil.format(event.endTime)) : ''
-		  , diffTimeClassEndTime = startTimeClass == endTimeClass ? '' : (timeUtil.format(event.endTime) + ' ' + endTimeClass)
+		  , sameTimeClassEndTime = event.endTime && (startTimeClass == endTimeClass ? (' - '+timeUtil.format(event.endTime)) : '') || ''
+		  , diffTimeClassEndTime = event.endTime && (startTimeClass == endTimeClass ? '' : (timeUtil.format(event.endTime) + ' ' + endTimeClass)) || ''
 
+		
 		return (
 			<Layout user={this.props.user}>
 				

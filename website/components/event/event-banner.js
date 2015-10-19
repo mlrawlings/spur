@@ -103,7 +103,7 @@ class EventBanner extends React.Component {
 				<View style={styles[direction].details(color)}>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/person-white.png" />
-						<Text style={styles.detailText}>{event.attendees.length + ' going'}</Text>
+						<Text style={styles.detailText}>{event.attendees.length + (event.max ? '/'+event.max : '') + ' going'}</Text>
 					</View>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/clock-white.png" />

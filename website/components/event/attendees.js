@@ -46,7 +46,9 @@ class Attendees extends React.Component {
 		
 		return (
 			<View style={style}>
-				<Heading style={styles.going}>{this.getHeaderString(num, on, over)}</Heading>	
+				<Heading style={styles.going}>
+					{this.getHeaderString(num, on, over)}
+				</Heading>
 				<View style={styles.container}>
 					{attendees.map(attendee =>
 						<Link style={styles.attendee} href={'/profile/'+attendee.id}>

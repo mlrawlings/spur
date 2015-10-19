@@ -131,7 +131,9 @@ router.get('/events', function(req, res, next) {
 			r.row('cancelled').ne(true)
 			.or(containsAttendees)
 			.or(isOwner)
-		).and(r.row('private').ne(true))
+		).and(
+			r.row('private').ne(true)
+		)
 	).orderBy(
 		r.asc('time')
 	).without(
@@ -200,6 +202,13 @@ function validateEvent(event) {
 	if(event.endTime && event.endTime < event.time) throw new Error('endTime cannot be before start time')
 
 	if(!event.endTime) event.endTime = null
+
+	if(event.max && event.max < 2) throw new Error('event max attendees cannot be less than 2')
+	if(!event.max) {
+		event.max = null
+	} else {
+		event.max = parseInt(event.max)
+	}
 
 	event.locationIndex = r.point(event.location.coords[1], event.location.coords[0])
 	

@@ -32,7 +32,6 @@ class EventList extends React.Component {
 		return (
 			<Section>
 				{events.length ? events.map((event, index) => {
-					console.log(event.time)
 					var timeClass = time.getTimeClass(event.time)
 
 					if(previousTimeClass == timeClass) {
