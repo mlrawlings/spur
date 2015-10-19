@@ -11,8 +11,7 @@
 	        'Safari': 6.1,
 	        'Mobile Safari': 7.1,
 	        'Firefox': 28
-	    },
-		requireChromeOnAndroid: true
+	    }
 	})
 
 })()

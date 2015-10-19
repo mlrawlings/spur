@@ -50,11 +50,11 @@ styles.actionBanner = {
 }
 styles.actionCreate = {
 	...styles.actionBanner,
-	backgroundColor:'#0DBD6F'
+	backgroundColor:'rgb(5, 191, 203)'
 }
 styles.actionShare = {
 	...styles.actionBanner,
-	backgroundColor:'#3c4f62'
+	backgroundColor:'rgb(58, 87, 157)'
 }
 styles.actionNearby = {
 	...styles.actionBanner,
