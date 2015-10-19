@@ -57,15 +57,14 @@ class DownloadAndShare extends React.Component {
 	copyText(e) {
 		try {
 			var input = React.findDOMNode(this.refs.input)
-			  , range = document.createRange()
-			
-			range.selectNode(input)
+
 			window.getSelection().removeAllRanges()
-			window.getSelection().addRange(range)
-			document.execCommand('copy')
-			window.getSelection().removeAllRanges()
-			this.setState({ copied:true })
-			setTimeout(() => this.setState({ copied:false }), 2000)
+			input.select()
+			if(document.queryCommandEnabled('copy')) {
+				document.execCommand('copy')
+				this.setState({ copied:true })
+				setTimeout(() => this.setState({ copied:false }), 2000)
+			}
 		} catch(e) {
 			React.findDOMNode(this.refs.input).select()
 		}
