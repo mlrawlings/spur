@@ -1,15 +1,16 @@
 var React = require('react')
+  , Touchable = require('./touchable')
   , prefix = require('auto-prefixer')
-
-var styles = {}
-
-styles.text = {}
 
 class Text extends React.Component {
 	render() {
-		var { style, ...props } = this.props
+		if(this.props.href) return <Touchable tag="a" className="text" {...this.props} />
+		if(this.props.onClick) return <Touchable tag="span" {...this.props} />
 
-		return <span {...props} style={prefix({ ...styles.text, ...style })} />
+		var { tag, style, ...props } = this.props
+		  , Tag = tag || 'span'
+		
+		return <Tag {...props} style={prefix(style)} />
 	}
 }
 

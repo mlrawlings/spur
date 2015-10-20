@@ -60,6 +60,10 @@ input, textarea, select {
     -webkit-flex: 1 0 auto;
 }
 
+#app a:not(.text) {
+	text-decoration: none;
+}
+
 #app,
 #app a,
 #app div, 
@@ -102,7 +106,8 @@ input, textarea, select {
 }
 
 #app img, 
-#app span {
+#app span,
+#app a.text {
 	display:block;
 
 	box-sizing: border-box;
@@ -115,8 +120,10 @@ input, textarea, select {
 	color:#444;
 }
 
-#app span a, 
-#app span span {
+#app span span,
+#app span a.text,
+#app a.text span,
+#app a.text a.text, {
 	display:inline;
 	color:inherit;
 }
@@ -129,4 +136,35 @@ input, textarea, select {
 
 #app input[type=search] {
 	box-sizing: border-box;
+}
+
+
+::-webkit-input-placeholder {
+	color:#808080;
+	opacity:0.9;
+}
+:-moz-placeholder {
+	color:#808080;
+	opacity:0.9;
+}
+::-moz-placeholder {
+	color:#808080;
+	opacity:0.9;
+}
+:-ms-input-placeholder {
+	color:#808080;
+	opacity:0.9;
+}
+
+:focus::-webkit-input-placeholder{
+	opacity:0.5;
+}
+:focus:-moz-placeholder{
+	opacity:0.5;
+}
+:focus::-moz-placeholder{
+	opacity:0.5;
+}
+:focus:-ms-input-placeholder {
+	opacity:0.5;
 }
