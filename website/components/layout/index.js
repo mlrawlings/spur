@@ -14,12 +14,12 @@ class Layout extends React.Component {
 		window.user = this.props.user
 	}
 	render() {
-		var { children, ...props} = this.props
+		var { children, noFooter, ...props} = this.props
 		return (
 			<View style={styles.container}>
 				<PageHeader {...props} />
 				<View style={styles.container}>{children}</View>
-				<PageFooter />
+				{!noFooter && <PageFooter />}
 			</View>
 		)
 	}

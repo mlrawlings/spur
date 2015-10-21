@@ -23,7 +23,7 @@ styles.buttonsInline = {
 styles.buttonsFixed = {
 	position:'fixed',
 	left:0, right:0, bottom:0,
-	zIndex:2,
+	zIndex:5,
 	backgroundColor:'#fff',
 	flexDirection:'row',
 	transition:'all 0.4s',
@@ -82,11 +82,14 @@ class AttendAndInvite extends React.Component {
 			if(running) return
 			running = true
 			requestAnimationFrame(() => {
+				var distanceFromBottom = document.body.scrollHeight - window.scrollY - window.innerHeight
+				
 				if(window.scrollY < previousY) {
-					this.setState({ hide:false })
+					if(distanceFromBottom > 0) this.setState({ hide:false })
 				} else {
-					this.setState({ hide:true })
+					if(distanceFromBottom < 200) this.setState({ hide:true })
 				}
+
 				previousY = window.scrollY
 				running = false
 			})
@@ -140,12 +143,12 @@ class AttendAndInvite extends React.Component {
 
 		return (
 			<View>
-				<MediaQuery query="(max-width:500px), (max-height:500px)">
+				<MediaQuery query="(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)">
 					<View style={this.state.hide ? styles.buttonsFixedHidden : styles.buttonsFixed}>
 						{this.renderButtons(FlatButton, false)}
 					</View>
 				</MediaQuery>
-				<MediaQuery query="(min-width:501px) and (min-height:501px)" >
+				<MediaQuery query="(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)" >
 					{!event.cancelled && <View>
 						<Heading style={styles.heading}>{attending ? 'You\'re going!' : 'Want to go?'}</Heading>
 						<View style={styles.buttonsInline}>{this.renderButtons(Button, true)}</View>

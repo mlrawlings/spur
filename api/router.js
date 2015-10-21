@@ -172,7 +172,7 @@ router.get('/events/:id', function(req, res, next) {
 							})
 						}
 					})
-				}).orderBy(r.desc('time'))
+				}).orderBy(r.asc('time'))
 			}
 		}).run(connection).then(function(event) {
 			res.json(event)

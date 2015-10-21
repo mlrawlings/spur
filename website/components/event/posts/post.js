@@ -10,7 +10,6 @@ var React = require('react')
 var styles = {}
 
 styles.container = {
-	marginTop:30,
 	borderWidth:1,
 	borderColor:'#ddd'
 }

@@ -10,6 +10,7 @@ styles.container = {
 
 styles.sizer = {
 	width:'100%',
+	flex:1,
 	maxWidth:800,
 	paddingLeft:5,
 	paddingRight:5,
@@ -18,12 +19,14 @@ styles.sizer = {
 
 styles.wrapper = {
 	paddingLeft:'3%',
-	paddingRight:'3%'
+	paddingRight:'3%',
+	flex:1
 }
 
 class Section extends React.Component {
 	render() {
-		var { flexDirection, flexWrap, flexFlow, justifyContent, alignItems, alignContent, ...containerStyles} = this.props.style || {}
+		var { style, ...props } = this.props
+		  , { flexDirection, flexWrap, flexFlow, justifyContent, alignItems, alignContent, ...containerStyles} = style || {}
 		  , wrapperStyles = { flexDirection, flexWrap, flexFlow, justifyContent, alignItems, alignContent }
 
 		Object.keys(wrapperStyles).forEach(function(style) {
@@ -31,7 +34,7 @@ class Section extends React.Component {
 		})
 
 		return (
-			<View style={{ ...styles.container, ...containerStyles }}>
+			<View style={{ ...styles.container, ...containerStyles }} {...props}>
 				<View style={styles.sizer}>
 					<View style={{ ...styles.wrapper, ...wrapperStyles }}>
 						{this.props.children}

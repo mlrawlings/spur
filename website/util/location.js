@@ -279,14 +279,16 @@ exports.getAddressComponents = function(place) {
 	return address
 }
 
-exports.getMapImageUrl = function(location) {
+exports.getMapImageUrl = function(location, width, height) {
 	location = location.coords || location
+	width = width || 600
+	height = height || 315
 
 	var locationString = location[0]+','+location[1]
 
 	return 'https://maps.googleapis.com/maps/api/staticmap?' + qs.stringify({
 		center:locationString,
-		size:'600x315',
+		size:width+'x'+height,
 		scale:2,
 		maptype:'roadmap',
 		markers:locationString

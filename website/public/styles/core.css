@@ -60,15 +60,15 @@ input, textarea, select {
     -webkit-flex: 1 0 auto;
 }
 
-#app a:not(.text) {
+#app a {
 	text-decoration: none;
 }
 
 #app,
-#app a,
 #app div, 
 #app form, 
-#app button {
+#app button,
+#app a:not(.text) {
 	display: -webkit-box;
 	display: -moz-box;
 	display: -ms-flexbox;
@@ -123,7 +123,7 @@ input, textarea, select {
 #app span span,
 #app span a.text,
 #app a.text span,
-#app a.text a.text, {
+#app a.text a.text {
 	display:inline;
 	color:inherit;
 }
