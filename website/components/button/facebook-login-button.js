@@ -60,7 +60,7 @@ class FacebookLoginButton extends React.Component {
 				return this.setState({ loading:false })
 			}
 
-			this.api.del('/auth').then(res => {
+			api.del('/auth').then(res => {
 				window.user = undefined
 				this.setState({ loading:false })
 				app.refresh()
@@ -76,7 +76,7 @@ class FacebookLoginButton extends React.Component {
 		
 		return (
 			<Button onClick={action} loading={this.state.loading} src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }}>
-				text
+				{text}
 			</Button>
 		)
 	}
