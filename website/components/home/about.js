@@ -71,8 +71,6 @@ styles.actionSignup = {
 
 class About extends React.Component {
 	render() {
-		var { user } = this.props
-		
 		return (
 			<View>
 				<Section style={styles.about}>
@@ -85,14 +83,10 @@ class About extends React.Component {
 				</Section>
 				<Section style={styles.excite}>
 					<Text style={styles.header}>Excited? Here&apos;s what you can do:</Text>
-					{user && <Link href="/create/event" style={styles.action}>
+					<Link href="/create/event" style={styles.action}>
 						<Text style={styles.actionText}>Spur something awesome!</Text>
 						<View style={styles.actionCreate}>Create an event</View>
-					</Link>}
-					<ShareButton type={Link} style={styles.action}>
-						<Text style={styles.actionText}>Share with your friends!</Text>
-						<View style={styles.actionShare}>Share</View>
-					</ShareButton>
+					</Link>
 					<Link href="/events" style={styles.action}>
 						<Text style={styles.actionText}>See what&apos;s happening nearby!</Text>
 						<View style={styles.actionNearby}>Nearby Events</View>
@@ -101,10 +95,6 @@ class About extends React.Component {
 						<Text style={styles.actionText}>Got ideas? Found a bug? Want to say hi?</Text>
 						<View style={styles.actionFeedback}>Send Feedback</View>
 					</Link>
-					{!user && <Link href="/facebook/login" style={styles.action}>
-						<Text style={styles.actionText}>Sign up so you we can let you know when things really kick off!</Text>
-						<View style={styles.actionSignup}>Sign up</View>
-					</Link>}
 				</Section>
 			</View>
 		)

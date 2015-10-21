@@ -49,11 +49,11 @@ class EventList extends React.Component {
 						<Text style={styles.noEvents}>
 							{this.props.noEventsText}
 						</Text>
-					) :	(user ? <Text style={styles.noEvents}>
-							There are currently no events nearby.  Try increasing your radius or <Link style={styles.createLink} href="/create/event">create your own event</Link>.
-						</Text> : <Text style={styles.noEvents}>
-							There are currently no events nearby.  Try increasing your radius.
-						</Text>)
+					) :	(
+						<Text style={styles.noEvents}>
+							Nothing&apos;s happening nearby.  Why not <Link style={styles.createLink} href="/create/event">create your own event</Link>?
+						</Text>
+					)
 				)}
 			</Section>
 		)

@@ -21,7 +21,8 @@ router.post('/auth/guest', jsonParser, function(req, res, next) {
 			first: req.body.name,
 			full: req.body.name
 		},
-		isGuest: true
+		isGuest: true,
+		events:[]
 	}
 
 	return r.table('users').insert(user).run(connection).then(function(result) {

@@ -6,6 +6,7 @@ var React = require('react')
   , Text = require('../core/text')
   , FacebookLoginButton = require('../button/facebook-login-button')
   , ShareButton = require('../button/share-button')
+  , UserActionButton = require('../button/user-action-button')
   , MediaQuery = require('react-responsive')
 
 var styles = {}
@@ -120,10 +121,10 @@ class AttendAndInvite extends React.Component {
 					<Text style={styles.buttonText}>Bail</Text>
 				</ButtonElement>
 			) : (
-				<ButtonElement style={transformStyles(styles.joinButton)} href={'/event/'+event.id+'/join'}>
+				<UserActionButton user={user} type={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
 					<Text style={styles.buttonText}>Count me in!</Text>
 					{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
-				</ButtonElement>
+				</UserActionButton>
 			),
 			<ShareButton type={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
 				<Text style={styles.buttonText}>{attending || isInline ? 'Invite Friends' : 'Invite'}</Text>

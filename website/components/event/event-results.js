@@ -129,9 +129,9 @@ class EventResults extends React.Component {
 						<Input type="hidden" name="location" value={JSON.stringify(location)} ref="location" />
 					</Form>
 					<View style={styles.spacer} />
-					{user && <View style={styles.buttonContainer}>
+					<View style={styles.buttonContainer}>
 						<Button src="/images/create.png" href="/create/event">Create an event</Button>
-					</View>}
+					</View>
 				</Section>
 
 				{this.props.location ? 
