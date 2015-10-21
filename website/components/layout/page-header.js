@@ -5,6 +5,7 @@ var React = require('react')
   , Image = require('../core/image')
   , Button = require('../core/button')
   , View = require('../core/view')
+  , Avatar = require('../core/avatar')
   , UserActionButton = require('../button/user-action-button')
 
 var styles = {}
@@ -58,8 +59,7 @@ styles.signUp = {
 
 styles.avatar = {
 	width:36,
-	height:36,
-	borderRadius:4
+	height:36
 }
 
 class Header extends React.Component {
@@ -77,7 +77,7 @@ class Header extends React.Component {
 				<View style={styles.nav}>
 					<Link href="/events" style={styles.navLink}>Nearby</Link>
 					<UserActionButton type={Link} user={user} style={styles.signUp} action="/profile/me" actionName="Sign Up">
-						<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+(user && user.fbid)+'/picture'} />
+						<Avatar style={styles.avatar} user={user} />
 					</UserActionButton>
 				</View>
 			</Section>

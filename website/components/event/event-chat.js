@@ -6,7 +6,7 @@ var React = require('react')
   , Text = require('../core/text')
   , Form = require('../core/form')
   , Link = require('../core/link')
-  , Image = require('../core/image')
+  , Avatar = require('../core/avatar')
   , Input = require('../core/input')
   , FlatButton = require('../core/flat-button')
   , timeUtil = require('../../util/time')
@@ -188,8 +188,8 @@ styles.myMessageAvatar = {
 }
 
 styles.messageAvatarImage = {
-	width:45,
 	height:45,
+	width:45,
 	borderRadius:4
 }
 
@@ -216,7 +216,7 @@ class Message extends React.Component {
 		return (
 			<View style={styles.message}>
 				<Link style={isOwner ? styles.myMessageAvatar : styles.messageAvatar} href={'/profile/'+message.user.id}>
-					<Image style={styles.messageAvatarImage} src={'https://graph.facebook.com/'+message.user.fbid+'/picture'} />
+					<Avatar style={styles.messageAvatarImage} user={message.user} />
 				</Link>
 				<View style={isOwner ? styles.myMessageContent : styles.messageContent}>
 					<Text>

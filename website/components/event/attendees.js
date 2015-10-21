@@ -1,7 +1,7 @@
 var React = require('react')
   , Section = require('../layout/section')
   , Heading = require('../layout/heading')
-  , Image = require('../core/image')
+  , Avatar = require('../core/avatar')
   , Text = require('../core/text')
   , Link = require('../core/link')
   , View = require('../core/view')
@@ -24,9 +24,9 @@ styles.attendee = {
 }
 
 styles.picture = {
-	height: 35,
+	width:35,
+	height:35,
 	marginRight: 5,
-	borderRadius:4
 }
 
 class Attendees extends React.Component {
@@ -52,7 +52,7 @@ class Attendees extends React.Component {
 				<View style={styles.container}>
 					{attendees.map(attendee =>
 						<Link style={styles.attendee} href={'/profile/'+attendee.id}>
-							<Image style={styles.picture} src={'https://graph.facebook.com/'+attendee.fbid+'/picture'} />
+							<Avatar style={styles.picture} user={attendee} />
 							<Text>{attendee.name.first}</Text>
 						</Link>
 					)}

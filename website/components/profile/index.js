@@ -3,7 +3,7 @@ var React = require('react')
   , Section = require('../layout/section')
   , EventList = require('../event/event-list')
   , FacebookLoginButton = require('../button/facebook-login-button')
-  , Image = require('../core/image')
+  , Avatar = require('../core/avatar')
   , Text = require('../core/text')
   , Link = require('../core/link')
 
@@ -45,7 +45,7 @@ class Profile extends React.Component {
 		return (
 			<Layout user={user}>
 				<Section style={styles.header}>
-					<Image style={styles.photo} src={'https://graph.facebook.com/v2.3/'+profileUser.fbid+'/picture?width=150&height=150'} />
+					<Avatar style={styles.photo} user={profileUser} />
 					<Text style={styles.name}>{profileUser.name.full}</Text>
 					{user && !user.isGuest && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
 				</Section>
