@@ -26,6 +26,5 @@ app.use(router)
 
 app.listen(config.api.port, function(err) {
 	if(err) throw err
-	var { protocol, host, port } = config.api
-	console.log('api running at', protocol+'://'+host+(port==80 ? '' : ':'+port ))
+	console.log('api running at', config.api.protocol+'://'+config.api.host+(config.api.port==80 ? '' : ':'+config.api.port ))
 })

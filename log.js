@@ -18,9 +18,9 @@ var path = require('path')
 				stack = stack.slice(1)
 			}
 			var args = [].slice.apply(arguments).concat([format(stack[1].trim()).gray.italic])
-			return log(...args)
+			return log.apply(console, args)
 		} catch(e) { 
-			return log(...arguments)
+			return log.apply(console, arguments)
 		}
 	}
 })
