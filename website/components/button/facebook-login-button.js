@@ -32,19 +32,51 @@ styles.avatar = {
 }
 
 class FacebookLoginButton extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.state = {}
+	}
+	login() {
+		this.setState({ loading:true })
+		FB.login(response => {
+			if(response.status != 'connected') {
+				return this.setState({ loading:false })
+			}
+
+			api.post('/auth/facebook?access_token='+response.authResponse.accessToken).then(res => {
+				window.user = res.user
+				this.setState({ loading:false })
+				this.props.onLogin && this.props.onLogin(res.user)
+			}).catch(() => {
+				this.setState({ loading:false })
+			})
+		}, {scope: 'public_profile,email'})
+	}
+	logout() {
+		this.setState({ loading:true })
+		FB.logout(response => {
+			if(response.status == 'connected') {
+				return this.setState({ loading:false })
+			}
+
+			this.api.del('/auth').then(res => {
+				window.user = undefined
+				this.setState({ loading:false })
+				app.refresh()
+			}).catch(() => {
+				this.setState({ loading:false })
+			})
+		})
+	}
 	render() {
-		var text = this.props.children ? this.props.children : this.props.user ? 'Log out' : 'Log in' 
-		  , href = '/facebook/' + (this.props.user ? 'logout' : 'login')
-
-		if(this.props.avatar && this.props.user) return (
-			<Link href={'/profile/'+this.props.user.id}>
-				<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+this.props.user.fbid+'/picture'} />
-			</Link>
-		)
-
+		var { user, children } = this.props
+		  , action = user ? this.logout.bind(this) : this.login.bind(this)
+		  , text = children || 'Facebook'
+		
 		return (
-			<Button href={href} src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }}>
-				{text}
+			<Button onClick={action} loading={this.state.loading} src="/images/facebook-icon-white.png" style={{ ...styles.facebookButton, ...this.props.style }}>
+				text
 			</Button>
 		)
 	}

@@ -58,6 +58,9 @@ class Modal extends React.Component {
 			document.body.style.overflow = 'auto'
 		}
 	}
+	stopPropagation(e) {
+		e.stopPropagation()
+	}
 	overlayClose(e) {
 		if(e.target == e.currentTarget) {
 			this.props.onRequestClose && this.props.onRequestClose()
@@ -67,7 +70,7 @@ class Modal extends React.Component {
 		var { style, isOpen, ...props } = this.props
 		return !!this.props.isOpen && (
 			<View style={styles.overlay} onClick={this.overlayClose.bind(this)}>
-				<View style={{ ...styles.modal, ...style }} {...props} />
+				<View style={{ ...styles.modal, ...style }} {...props} onMouseDown={this.stopPropagation} />
 			</View>
 		)
 	}

@@ -50,6 +50,12 @@ router.use(function(next) {
 	next()
 })
 
+router.on('/profile/me', function(next) {
+	if(!this.props.user) return this.render(Four0Four, {})
+
+	this.redirect('/profile/'+this.props.user.id)
+})
+
 router.on('/profile/:id', function(next) {
 	this.api.get('/users/'+this.params.id).then(profileUser => {
 		this.render(Profile, { profileUser })
@@ -92,65 +98,6 @@ router.on('/events', function(next) {
 	}
 		
 })
-
-
-router.on('/facebook/login', function(next) {
-	if(__SERVER__) {
-		this.req.session.facebookReferrer = this.req.header('Referrer')
-		this.redirect("https://www.facebook.com/dialog/oauth?client_id="+config.facebook.appId+"&redirect_uri="+this.site+"/facebook/callback&response_type=code&scope=public_profile,email")
-	}
-
-	if(__BROWSER__) {
-		FB.login(response => {
-			if(response.status != 'connected') {
-				return next(new Error('Login Failed...'))
-			}
-
-			this.api.post('/auth?access_token='+response.authResponse.accessToken).then(res => {
-				window.user = res.user
-				this.redirect(window.location.href)
-			}).catch(next)
-		}, {scope: 'public_profile,email'})
-	}
-})
-
-router.on('/facebook/logout', function(next) {
-	if(__SERVER__) {
-		this.api.del('/auth').then(res => {
-			this.redirect('https://www.facebook.com/logout.php?next='+encodeURIComponent(this.req.header('referrer'))+'&access_token='+this.req.session.token)
-		})
-	}
-
-	if(__BROWSER__) {
-		FB.logout(response => {
-			if(response.status == 'connected') {
-				return next(new Error('Logout Failed...'))
-			}
-
-			this.api.del('/auth').then(res => {
-				window.user = undefined
-				this.redirect(window.location.href)	
-			}).catch(next)
-		})
-	}
-})
-
-if(__SERVER__) {
-	router.on('/facebook/callback', function(next) {
-		fb.get('/oauth/access_token').query({
-			client_id: config.facebook.appId,
-			redirect_uri: this.site+'/facebook/callback',
-			client_secret: config.facebook.appSecret,
-			code: this.req.query.code
-		}).end((err, response) => {
-			if(err) return next(err)
-			
-			this.api.post('/auth?'+response.text).then(() => {
-				this.redirect(this.req.session.facebookReferrer)
-			}).catch(next)
-		})
-	})
-}
 
 router.on('/event/:id', function(next) {
 	this.api.get('/events/'+this.params.id).then(event => {

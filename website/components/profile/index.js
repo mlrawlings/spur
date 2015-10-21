@@ -47,7 +47,7 @@ class Profile extends React.Component {
 				<Section style={styles.header}>
 					<Image style={styles.photo} src={'https://graph.facebook.com/v2.3/'+profileUser.fbid+'/picture?width=150&height=150'} />
 					<Text style={styles.name}>{profileUser.name.full}</Text>
-					{user && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
+					{user && !user.isGuest && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
 				</Section>
 
 				<EventList events={events} location={this.props.location} noEventsText={(user && profileUser.id == user.id) ? 'You have not gone to any events yet.' : (user && profileUser.id != user.id ? 'You and ' + profileUser.name.first + ' have not gone to any events together yet.' : ('Login to see events that you and '+profileUser.name.first+' have gone to together.'))} />

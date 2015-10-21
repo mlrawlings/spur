@@ -3,7 +3,9 @@ var React = require('react')
   , Section = require('./section')
   , Link = require('../core/link')
   , Image = require('../core/image')
+  , Button = require('../core/button')
   , View = require('../core/view')
+  , UserActionButton = require('../button/user-action-button')
 
 var styles = {}
 
@@ -49,7 +51,21 @@ styles.login = {
 	marginLeft:'4%'
 }
 
+styles.signUp = {
+	cursor: 'pointer',
+	marginLeft:16
+}
+
+styles.avatar = {
+	width:36,
+	height:36,
+	borderRadius:4
+}
+
 class Header extends React.Component {
+	onLogin() {
+		app.refresh()
+	}
 	render() {
 		var user = this.props.user
 
@@ -60,7 +76,9 @@ class Header extends React.Component {
 				</Link>
 				<View style={styles.nav}>
 					<Link href="/events" style={styles.navLink}>Nearby</Link>
-					<FacebookLoginButton style={styles.login} user={user} avatar={true} />
+					<UserActionButton type={Link} user={user} style={styles.signUp} action="/profile/me" actionName="Sign Up">
+						<Image style={styles.avatar} src={'https://graph.facebook.com/v2.3/'+(user && user.fbid)+'/picture'} />
+					</UserActionButton>
 				</View>
 			</Section>
 		)

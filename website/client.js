@@ -43,10 +43,10 @@ window.fbAsyncInit = function() {
 		if(response.status == 'connected') {
 			var userId = response.authResponse.userID
 			
-			api.post('/auth?access_token='+response.authResponse.accessToken).then(res => {
+			api.post('/auth/facebook?access_token='+response.authResponse.accessToken).then(res => {
 				window.user = res.user
 			}).catch(e => console.error(e.stack))
-		} else {
+		} else if(window.user && !window.user.isGuest) {
 			api.del('/auth').then(res => {
 				window.user = undefined 
 			}).catch(e => console.error(e.stack))

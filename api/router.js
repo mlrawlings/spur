@@ -13,7 +13,30 @@ r.connect(config.rethink).then(function(conn) {
 	connection = conn
 })
 
-router.post('/auth'/*, session*/, function(req, res, next) {
+router.post('/auth/guest', jsonParser, function(req, res, next) {
+	if(req.session.user) return next(new Error('You are currently logged in.'))
+
+	var user = {
+		name: {
+			first: req.body.name,
+			full: req.body.name
+		},
+		isGuest: true
+	}
+
+	return r.table('users').insert(user).run(connection).then(function(result) {
+		user.id = result.generated_keys[0]
+		return user
+	}).then(function(user) {
+		req.session.user = user
+		res.json({ user:user })
+	}).catch(function(err) {
+		console.error(err)
+		next(err)
+	})
+})
+
+router.post('/auth/facebook'/*, session*/, function(req, res, next) {
 	var access_token, fbUser
 	fb.exchangeToken(req.query.access_token).then(function(_result) {
 		access_token = _result
