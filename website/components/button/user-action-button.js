@@ -38,18 +38,24 @@ class UserActionButton extends React.Component {
 	render() {
 		var { user, action, style, actionName, type, children, ...buttonProps } = this.props
 		  , Type = this.props.type || Button
+		  , { order, flex, flexGrow, flexShrink, flexBasis, alignSelf, ...buttonStyles } = style
+		  , wrapperStyles = { order, flex, flexGrow, flexShrink, flexBasis, alignSelf }
+
+		buttonStyles.flexGrow = 1
+
+		Object.keys(wrapperStyles).forEach(function(style) {
+			if(wrapperStyles[style] === undefined) delete wrapperStyles[style]
+		})
 
 		return (
-			<View>
-				<View>
-					<Type {...buttonProps} loading={this.state.loading} style={style} onClick={this.performAction.bind(this, user)}>
-						{children || actionName}
-					</Type>
-					<SignUpModal isOpen={this.state.modalIsOpen} onRequestClose={this.closeModal.bind(this)}
-						actionName={actionName}
-						actionColor={(style && style.backgroundColor) || 'rgb(4, 190, 202)'}
-						onLogin={this.performAction.bind(this)} />
-				</View>
+			<View style={wrapperStyles}>
+				<Type {...buttonProps} loading={this.state.loading} style={style} onClick={this.performAction.bind(this, user)}>
+					{children || actionName}
+				</Type>
+				<SignUpModal isOpen={this.state.modalIsOpen} onRequestClose={this.closeModal.bind(this)}
+					actionName={actionName}
+					actionColor={(style && style.backgroundColor) || 'rgb(4, 190, 202)'}
+					onLogin={this.performAction.bind(this)} />
 			</View>
 		)
 	}
