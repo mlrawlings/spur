@@ -48,7 +48,8 @@ class FacebookLoginButton extends React.Component {
 				window.user = res.user
 				this.setState({ loading:false })
 				this.props.onLogin && this.props.onLogin(res.user)
-			}).catch(() => {
+			}).catch((e) => {
+				alert(e.response && e.response.text)
 				this.setState({ loading:false })
 			})
 		}, {scope: 'public_profile,email'})
