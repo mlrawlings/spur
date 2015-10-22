@@ -15,8 +15,7 @@ var styles = {}
 
 styles.container = {
 	flex:1,
-	backgroundColor:'#eaeaea',
-	maxHeight:350
+	backgroundColor:'#eaeaea'
 }
 
 styles.containerExpanded = {
@@ -78,7 +77,7 @@ styles.messages = {
 	paddingTop:10,
 	paddingBottom:0,
 	flexGrow:1,
-	height:250,
+	flexBasis:250,
 	overflow:'hidden'
 }
 
@@ -210,7 +209,13 @@ styles.myMessageContent = {
 
 styles.messageName = {
 	fontSize:10,
-	color:'#888'
+	color:'#777',
+	marginRight:4
+}
+
+styles.messageTime = {
+	fontSize:10,
+	color:'#aaa'
 }
 
 styles.messageText = {
@@ -230,6 +235,7 @@ class Message extends React.Component {
 				<View style={isOwner ? styles.myMessageContent : styles.messageContent}>
 					<Text>
 						<Text style={styles.messageName}>{message.user.name.first}</Text> 
+						<Text style={styles.messageTime}>{timeUtil.format(message.time)}</Text>
 					</Text>
 					<Text style={styles.messageText}>{message.message}</Text>
 				</View>
@@ -238,19 +244,23 @@ class Message extends React.Component {
 	}
 }
 
-styles.form = {
-	flexDirection:'row',
+styles.formContainer = {
 	backgroundColor:'#fff',
 	borderTopWidth:1,
 	borderTopColor:'#ddd',
-	alignItems:'center',
-	paddingLeft:5,
-	paddingRight:5,
+	paddingTop:0,
+	paddingBottom:0,
 	zIndex:2
+}
+styles.form = {
+	flexDirection:'row',
+	alignItems:'center'
 }
 styles.messageInput = {
 	flex:1,
-	padding:'3%',
+	marginLeft:'-3%',
+	paddingLeft:'3%',
+	paddingRight:'3%',
 	paddingTop:10,
 	paddingBottom:10,
 	borderWidth:0,
@@ -260,7 +270,8 @@ styles.messageInput = {
 }
 styles.messageButton = {
 	backgroundColor:'transparent',
-	padding: '3%'
+	marginRight: '-3%',
+	paddingRight: '3%'
 }
 styles.messageButtonText = {
 	color:'#04beca'
@@ -308,12 +319,14 @@ class MessageForm extends React.Component {
 		  , { hasValue, loading } = this.state
 
 		return (
-			<Form style={styles.form} onSubmit={this.submitMessage.bind(this)} ref="form" action={'/event/'+event.id+'/post'}>
-				<Input onFocus={onFocus} type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
-				<FlatButton onClick={this.refocus.bind(this)} loading={loading} style={styles.messageButton} type="submit">
-					<Text style={hasValue ? styles.messageButtonText : styles.messageButtonTextDisabled}>Send</Text>
-				</FlatButton>
-			</Form>
+			<Section style={styles.formContainer}>
+				<Form style={styles.form} onSubmit={this.submitMessage.bind(this)} ref="form" action={'/event/'+event.id+'/post'}>
+					<Input onFocus={onFocus} type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
+					<FlatButton onClick={this.refocus.bind(this)} loading={loading} style={styles.messageButton} type="submit">
+						<Text style={hasValue ? styles.messageButtonText : styles.messageButtonTextDisabled}>Send</Text>
+					</FlatButton>
+				</Form>
+			</Section>
 		)
 	}
 }
