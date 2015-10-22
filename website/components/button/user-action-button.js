@@ -10,11 +10,11 @@ var styles = {}
 class UserActionButton extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { modalIsOpen:false }
+		this.state = { opener:false }
 	}
 	performAction(user) {
 		if(!user) {
-			return this.setState({ modalIsOpen:true })
+			return this.setState({ opener:this.refs.button })
 		}
 
 		var fn = typeof this.props.action == 'function'
@@ -24,16 +24,16 @@ class UserActionButton extends React.Component {
 		if(fn.length) {
 			this.setState({ loading:true })
 			fn(() => {
-				this.setState({ loading:false, modalIsOpen:false })
+				this.setState({ loading:false, opener:false })
 				this.props.onRequestClose && this.props.onRequestClose()
 			})
 		} else {
 			fn()
-			this.setState({ modalIsOpen:false })
+			this.setState({ opener:false })
 		}
 	}
 	closeModal() {
-		this.setState({ modalIsOpen:false })
+		this.setState({ opener:false })
 	}
 	render() {
 		var { user, action, style, actionName, type, children, ...buttonProps } = this.props
@@ -49,10 +49,10 @@ class UserActionButton extends React.Component {
 
 		return (
 			<View style={wrapperStyles}>
-				<Type {...buttonProps} loading={this.state.loading} style={style} onClick={this.performAction.bind(this, user)}>
+				<Type ref="button" {...buttonProps} loading={this.state.loading} style={style} onClick={this.performAction.bind(this, user)}>
 					{children || actionName}
 				</Type>
-				<SignUpModal isOpen={this.state.modalIsOpen} onRequestClose={this.closeModal.bind(this)}
+				<SignUpModal openedBy={this.state.opener} onRequestClose={this.closeModal.bind(this)}
 					actionName={actionName}
 					actionColor={(style && style.backgroundColor) || 'rgb(4, 190, 202)'}
 					onLogin={this.performAction.bind(this)} />
