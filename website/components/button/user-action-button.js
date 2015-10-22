@@ -11,24 +11,31 @@ class UserActionButton extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = { opener:false }
+		this.setFunction(props.action) 
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setFunction(nextProps.action)
+	}
+	trigger(fn) {
+		this.fn = fn
+		this.performAction(this.props.user)
+	}
+	setFunction(action) {
+		this.fn = typeof action == 'function' ? action : (done) => app.navigate(action).then(done)
 	}
 	performAction(user) {
 		if(!user) {
 			return this.setState({ opener:this.refs.button })
 		}
 
-		var fn = typeof this.props.action == 'function'
-			? this.props.action
-			: (done) => app.navigate(this.props.action).then(done)
-
-		if(fn.length) {
+		if(this.fn.length) {
 			this.setState({ loading:true })
-			fn(() => {
+			this.fn(() => {
 				this.setState({ loading:false, opener:false })
 				this.props.onRequestClose && this.props.onRequestClose()
 			})
 		} else {
-			fn()
+			this.fn()
 			this.setState({ opener:false })
 		}
 	}
@@ -36,9 +43,9 @@ class UserActionButton extends React.Component {
 		this.setState({ opener:false })
 	}
 	render() {
-		var { user, action, style, actionName, type, children, ...buttonProps } = this.props
-		  , Type = this.props.type || Button
-		  , { order, flex, flexGrow, flexShrink, flexBasis, alignSelf, ...buttonStyles } = style
+		var { user, action, style, actionName, tag, children, ...buttonProps } = this.props
+		  , Type = this.props.tag || Button
+		  , { order, flex, flexGrow, flexShrink, flexBasis, alignSelf, ...buttonStyles } = style || {}
 		  , wrapperStyles = { order, flex, flexGrow, flexShrink, flexBasis, alignSelf }
 
 		buttonStyles.flexGrow = 1
@@ -49,12 +56,12 @@ class UserActionButton extends React.Component {
 
 		return (
 			<View style={wrapperStyles}>
-				<Type ref="button" {...buttonProps} loading={this.state.loading} style={style} onClick={this.performAction.bind(this, user)}>
+				<Type ref="button" {...buttonProps} loading={this.state.loading} style={style} onClick={action && this.performAction.bind(this, user)}>
 					{children || actionName}
 				</Type>
 				<SignUpModal openedBy={this.state.opener} onRequestClose={this.closeModal.bind(this)}
 					actionName={actionName}
-					actionColor={(style && style.backgroundColor) || 'rgb(4, 190, 202)'}
+					actionColor={'rgb(4, 190, 202)'}
 					onLogin={this.performAction.bind(this)} />
 			</View>
 		)

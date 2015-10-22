@@ -1,3 +1,5 @@
+const ENTER = 13
+
 var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
@@ -69,8 +71,10 @@ class SignUpModal extends React.Component {
 		if(e.target.value) this.setState({ disabled:false })
 		else this.setState({ disabled:true })
 	}
-	onSubmit(e) {
-		e.preventDefault()
+	submitIfEnter(e) {
+		if(e.which == ENTER) this.submit()
+	}
+	submit() {
 		this.setState({ loading:true })
 		api.post('/auth/guest').send({ name:React.findDOMNode(this.refs.name).value }).then((res) => {
 			window.user = res.user
@@ -90,12 +94,12 @@ class SignUpModal extends React.Component {
 				</Modal.Header>
 				<Modal.Body>
 					<Label required={true}>No. My first name is...</Label>
-					<Form action="/guest" onSubmit={this.onSubmit.bind(this)} style={styles.nameContainer}>
-						<Input ref="name" name="name" onChange={this.onInputChange.bind(this)} style={styles.name} type="text" value={this.state.value} />
-						<FlatButton loading={this.state.loading} type="submit" disabled={this.state.disabled} style={styles.action}>
+					<View style={styles.nameContainer}>
+						<Input ref="name" name="name" onKeyDown={this.submitIfEnter.bind(this)} onChange={this.onInputChange.bind(this)} style={styles.name} type="text" value={this.state.value} />
+						<FlatButton onClick={this.submit.bind(this)} loading={this.state.loading} type="submit" disabled={this.state.disabled} style={styles.action}>
 							<Text style={styles.actionText}>{actionName}</Text>
 						</FlatButton>
-					</Form>
+					</View>
 					<View style={styles.loginOrSignUpTextContainer}>
 						<View style={styles.loginOrSignUpText}>or login/sign up with</View>
 					</View>

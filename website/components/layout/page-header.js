@@ -76,7 +76,7 @@ class Header extends React.Component {
 				</Link>
 				<View style={styles.nav}>
 					<Link href="/events" style={styles.navLink}>Nearby</Link>
-					<UserActionButton type={Link} user={user} style={styles.signUp} action="/profile/me" actionName="Sign Up">
+					<UserActionButton tag={Link} user={user} style={styles.signUp} action="/profile/me" actionName="Sign Up">
 						<Avatar style={styles.avatar} user={user} />
 					</UserActionButton>
 				</View>

@@ -9,6 +9,7 @@ var React = require('react')
   , Avatar = require('../core/avatar')
   , Input = require('../core/input')
   , FlatButton = require('../core/flat-button')
+  , UserActionButton = require('../button/user-action-button')
   , timeUtil = require('../../util/time')
 
 var styles = {}
@@ -305,10 +306,12 @@ class MessageForm extends React.Component {
 		  , form = React.findDOMNode(this.refs.form)
 		
 		if(React.findDOMNode(this.refs.message).value.trim()) {
-			this.setState({ loading:true })
-			app.submit(form).then(() => {
-				form.reset()
-				this.setState({ hasValue:false, loading:false })
+			this.refs.userActionButton.trigger((done) => {
+				app.submit(form).then(() => {
+					form.reset()
+					this.setState({ hasValue:false })
+					done()
+				}).catch(done)
 			})
 		}
 
@@ -316,15 +319,15 @@ class MessageForm extends React.Component {
 	}
 	render() {
 		var { event, user, onFocus } = this.props
-		  , { hasValue, loading } = this.state
+		  , { hasValue } = this.state
 
 		return (
 			<Section style={styles.formContainer}>
 				<Form style={styles.form} onSubmit={this.submitMessage.bind(this)} ref="form" action={'/event/'+event.id+'/post'}>
 					<Input onFocus={onFocus} type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
-					<FlatButton onClick={this.refocus.bind(this)} loading={loading} style={styles.messageButton} type="submit">
+					<UserActionButton ref="userActionButton" tag={FlatButton} onClick={this.refocus.bind(this)} actionName="Send" style={styles.messageButton} type="submit" user={user}>
 						<Text style={hasValue ? styles.messageButtonText : styles.messageButtonTextDisabled}>Send</Text>
-					</FlatButton>
+					</UserActionButton>
 				</Form>
 			</Section>
 		)

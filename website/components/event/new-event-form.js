@@ -11,6 +11,7 @@ var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
   , timeUtil = require('../../util/time')
+  , UserActionButton = require('../button/user-action-button')
 
 var styles = {}
 
@@ -105,6 +106,13 @@ class NewEventForm extends React.Component {
 	hideMax() {
 		this.setState({ showMax:false })
 	}
+	submit(e) {
+		e.preventDefault()
+
+		this.refs.userActionButton.trigger((done) => {
+			app.submit(React.findDOMNode(this.refs.form)).then(done).catch(done)
+		})
+	}
 	render() {
 		var { location, time } = this.state
 		  , event = this.props.event
@@ -115,7 +123,7 @@ class NewEventForm extends React.Component {
 		return (
 			<Layout user={this.props.user}>
 				<Section>
-					<Form action={event ? '/event/'+event.id+'/edit' : '/create/event'}>
+					<Form ref="form" onSubmit={this.submit.bind(this)} action={event ? '/event/'+event.id+'/edit' : '/create/event'}>
 						<View style={styles.field}>
 							<Label required={true}>Event Name</Label>
 							<Input style={styles.titleInput} defaultValue={event && event.name} onKeyDown={this.preventSubmit.bind(this)} maxLength={64} name="name" type="text" placeholder="Name this event..." required={true} />
@@ -175,8 +183,11 @@ class NewEventForm extends React.Component {
 							<Label>Additional Details</Label>
 							<Input type="textarea" name="details" defaultValue={event && event.details} style={Input.style} placeholder="Anthing else people need to know..." />
 						</View>
+
 						<View style={styles.actions}>
-							<Button src="/images/create.png" type="submit">{event ? 'Save Event' : 'Create Event'}</Button>
+							<UserActionButton ref="userActionButton" tag={Button} src="/images/create.png" type='submit' user={this.props.user} actionName={event ? 'Save Event' : 'Create Event'}>
+								{event ? 'Save Event' : 'Create Event'}
+							</UserActionButton>
 						</View>
 					</Form>
 				</Section>

@@ -82,7 +82,7 @@ router.post('/auth/facebook'/*, session*/, function(req, res, next) {
 					return user
 				})
 			}
-		} else if(req.session.user) {
+		} else if(req.session.user && req.session.user.fbid != user.fbid) {
 			throw new Error('Facebook user already associated with a spur account')
 		}
 
