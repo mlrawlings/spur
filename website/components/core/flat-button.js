@@ -36,11 +36,6 @@ styles.loadingContainer = {
 	alignItems: 'center'
 }
 
-styles.loadingContainerLeft = {
-	...styles.loadingContainer,
-	alignItems:'flex-start'
-}
-
 class FlatButton extends React.Component {
 	constructor(props) {
 		super(props)
