@@ -6,6 +6,7 @@ var React = require('react')
   , Avatar = require('../core/avatar')
   , Text = require('../core/text')
   , Link = require('../core/link')
+  , View = require('../core/view')
   , LogoutButton = require('../button/logout-button')
 
 var styles = {}
@@ -35,6 +36,24 @@ styles.logout = {
 	marginTop:5
 }
 
+styles.guestText = {
+	color: '#fff',
+	alignItems: 'center',
+	justifyContent: 'center'
+}
+
+styles.buttons = {
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'center'
+}
+
+styles.logoutButton = {
+	fontSize: 14,
+	marginLeft: 20,
+	marginRight: 20
+}
+
 class Profile extends React.Component {
 	onLogin() {
 		app.refresh()
@@ -53,8 +72,22 @@ class Profile extends React.Component {
 					<Text style={styles.name}>{profileUser.name.full}</Text>
 					{user && !user.isGuest && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
 					
-					{user && user.isGuest && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} onLogin={this.onLogin}>Connect with Facebook</FacebookLoginButton>}
-					{user && user.isGuest && profileUser.id == user.id && <LogoutButton>Logout</LogoutButton>}
+
+					{user && user.isGuest && profileUser.id == user.id && <View>
+						<View style={styles.guestText}>
+							<Text style={styles.guestText}>
+								This is a guest account.
+							</Text>
+							<Text style={styles.guestText}>
+								Connect to Facebook in order to save your account.
+							</Text>
+						</View>
+						<View style={styles.buttons}>
+							<FacebookLoginButton style={styles.logout} onLogin={this.onLogin}>Connect with Facebook</FacebookLoginButton>
+							<LogoutButton style={styles.logoutButton}>Logout</LogoutButton>
+						</View>
+					</View>
+					}
 				</Section>
 
 				<EventList events={events} location={this.props.location} noEventsText={(user && profileUser.id == user.id) ? 'You have not gone to any events yet.' : (user && profileUser.id != user.id ? 'You and ' + profileUser.name.first + ' have not gone to any events together yet.' : ('Login to see events that you and '+profileUser.name.first+' have gone to together.'))} />
