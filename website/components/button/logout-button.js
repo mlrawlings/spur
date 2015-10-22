@@ -15,11 +15,11 @@ class ShareButton extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			modalIsOpen:false
+			opener:false
 		}
 	}
 	logout() {
-		this.setState({ modalIsOpen:false })
+		this.setState({ opener:false })
 		console.log('logout')
 		api.delete('/auth').then(res => {
 			console.log('test')
@@ -28,20 +28,20 @@ class ShareButton extends React.Component {
 		})
 	}
 	openModal() {
-		this.setState({ modalIsOpen:true })
+		this.setState({ opener:this.refs.button })
 	}
 	closeModal() {
-		this.setState({ modalIsOpen:false })
+		this.setState({ opener:false })
 	}
 	render() {
 		var logoutButtonStyles = { ...this.props.style, ...styles.logoutButton }
 
 		return (
 			<View>
-				<Button style={logoutButtonStyles} onClick={this.openModal.bind(this)}>
+				<Button ref="button" style={logoutButtonStyles} onClick={this.openModal.bind(this)}>
 					{this.props.children}
 				</Button>
-				<ConfirmModal title="You will not be able to return to this guest account" isOpen={this.state.modalIsOpen} onRequestClose={this.closeModal.bind(this)}
+				<ConfirmModal title="You will not be able to return to this guest account" openedBy={this.state.opener} onRequestClose={this.closeModal.bind(this)}
 					onConfirm={this.logout.bind(this)} onCancel={this.closeModal.bind(this)} />
 			</View>
 		)
