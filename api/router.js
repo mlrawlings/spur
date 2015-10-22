@@ -51,8 +51,13 @@ router.post('/auth/facebook'/*, session*/, function(req, res, next) {
 			user = {
 				fbid:fbUser.id,
 				name: {},
-				events:[]
+				isGuest: false
 			}
+			
+			if(!req.session.user) {
+				user.events = []
+			}
+
 
 			if(fbUser.birthday) user.birthday = new Date(fbUser.birthday)
 			if(fbUser.email) user.email = fbUser.email
@@ -65,11 +70,22 @@ router.post('/auth/facebook'/*, session*/, function(req, res, next) {
 				user.location = JSON.parse(req.cookies.location)
 			} catch(e) {}
 
-			return r.table('users').insert(user).run(connection).then(function(result) {
-				user.id = result.generated_keys[0]
-				return user
-			})
+
+			if(req.session.user) {
+				return r.table('users').get(req.session.user.id).update(user).run(connection).then(function(result) {
+					user.id = req.session.user.id
+					return user
+				})
+			} else {
+				return r.table('users').insert(user).run(connection).then(function(result) {
+					user.id = result.generated_keys[0]
+					return user
+				})
+			}
+		} else if(req.session.user) {
+			throw new Error('Facebook user already associated with a spur account')
 		}
+
 		return user
 	}).then(function(user) {
 		req.session.user = user

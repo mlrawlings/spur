@@ -23,6 +23,9 @@ app.use(function(req, res, next) {
 
 app.use(session)
 app.use(router)
+app.use(function(err, req, res, next) {
+	res.status(500).send(err.message)
+})
 
 app.listen(config.api.port, function(err) {
 	if(err) throw err
