@@ -1,6 +1,7 @@
 var React = require('react')
   , View = require('./view')
   , Text = require('./text')
+  , MediaQuery = require('react-responsive')
 
 var styles = {}
 
@@ -13,6 +14,11 @@ styles.overlay = {
 	zIndex:10
 }
 
+styles.overlayActive = {
+	opacity:1,
+	backgroundColor:'rgba(0,0,0,0.25)',
+}
+
 styles.modal = {
 	backgroundColor:'#fff',
 	overflow:'auto',
@@ -22,6 +28,15 @@ styles.modal = {
 	width:450,
 	boxShadow:'0 2px 5px rgba(0,0,0,0.3)',
 	borderRadius:4
+}
+
+styles.modalDocked = {
+	backgroundColor:'#fff',
+	overflow:'auto',
+	width:'100%',
+	position:'fixed',
+	left:0, bottom:0,
+	boxShadow:'0 -2px 5px rgba(0,0,0,0.3)',
 }
 
 styles.header = {
@@ -69,8 +84,13 @@ class Modal extends React.Component {
 	render() {
 		var { style, isOpen, ...props } = this.props
 		return !!this.props.isOpen && (
-			<View style={styles.overlay} onClick={this.overlayClose.bind(this)}>
-				<View style={{ ...styles.modal, ...style }} {...props} onMouseDown={this.stopPropagation} />
+			<View style={styles.overlay} styleActive={styles.overlayActive} onClick={this.overlayClose.bind(this)}>
+				<MediaQuery query="(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)">
+					<View style={{ ...styles.modalDocked, ...style }} {...props} onMouseDown={this.stopPropagation} onTouchStart={this.stopPropagation} />
+				</MediaQuery>
+				<MediaQuery query="(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)" >
+					<View style={{ ...styles.modal, ...style }} {...props} onMouseDown={this.stopPropagation} onTouchStart={this.stopPropagation} />
+				</MediaQuery>
 			</View>
 		)
 	}

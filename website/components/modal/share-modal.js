@@ -74,9 +74,6 @@ class DownloadAndShare extends React.Component {
 
 		return (
 			<Modal {...this.props}>
-				<Modal.Header>
-					<Modal.Title>Invite Friends!</Modal.Title>
-				</Modal.Header>
 				<Modal.Body>
 					<Label required={true}>Share this link...</Label>
 					<View style={styles.copy}>
