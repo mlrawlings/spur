@@ -138,11 +138,20 @@ class EventChat extends React.Component {
 		this.shouldScrollBottom = true
 		this.setState({ expanded:true })
 		document.body.scrollTop = document.body.scrollHeight
+		this.toggleBodyScroll(false)
 	}
 	collapse() {
 		this.shouldScrollBottom = true
 		this.resetBodyScroll = true
 		this.setState({ expanded:false })
+		this.toggleBodyScroll(true)
+	}
+	toggleBodyScroll(allowScroll) {
+		if(allowScroll) {
+			document.body.style.overflow = 'auto'
+		} else {
+			document.body.style.overflow = 'hidden'
+		}
 	}
 	render() {
 		var { event, user } = this.props
