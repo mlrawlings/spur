@@ -1,11 +1,19 @@
+const DEFAULT_SIZE = 36
+
 var React = require('react')
   , Image = require('./image')
   , View = require('./view')
   , Text = require('./text')
   , ColorHash = require('color-hash')
-  , colors = new ColorHash()
+  , colors = new ColorHash({ hash })
 
-const DEFAULT_SIZE = 36
+function hash(str) {
+    var hash = 0
+    for(var i = 0; i < str.length; i++) {
+        hash = hash*11 + str.charCodeAt(i)
+    }
+    return hash
+}
 
 var styles = {}
 

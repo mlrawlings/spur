@@ -1,6 +1,5 @@
 var React = require('react')
   , Section = require('./section')
-  , Link = require('../core/link')
   , Text = require('../core/text')
 
 var styles = {}
@@ -30,7 +29,7 @@ class PageFooter extends React.Component {
 			<Section style={styles.footer}>
 				<Text style={styles.copyright}>
 					Made with &hearts; by Embark in Roanoke, VA. 
-					<Link style={styles.privacy} href="https://www.iubenda.com/privacy-policy/922529">Privacy Policy</Link>
+					<Text style={styles.privacy} href="https://www.iubenda.com/privacy-policy/922529">Privacy Policy</Text>
 				</Text>
 			</Section>
 		)
