@@ -281,7 +281,8 @@ styles.messageInput = {
 styles.messageButton = {
 	backgroundColor:'transparent',
 	marginRight: '-3%',
-	paddingRight: '3%'
+	paddingRight: '3%',
+	paddingLeft: '3%'
 }
 styles.messageButtonText = {
 	color:'#04beca'

@@ -66,7 +66,7 @@ class FlatButton extends React.Component {
 			<Touchable tag={tag} {...props} onClick={this.onClick.bind(this)} style={{ ...styles.button, ...style}}>
 				{children}
 				{loading && <View style={styles.loadingContainer}>
-					<Image style={styles.loadingImage} src={textColor.luminosity() > 0.8 ? "/images/white-tail-spin.svg" : "/images/black-tail-spin.svg"} />
+					<Image style={styles.loadingImage} src={styles.loadingContainer.backgroundColor && styles.loadingContainer.backgroundColor != 'transparent' && textColor.luminosity() > 0.8 ? "/images/white-tail-spin.svg" : "/images/black-tail-spin.svg"} />
 				</View>}
 			</Touchable>
 		)
