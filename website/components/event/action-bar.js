@@ -53,9 +53,20 @@ styles.slash = {
 	color: '#fff'
 }
 
+styles.eventOver = {
+	color: '#fff'
+}
+
 class ActionBar extends React.Component {
+	sixHoursFrom(time) {
+		time = new Date(time)
+		time.setHours(time.getHours()+6)
+
+		return time
+	}
 	render() {
 		var { location, events, user } = this.props
+		  , eventIsOver = (this.props.event.endTime ? this.props.event.endTime : this.sixHoursFrom(this.props.event.time)) < new Date()
 
 		styles.edit = { ...styles.edit, ...styles.action }
 		styles.cancel = { ...styles.cancel, ...styles.action }
@@ -65,14 +76,16 @@ class ActionBar extends React.Component {
 			<Section style={styles.actionSection}>
 				<Text style={styles.text}>You created this event.</Text>
 				<View style={styles.actions}>
-					{!this.props.event.cancelled ? (
+					{!eventIsOver && (!this.props.event.cancelled ? (
 						[<Link href={'/event/'+this.props.event.id+'/edit'} style={styles.edit}>Edit</Link>,
 						<Text style={styles.slash}>/</Text>,
 						<Link href={'/event/'+this.props.event.id+'/cancel'} style={styles.cancel}>Cancel</Link>]
 					)
 					: (
 						<Link href={'/event/'+this.props.event.id+'/uncancel'} style={styles.uncancel}>UnCancel</Link>
-					)}
+					))}
+
+					{eventIsOver && <Text style={styles.eventOver}>This event has ended.</Text>}
 				</View>
 			</Section>
 		)

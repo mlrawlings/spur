@@ -100,11 +100,20 @@ class AttendAndInvite extends React.Component {
 	componentWillUnmount() {
 		window.removeEventListener('scroll', this.scrollListener)
 	}
+	sixHoursFrom(time) {
+		time = new Date(time)
+		time.setHours(time.getHours()+6)
+
+		return time
+	}
 	renderButtons(ButtonElement, isInline) {
 		var { event, user } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , spotsRemaining = (event.max && event.max - event.attendees.length)
 		  , spotsReaminingText = spotsRemaining + (spotsRemaining == 1 ? ' spot' : ' spots') + ' remaining...'
+		  , eventIsOver = (event.endTime ? event.endTime : this.sixHoursFrom(event.time)) < new Date()
+		  , isAttendeeMax = !!(event.max && event.attendees.length >= event.max)
+		  , componentsToReturn = []
 
 		var transformStyles = (styles) => {
 			if(isInline) {
@@ -115,28 +124,29 @@ class AttendAndInvite extends React.Component {
 			return styles
 		}
 
-		if(!event.cancelled) return [
-			attending ? (
-				<ButtonElement style={transformStyles(styles.bailButton)} href={'/event/'+event.id+'/bail'}>
-					<Text style={styles.buttonText}>Bail</Text>
-				</ButtonElement>
-			) : (
-				<UserActionButton user={user} tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
-					<Text style={styles.buttonText}>Count me in!</Text>
-					{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
-				</UserActionButton>
-			),
-			<ShareButton tag={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
-				<Text style={styles.buttonText}>{attending || isInline ? 'Invite Friends' : 'Invite'}</Text>
-				{!isInline && attending && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
-			</ShareButton>
-		]
+		// Display Join
+		!event.cancelled && !eventIsOver && !attending && !isAttendeeMax && componentsToReturn.push(<UserActionButton user={user} tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
+			<Text style={styles.buttonText}>Count me in!</Text>
+			{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
+		</UserActionButton>)
 
-		return (
-			<View style={styles.cancelBanner}>
-				<Text style={styles.buttonText}>This event was cancelled</Text>
-			</View>
-		)
+		// Display Bail
+		!event.cancelled && !eventIsOver && attending && componentsToReturn.push(<ButtonElement style={transformStyles(styles.bailButton)} href={'/event/'+event.id+'/bail'}>
+			<Text style={styles.buttonText}>Bail</Text>
+		</ButtonElement>)
+
+		// Display Invite
+		!event.cancelled && !eventIsOver && !isAttendeeMax && componentsToReturn.push(<ShareButton tag={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
+			<Text style={styles.buttonText}>{attending || isInline ? 'Invite Friends' : 'Invite'}</Text>
+			{!isInline && attending && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
+		</ShareButton>)
+
+		// Event was cancelled
+		event.cancelled && componentsToReturn.push(<View style={styles.cancelBanner}>
+			<Text style={styles.buttonText}>This event was cancelled</Text>
+		</View>)
+
+		return componentsToReturn
 	}
 	render() {
 		var { event, user } = this.props
