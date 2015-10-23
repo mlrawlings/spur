@@ -1,3 +1,5 @@
+require('react-fastclick')
+
 var kent = require('kent/client')
   , kentReact = require('kent-react/client')
   , api = require('../api/client')
