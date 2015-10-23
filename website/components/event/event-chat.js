@@ -139,12 +139,21 @@ class EventChat extends React.Component {
 		this.setState({ expanded:true })
 		document.body.scrollTop = document.body.scrollHeight
 		this.toggleBodyScroll(false)
+		this.previousHash = window.location.hash
+		this.onHashChange = () => {
+		  	if(window.location.hash == this.previousHash) {
+				this.collapse()
+			}
+		}
+		window.location.hash = 'chat'
+		window.addEventListener('hashchange', this.onHashChange)
 	}
 	collapse() {
 		this.shouldScrollBottom = true
 		this.resetBodyScroll = true
 		this.setState({ expanded:false })
 		this.toggleBodyScroll(true)
+		window.removeEventListener('hashchange', this.onHashChange)
 	}
 	toggleBodyScroll(allowScroll) {
 		if(allowScroll) {
