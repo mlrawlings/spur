@@ -4,6 +4,7 @@ var React = require('react')
   , Image = require('../core/image')
   , View = require('../core/view')
   , Text = require('../core/text')
+  , Link = require('../core/link')
   , timeUtil = require('../../util/time')
   , locationUtil = require('../../util/location')
   , categories = require('../../data/categories')
@@ -13,6 +14,10 @@ var styles = {}
 styles.section = {
 	flexDirection:'row',
 	alignItems:'center'
+}
+
+styles.actionBar = {
+	backgroundColor: '#777'
 }
 
 styles.categoryText = {
@@ -59,48 +64,20 @@ styles.vertical.details = (backgroundColor) => ({
 	backgroundColor:Color(backgroundColor).darken(0.2).rgbString()
 })
 
-styles.horizontal = {}
-
-
-styles.horizontal.banner = (backgroundColor) => ({
-	flexDirection:'row', 
-	flexWrap:'wrap',
-	backgroundColor
-})
-
-styles.horizontal.category = () => ({
-	...styles.section, 
-	justifyContent:'flex-start',
-	flexGrow:2,
-	minWidth:200,
-	paddingTop:5,
-	paddingBottom:5,
-})
-
-styles.horizontal.details = () => ({
-	...styles.section, 
-	minWidth:230,
-	flexGrow:1,
-	paddingTop:5,
-	paddingBottom:5,
-	justifyContent:'space-between'
-})
-
 class EventBanner extends React.Component {
 	render() {
 		var event = this.props.event
 		  , style = this.props.style
 		  , category = categories[event.category || 'other']
 		  , location = this.props.location
-		  , direction = this.props.horizontal ? 'horizontal' : 'vertical'
 		  , color = category.color
 
 		return (
-			<View onClick={this.props.onClick} style={{ ...styles[direction].banner(color), ...style }}>
-				<View style={styles[direction].category(color)}>
+			<View onClick={this.props.onClick} style={{ ...styles.vertical.banner(color), ...style }}>
+				<View style={styles.vertical.category(color)}>
 					<Text style={styles.categoryText}>{category.name}</Text>
 				</View>
-				<View style={styles[direction].details(color)}>
+				<View style={styles.vertical.details(color)}>
 					<View style={styles.detail}>
 						<Image style={styles.icon} src="/images/person-white.png" />
 						<Text style={styles.detailText}>{event.attendees.length + (event.max ? '/'+event.max : '') + ' going'}</Text>

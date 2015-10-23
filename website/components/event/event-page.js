@@ -13,12 +13,15 @@ var React = require('react')
   , Link = require('../core/link')
   , categories = require('../../data/categories')
   , scroll = __BROWSER__ && require('scroll')
+  , ActionBar = require('./action-bar')
 
 var styles = {}
 
 styles.banner = {
 	paddingTop:5,
-	paddingBottom:5
+	paddingBottom:5,
+	flexDirection: 'row',
+	justifyContent: 'space-between'
 }
 
 styles.details = {
@@ -41,10 +44,24 @@ styles.content = {
 	backgroundColor:'#fff'
 }
 
+styles.back = {
+	color: '#fff',
+	fontWeight: 600
+}
+
+styles.categoryText = {
+	color: '#fff',
+	fontWeight: 600,
+	textTransform: 'uppercase'
+}
+
 class EventPage extends React.Component {
 	onEventBannerClick() {
 		var distance = React.findDOMNode(this.refs.eventBanner).getBoundingClientRect().top
 		scroll.top(document.body, window.scrollY+distance, { duration:Math.abs(distance) })
+	}
+	goBack() {
+		window.history.back()
 	}
 	render() {
 		var { event, user, location } = this.props
@@ -58,8 +75,13 @@ class EventPage extends React.Component {
 				<EventMap event={event} />
 
 				<Section style={bannerStyles}>
-					<EventBanner horizontal={true} event={event} location={location} />
+					<Link onClick={this.goBack.bind(this)} style={styles.back}>{'< Back'}</Link>
+					<View style={styles.category}>
+						<Text style={styles.categoryText}>{category.name}</Text>
+					</View>
 				</Section>
+				
+				{isOwner && <ActionBar event={event} />}
 
 				<EventSummary event={event} location={location} />
 
