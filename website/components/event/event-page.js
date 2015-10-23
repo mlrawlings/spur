@@ -13,6 +13,7 @@ var React = require('react')
   , Link = require('../core/link')
   , categories = require('../../data/categories')
   , scroll = __BROWSER__ && require('scroll')
+  , ActionBar = require('./action-bar')
 
 var styles = {}
 
@@ -60,6 +61,8 @@ class EventPage extends React.Component {
 				<Section style={bannerStyles}>
 					<EventBanner horizontal={true} event={event} location={location} />
 				</Section>
+				
+				{isOwner && <ActionBar event={event} />}
 
 				<EventSummary event={event} location={location} />
 

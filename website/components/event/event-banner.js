@@ -15,6 +15,10 @@ styles.section = {
 	alignItems:'center'
 }
 
+styles.actionBar = {
+	backgroundColor: '#777'
+}
+
 styles.categoryText = {
 	color:'#fff',
 	fontWeight:600,
@@ -96,25 +100,27 @@ class EventBanner extends React.Component {
 		  , color = category.color
 
 		return (
-			<View onClick={this.props.onClick} style={{ ...styles[direction].banner(color), ...style }}>
-				<View style={styles[direction].category(color)}>
-					<Text style={styles.categoryText}>{category.name}</Text>
-				</View>
-				<View style={styles[direction].details(color)}>
-					<View style={styles.detail}>
-						<Image style={styles.icon} src="/images/person-white.png" />
-						<Text style={styles.detailText}>{event.attendees.length + (event.max ? '/'+event.max : '') + ' going'}</Text>
+			<View>
+				<View onClick={this.props.onClick} style={{ ...styles[direction].banner(color), ...style }}>
+					<View style={styles[direction].category(color)}>
+						<Text style={styles.categoryText}>{category.name}</Text>
 					</View>
-					<View style={styles.detail}>
-						<Image style={styles.icon} src="/images/clock-white.png" />
-						<TimeUntil style={styles.detailText} time={event.time} />
+					<View style={styles[direction].details(color)}>
+						<View style={styles.detail}>
+							<Image style={styles.icon} src="/images/person-white.png" />
+							<Text style={styles.detailText}>{event.attendees.length + (event.max ? '/'+event.max : '') + ' going'}</Text>
+						</View>
+						<View style={styles.detail}>
+							<Image style={styles.icon} src="/images/clock-white.png" />
+							<TimeUntil style={styles.detailText} time={event.time} />
+						</View>
+						{location && <View style={styles.detail}>
+							<Image style={styles.icon} src="/images/white-pin.png" />
+							<Text style={styles.detailText}>
+								{locationUtil.getDistanceBetween(event.location.coords, location.coords)}
+							</Text>
+						</View>}
 					</View>
-					{location && <View style={styles.detail}>
-						<Image style={styles.icon} src="/images/white-pin.png" />
-						<Text style={styles.detailText}>
-							{locationUtil.getDistanceBetween(event.location.coords, location.coords)}
-						</Text>
-					</View>}
 				</View>
 			</View>
 		)
