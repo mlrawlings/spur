@@ -1,4 +1,4 @@
-var React = require('react/addons')
+var React = require('react')
   , Marker = require('./google-map-marker')
   , Image = require('../core/image')
   , View = require('../core/view')
@@ -67,7 +67,7 @@ class GoogleMap extends React.Component {
 		return React.Children.map(this.props.children, (child) => {
 			if(!child || child.type != Marker) return child
 				
-			return React.addons.cloneWithProps(child, {
+			return React.cloneElement(child, {
 				map: this.map
 			})
 		})
