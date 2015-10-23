@@ -307,12 +307,15 @@ class MessageForm extends React.Component {
 		
 		if(React.findDOMNode(this.refs.message).value.trim()) {
 			this.refs.userActionButton.trigger((done) => {
+				message.focus()
 				app.submit(form).then(() => {
 					form.reset()
 					this.setState({ hasValue:false })
 					done()
 				}).catch(done)
 			})
+		} else {
+			message.focus()
 		}
 
 		e.preventDefault()
