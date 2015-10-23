@@ -282,12 +282,11 @@ styles.messageButton = {
 	backgroundColor:'transparent',
 	marginRight: '-3%',
 	paddingRight: '3%',
-	paddingLeft: '3%'
-}
-styles.messageButtonText = {
+	paddingLeft: '3%',
 	color:'#04beca'
 }
-styles.messageButtonTextDisabled = {
+styles.messageButtonDisabled = {
+	...styles.messageButton,
 	color:'#999'
 }
 
@@ -338,8 +337,8 @@ class MessageForm extends React.Component {
 			<Section style={styles.formContainer}>
 				<Form style={styles.form} onSubmit={this.submitMessage.bind(this)} ref="form" action={'/event/'+event.id+'/post'}>
 					<Input onFocus={onFocus} type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
-					<UserActionButton ref="userActionButton" tag={FlatButton} onClick={this.refocus.bind(this)} actionName="Send" style={styles.messageButton} type="submit" user={user}>
-						<Text style={hasValue ? styles.messageButtonText : styles.messageButtonTextDisabled}>Send</Text>
+					<UserActionButton ref="userActionButton" tag={FlatButton} onClick={this.refocus.bind(this)} actionName="Send" style={hasValue ? styles.messageButton : styles.messageButtonDisabled} type="submit" user={user}>
+						Send
 					</UserActionButton>
 				</Form>
 			</Section>
