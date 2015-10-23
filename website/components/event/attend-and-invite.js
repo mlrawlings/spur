@@ -121,12 +121,12 @@ class AttendAndInvite extends React.Component {
 					<Text style={styles.buttonText}>Bail</Text>
 				</ButtonElement>
 			) : (
-				<UserActionButton user={user} type={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
+				<UserActionButton user={user} tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
 					<Text style={styles.buttonText}>Count me in!</Text>
 					{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
 				</UserActionButton>
 			),
-			<ShareButton type={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
+			<ShareButton tag={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
 				<Text style={styles.buttonText}>{attending || isInline ? 'Invite Friends' : 'Invite'}</Text>
 				{!isInline && attending && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
 			</ShareButton>

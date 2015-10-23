@@ -17,10 +17,10 @@ class ShareButton extends React.Component {
 		this.setState({ opener:null })
 	}
 	render() {
-		var { children, style, type, ...props } = this.props
+		var { children, style, tag, ...props } = this.props
 		  , { opener } = this.state
 		  , content = children ? children : 'Share'
-		  , Type = type || Button
+		  , Tag = tag || Button
 		  , { order, flex, flexGrow, flexShrink, flexBasis, alignSelf, ...buttonStyles } = style
 		  , wrapperStyles = { order, flex, flexGrow, flexShrink, flexBasis, alignSelf }
 
@@ -32,9 +32,9 @@ class ShareButton extends React.Component {
 
 		return (
 			<View style={wrapperStyles}>
-				<Type ref="button" style={buttonStyles} {...props} onClick={this.openModal.bind(this)}>
+				<Tag ref="button" style={buttonStyles} {...props} onClick={this.openModal.bind(this)}>
 					{content}
-				</Type>
+				</Tag>
 				<ShareModal openedBy={opener} onRequestClose={this.closeModal.bind(this)} />
 			</View>
 		)
