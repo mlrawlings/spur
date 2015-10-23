@@ -3,6 +3,10 @@ var React = require('react')
 
 var styles = {}
 
+styles.normal = {
+	cursor:'pointer'
+}
+
 styles.active = {
 	opacity:0.6
 }
@@ -24,10 +28,23 @@ class Touchable extends React.Component {
 	leave() {
 		this.setState({ hover:false, active:false })
 	}
+	getStyle() {
+		var { style, styleActive, styleHover } = this.props
+
+		if(this.state.active) {
+			return  { ...styles.normal, ...style, ...styles.active, ...styleActive }
+		}
+
+		if(this.state.hover) {
+			return  { ...styles.normal, ...style, ...styles.hover, ...styleHover }
+		}
+
+		return { ...styles.normal, ...style}
+	}
 	render() {
 		var { style, styleActive, styleHover, tag, ...props } = this.props
 		  , Tag = tag || 'a'
-		  , linkStyle = this.state.active ? { ...style, ...styles.active, ...styleActive } : this.state.hover ? { ...style, ...styleHover } : style
+		  , linkStyle = this.getStyle()
 		  , press = this.press.bind(this)
 		  , release = this.release.bind(this)
 		  , hover = this.hover.bind(this)
