@@ -130,7 +130,8 @@ input, textarea, select {
 
 #app input,
 #app select,
-#app textarea {
+#app textarea,
+#app button {
 	outline:0;
 }
 
