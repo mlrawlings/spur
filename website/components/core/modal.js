@@ -96,11 +96,27 @@ class Modal extends React.Component {
 	componentDidMount() {
 		this.toggleBodyScroll(this.props.openedBy)
 		this.calculatePosition(this.props.openedBy)
-
+		this.listenForHashChange(this.props.openedBy)
 	}
 	componentWillReceiveProps(nextProps) {
 		this.toggleBodyScroll(nextProps.openedBy)
 		this.calculatePosition(nextProps.openedBy)
+		this.listenForHashChange(nextProps.openedBy)
+	}
+	listenForHashChange(openedBy) {
+		if(openedBy) {
+			var previousHash = window.location.hash
+			this.onHashChange = () => {
+			  	if(window.location.hash == previousHash) {
+					this.props.onRequestClose && this.props.onRequestClose()
+					window.removeEventListener('hashchange', this.onHashChange)
+				}
+			}
+			window.location.hash = 'modal'
+			window.addEventListener('hashchange', this.onHashChange)
+		} else {
+			window.removeEventListener('hashchange', this.onHashChange)
+		}
 	}
 	calculatePosition(openedBy) {
 		if(!openedBy) return
@@ -155,7 +171,7 @@ class Modal extends React.Component {
 	}
 	overlayClose(e) {
 		if(e.target == e.currentTarget) {
-			this.props.onRequestClose && this.props.onRequestClose()
+			window.history.go(-1)
 		}
 	}
 	render() {
