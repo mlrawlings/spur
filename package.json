@@ -29,7 +29,7 @@
     "hash-loader": "^1.0.0",
     "json-loader": "^0.5.2",
     "kent": "^1.1.2",
-    "kent-react": "^1.0.1",
+    "kent-react": "^1.1.0",
     "methods": "^1.1.1",
     "qs": "^5.0.0",
     "react": "^0.14.0",
