@@ -8,6 +8,7 @@ var React = require('react')
   , ShareButton = require('../button/share-button')
   , UserActionButton = require('../button/user-action-button')
   , MediaQuery = require('react-responsive')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
 
@@ -100,18 +101,12 @@ class AttendAndInvite extends React.Component {
 	componentWillUnmount() {
 		window.removeEventListener('scroll', this.scrollListener)
 	}
-	sixHoursFrom(time) {
-		time = new Date(time)
-		time.setHours(time.getHours()+6)
-
-		return time
-	}
 	renderButtons(ButtonElement, isInline) {
 		var { event, user } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , spotsRemaining = (event.max && event.max - event.attendees.length)
 		  , spotsReaminingText = spotsRemaining + (spotsRemaining == 1 ? ' spot' : ' spots') + ' remaining...'
-		  , eventIsOver = (event.endTime ? event.endTime : this.sixHoursFrom(event.time)) < new Date()
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
 		  , isAttendeeMax = !!(event.max && event.attendees.length >= event.max)
 		  , componentsToReturn = []
 
@@ -151,6 +146,8 @@ class AttendAndInvite extends React.Component {
 	render() {
 		var { event, user } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
+		  , isAttendeeMax = !!(event.max && event.attendees.length >= event.max)
 
 		return (
 			<View>
@@ -160,7 +157,7 @@ class AttendAndInvite extends React.Component {
 					</View>
 				</MediaQuery>
 				<MediaQuery query="(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)" >
-					{!event.cancelled && <View>
+					{!event.cancelled && !eventIsOver && <View>
 						<Heading style={styles.heading}>{attending ? 'You\'re going!' : 'Want to go?'}</Heading>
 						<View style={styles.buttonsInline}>{this.renderButtons(Button, true)}</View>
 					</View>}

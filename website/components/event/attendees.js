@@ -5,6 +5,7 @@ var React = require('react')
   , Text = require('../core/text')
   , Link = require('../core/link')
   , View = require('../core/view')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
 
@@ -42,12 +43,12 @@ class Attendees extends React.Component {
 		  , attendees = event.attendees
 		  , on = !event.cancelled
 		  , num = attendees.length
-		  , over = event.time < Date.now()-20*60*1000
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
 		
 		return (
 			<View style={style}>
 				<Heading style={styles.going}>
-					{this.getHeaderString(num, on, over)}
+					{this.getHeaderString(num, on, eventIsOver)}
 				</Heading>
 				<View style={styles.container}>
 					{attendees.map(attendee =>

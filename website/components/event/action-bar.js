@@ -5,7 +5,7 @@ var React = require('react')
   , Link = require('../core/link')
   , Text = require('../core/text')
   , View = require('../core/view')
-  , time = require('../../util/time')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
 
@@ -58,15 +58,9 @@ styles.eventOver = {
 }
 
 class ActionBar extends React.Component {
-	sixHoursFrom(time) {
-		time = new Date(time)
-		time.setHours(time.getHours()+6)
-
-		return time
-	}
 	render() {
 		var { location, events, user } = this.props
-		  , eventIsOver = (this.props.event.endTime ? this.props.event.endTime : this.sixHoursFrom(this.props.event.time)) < new Date()
+		  , eventIsOver = (this.props.event.endTime ? this.props.event.endTime : timeUtil.sixHoursFrom(this.props.event.time)) < new Date()
 
 		styles.edit = { ...styles.edit, ...styles.action }
 		styles.cancel = { ...styles.cancel, ...styles.action }

@@ -167,3 +167,10 @@ exports.parseTime = function(string, date) {
 	return result
 
 }
+
+exports.sixHoursFrom = function(time) {
+	time = new Date(time)
+	time.setHours(time.getHours()+6)
+
+	return time
+}
