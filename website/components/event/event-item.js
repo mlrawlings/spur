@@ -9,22 +9,23 @@ var React = require('react')
 
 var styles = {}
 
-styles.item = {
-	flexDirection:'row',
+styles.verticalItem = {
 	textDecoration:'none',
 	width:'100%',
 	marginTop:8,
 	marginBottom:8,
 	borderWidth:1,
-	borderColor:'#ddd',
-	flexWrap:'wrap'
+	borderColor:'#ddd'
+}
+
+styles.horizontalItem = {
+	...styles.verticalItem,
+	flexDirection:'row',
 }
 
 styles.summary = {
 	backgroundColor:'#fff',
 	flex:1.5,
-	minWidth:'60%',
-	maxWidth:'100%',
 	padding:15
 }
 
@@ -38,37 +39,58 @@ styles.details = {
 	color: '#888'
 }
 
+styles.cancelled = {
+	...styles.details,
+	color:'#b00',
+	fontWeight:600,
+	textTransform:'uppercase'
+}
+
 styles.banner = {
-	minWidth:200,
-	width:'50%',
 	flex:1,
 	minHeight:60
 }
 
 class EventItem extends React.Component {
-	render() {
-		var { event, location } = this.props
-		  , category = categories[event.category || 'other']
-		  , itemStyles = {...styles.item }
+	renderSummary() {
+		var { event } = this.props
 		  , nameStyles = {...styles.name }
 
 		if(event.cancelled) {
-			itemStyles.opacity = 0.5
 			nameStyles.textDecoration = 'line-through'
 		}
 
 		return (
-			<Link style={itemStyles} href={"/event/"+event.id}>
-				<View style={styles.summary}>
-					<Text style={nameStyles}>
-						{event.name}
+			<View style={styles.summary}>
+				<Text style={nameStyles}>
+					{event.name}
+				</Text>
+				{event.cancelled ? (
+					<Text style={styles.cancelled}>
+						Cancelled
 					</Text>
+				) : (
 					<Text style={styles.details}>
 						{'@ ' + timeUtil.format(event.time) + ' - ' + (event.location.name || event.location.street)}
 					</Text>
+				)}
+			</View>
+		)
+	}
+	render() {
+		var { event, location } = this.props
+
+		return (
+			<View>
+				<View style={styles.verticalItem} href={"/event/"+event.id} query='(max-width:500px)'>
+					{this.renderSummary()}
+					<EventBanner style={styles.banner} event={event} location={location} />
 				</View>
-				<EventBanner style={styles.banner} event={event} location={location} />
-			</Link>
+				<View style={styles.horizontalItem} href={"/event/"+event.id} query='(min-width:501px)'>
+					{this.renderSummary()}
+					<EventBanner style={styles.banner} event={event} location={location} />
+				</View>
+			</View>
 		)
 	}
 }
