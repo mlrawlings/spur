@@ -45,11 +45,10 @@ styles.socialButton = {
 	marginRight:5
 }
 
-class DownloadAndShare extends React.Component {
+class ShareModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = { 
-			url:__BROWSER__ && window.location.href,
 			noSupport:false,
 			copied:false
 		}
@@ -70,7 +69,8 @@ class DownloadAndShare extends React.Component {
 		}
 	}
 	render() {
-		var { url, noSupport, copied } = this.state
+		var { url } = this.context
+		  , { noSupport, copied } = this.state
 
 		return (
 			<Modal {...this.props}>
@@ -82,9 +82,9 @@ class DownloadAndShare extends React.Component {
 					</View>
 					<Separator>or share with</Separator>
 					<View style={styles.social}>
-						<FacebookShareButton style={styles.socialButton} currentURL={url} />
-						<FacebookSendButton style={styles.socialButton} currentURL={url} />
-						<TextMessageButton style={styles.socialButton} currentURL={url} />
+						<FacebookShareButton style={styles.socialButton} />
+						<FacebookSendButton style={styles.socialButton} />
+						<TextMessageButton style={styles.socialButton} />
 					</View>
 				</Modal.Body>
 			</Modal>
@@ -92,4 +92,8 @@ class DownloadAndShare extends React.Component {
 	}
 }
 
-module.exports = DownloadAndShare
+ShareModal.contextTypes = {
+	url:React.PropTypes.string
+}
+
+module.exports = ShareModal

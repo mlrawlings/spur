@@ -18,7 +18,7 @@ class UserActionButton extends React.Component {
 	}
 	trigger(fn) {
 		this.fn = fn
-		this.performAction(this.props.user)
+		this.performAction(this.context.user)
 	}
 	setFunction(action) {
 		this.fn = typeof action == 'function' ? action : (done) => app.navigate(action).then(done)
@@ -43,7 +43,8 @@ class UserActionButton extends React.Component {
 		this.setState({ opener:false })
 	}
 	render() {
-		var { user, action, style, actionName, tag, children, ...buttonProps } = this.props
+		var { user } = this.context
+		  , { action, style, actionName, tag, children, ...buttonProps } = this.props
 		  , Type = this.props.tag || Button
 		  , { order, flex, flexGrow, flexShrink, flexBasis, alignSelf, ...buttonStyles } = style || {}
 		  , wrapperStyles = { order, flex, flexGrow, flexShrink, flexBasis, alignSelf }
@@ -66,6 +67,10 @@ class UserActionButton extends React.Component {
 			</View>
 		)
 	}
+}
+
+UserActionButton.contextTypes = {
+	user:React.PropTypes.object
 }
 
 module.exports = UserActionButton

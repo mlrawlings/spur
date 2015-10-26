@@ -3,7 +3,6 @@ const ARROW_SIZE = 8
 var React = require('react')
   , View = require('./view')
   , Text = require('./text')
-  , MediaQuery = require('react-responsive')
 
 var styles = {}
 
@@ -177,16 +176,18 @@ class Modal extends React.Component {
 	render() {
 		var { style, openedBy, ...props } = this.props
 		  , { modalPosition, arrowPosition, arrowDirection } = this.state
+		  , isSmall = '(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)'
+		  , isLarge = '(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)'
+
+		props.onMouseDown = props.onTouchStart = this.stopPropagation
 
 		return !!openedBy && (
 			<View style={styles.overlay} styleActive={styles.overlayActive} onClick={this.overlayClose.bind(this)} onTouchStart={this.stopPropagation}>
-				<MediaQuery query="(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)">
-					<View style={{ ...styles.modalDocked, ...style }} {...props} onMouseDown={this.stopPropagation} onTouchStart={this.stopPropagation} />
-				</MediaQuery>
-				<MediaQuery query="(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)" >
+				<View query={isSmall} style={{ ...styles.modalDocked, ...style }} {...props} />
+				<View query={isLarge}>
 					<View style={{ ...styles.arrow[arrowDirection], ...arrowPosition }} />
-					<View style={{ ...styles.modal, ...modalPosition, ...style }} {...props} onMouseDown={this.stopPropagation} onTouchStart={this.stopPropagation} />
-				</MediaQuery>
+					<View style={{ ...styles.modal, ...modalPosition, ...style }} {...props} />
+				</View>
 			</View>
 		)
 	}

@@ -1,7 +1,6 @@
 var React = require('react')
   , GoogleMap = require('../map/google-map')
   , GoogleMapMarker = require('../map/google-map-marker')
-  , MediaQuery = require('react-responsive')
   , View = require('../core/view')
   , Text = require('../core/text')
 
@@ -28,14 +27,12 @@ class EventMap extends React.Component {
 		var { event } = this.props
 
 		return (
-			<MediaQuery query="(min-width:501px) and (min-height:501px)">
-				<GoogleMap center={event.location.coords} zoom={17}>
-					{event.cancelled && <View style={styles.mapCover}>
-						<Text style={styles.cancelledText}>CANCELLED</Text>
-					</View>}
-					<GoogleMapMarker position={event.location.coords} />
-				</GoogleMap>
-			</MediaQuery>
+			<GoogleMap center={event.location.coords} zoom={17} query="(min-width:501px) and (min-height:501px)">
+				{event.cancelled && <View style={styles.mapCover}>
+					<Text style={styles.cancelledText}>CANCELLED</Text>
+				</View>}
+				<GoogleMapMarker position={event.location.coords} />
+			</GoogleMap>
 		)
 	}
 }

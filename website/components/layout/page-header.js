@@ -67,7 +67,7 @@ class Header extends React.Component {
 		app.refresh()
 	}
 	render() {
-		var user = this.props.user
+		var user = this.context.user
 
 		return (
 			<Section style={styles.header}>
@@ -76,13 +76,17 @@ class Header extends React.Component {
 				</Link>
 				<View style={styles.nav}>
 					<Link href="/events" style={styles.navLink}>Nearby</Link>
-					<UserActionButton tag={Link} user={user} style={styles.signUp} action="/profile/me" actionName="Sign Up">
+					<UserActionButton tag={Link} style={styles.signUp} action="/profile/me" actionName="Sign Up">
 						<Avatar style={styles.avatar} user={user} />
 					</UserActionButton>
 				</View>
 			</Section>
 		)
 	}
+}
+
+Header.contextTypes = {
+	user:React.PropTypes.object
 }
 
 module.exports = Header

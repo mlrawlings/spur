@@ -71,7 +71,8 @@ class FacebookLoginButton extends React.Component {
 		})
 	}
 	render() {
-		var { user, children } = this.props
+		var { user } = this.context
+		  , { children } = this.props
 		  , action = user ? this.logout.bind(this) : this.login.bind(this)
 		  , text = children || 'Facebook'
 		
@@ -81,6 +82,10 @@ class FacebookLoginButton extends React.Component {
 			</Button>
 		)
 	}
+}
+
+FacebookLoginButton.contextTypes = {
+	user:React.PropTypes.object
 }
 
 module.exports = FacebookLoginButton

@@ -46,10 +46,8 @@ styles.banner = {
 }
 
 class EventItem extends React.Component {
-
-
 	render() {
-		var event = this.props.event
+		var { event, location } = this.props
 		  , category = categories[event.category || 'other']
 		  , itemStyles = {...styles.item }
 		  , nameStyles = {...styles.name }
@@ -69,7 +67,7 @@ class EventItem extends React.Component {
 						{'@ ' + timeUtil.format(event.time) + ' - ' + (event.location.name || event.location.street)}
 					</Text>
 				</View>
-				<EventBanner style={styles.banner} event={event} location={this.props.location} />
+				<EventBanner style={styles.banner} event={event} location={location} />
 			</Link>
 		)
 	}

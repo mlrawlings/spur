@@ -73,8 +73,9 @@ class GoogleMap extends React.Component {
 		})
 	}
 	render() {
+		var { style, ...props } = this.props
 		return (
-			<View style={{ ...styles.googleMap, ...this.props.style }}>
+			<View style={{ ...styles.googleMap, ...style }} {...props}>
 				<View ref="map" style={styles.map} />
 				{this.renderChildren()}
 			</View>

@@ -7,7 +7,6 @@ var React = require('react')
   , FacebookLoginButton = require('../button/facebook-login-button')
   , ShareButton = require('../button/share-button')
   , UserActionButton = require('../button/user-action-button')
-  , MediaQuery = require('react-responsive')
 
 var styles = {}
 
@@ -101,7 +100,8 @@ class AttendAndInvite extends React.Component {
 		window.removeEventListener('scroll', this.scrollListener)
 	}
 	renderButtons(ButtonElement, isInline) {
-		var { event, user } = this.props
+		var { user } = this.context
+		  , { event } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , spotsRemaining = (event.max && event.max - event.attendees.length)
 		  , spotsReaminingText = spotsRemaining + (spotsRemaining == 1 ? ' spot' : ' spots') + ' remaining...'
@@ -121,7 +121,7 @@ class AttendAndInvite extends React.Component {
 					<Text style={styles.buttonText}>Bail</Text>
 				</ButtonElement>
 			) : (
-				<UserActionButton user={user} tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
+				<UserActionButton tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
 					<Text style={styles.buttonText}>Count me in!</Text>
 					{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
 				</UserActionButton>
@@ -139,25 +139,28 @@ class AttendAndInvite extends React.Component {
 		)
 	}
 	render() {
-		var { event, user } = this.props
+		var { user } = this.context
+		  , { event } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
+		  , isSmall = '(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)'
+		  , isLarge = '(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)'
 
 		return (
 			<View>
-				<MediaQuery query="(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)">
-					<View style={this.state.hide ? styles.buttonsFixedHidden : styles.buttonsFixed}>
-						{this.renderButtons(FlatButton, false)}
-					</View>
-				</MediaQuery>
-				<MediaQuery query="(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)" >
-					{!event.cancelled && <View>
-						<Heading style={styles.heading}>{attending ? 'You\'re going!' : 'Want to go?'}</Heading>
-						<View style={styles.buttonsInline}>{this.renderButtons(Button, true)}</View>
-					</View>}
-				</MediaQuery>
+				<View query={isSmall} style={this.state.hide ? styles.buttonsFixedHidden : styles.buttonsFixed}>
+					{this.renderButtons(FlatButton, false)}
+				</View>
+				{!event.cancelled && <View query={isLarge} >
+					<Heading style={styles.heading}>{attending ? 'You\'re going!' : 'Want to go?'}</Heading>
+					<View style={styles.buttonsInline}>{this.renderButtons(Button, true)}</View>
+				</View>}
 			</View>
 		)
 	}
+}
+
+AttendAndInvite.contextTypes = {
+	user:React.PropTypes.object
 }
 
 module.exports = AttendAndInvite

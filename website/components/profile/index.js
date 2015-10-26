@@ -62,35 +62,37 @@ class Profile extends React.Component {
 		app.submit(React.findDOMNode(this.refs.form))
 	}
 	render() {
-		var { user, profileUser } = this.props
+		var { user, device, profileUser } = this.props
 		  , events = profileUser.events
+		  , isMe = user && profileUser.id == user.id
 		
 		return (
-			<Layout user={user}>
+			<Layout user={user} device={device}>
 				<Section style={styles.header}>
 					<Avatar style={styles.photo} user={profileUser} />
 					<Text style={styles.name}>{profileUser.name.full}</Text>
-					{user && !user.isGuest && profileUser.id == user.id && <FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>}
-					
-
-					{user && user.isGuest && profileUser.id == user.id && <View>
-						<View style={styles.guestText}>
-							<Text style={styles.guestText}>
-								This is a guest account.
-							</Text>
-							<Text style={styles.guestText}>
-								Connect to Facebook in order to save your account.
-							</Text>
+					{isMe && !user.isGuest && (
+						<FacebookLoginButton style={styles.logout} user={user}>Log out of Facebook</FacebookLoginButton>
+					)}
+					{isMe && user.isGuest && (
+						<View>
+							<View style={styles.guestText}>
+								<Text style={styles.guestText}>
+									This is a guest account.
+								</Text>
+								<Text style={styles.guestText}>
+									Connect to Facebook in order to save your account.
+								</Text>
+							</View>
+							<View style={styles.buttons}>
+								<FacebookLoginButton style={styles.logout} onLogin={this.onLogin}>Connect with Facebook</FacebookLoginButton>
+								<LogoutButton style={styles.logoutButton}>Logout</LogoutButton>
+							</View>
 						</View>
-						<View style={styles.buttons}>
-							<FacebookLoginButton style={styles.logout} onLogin={this.onLogin}>Connect with Facebook</FacebookLoginButton>
-							<LogoutButton style={styles.logoutButton}>Logout</LogoutButton>
-						</View>
-					</View>
-					}
+					)}
 				</Section>
 
-				<EventList events={events} location={this.props.location} noEventsText={(user && profileUser.id == user.id) ? 'You have not gone to any events yet.' : (user && profileUser.id != user.id ? 'You and ' + profileUser.name.first + ' have not gone to any events together yet.' : ('Login to see events that you and '+profileUser.name.first+' have gone to together.'))} />
+				<EventList events={events} location={this.props.location} noEventsText={(isMe) ? 'You have not gone to any events yet.' : (user && profileUser.id != user.id ? 'You and ' + profileUser.name.first + ' have not gone to any events together yet.' : ('Login to see events that you and '+profileUser.name.first+' have gone to together.'))} />
 			</Layout>
 		)
 	}

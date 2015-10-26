@@ -9,14 +9,14 @@ styles.share = {
 
 class TextMessageButton extends React.Component {
 	render() {
-		var { currentURL } = this.props
+		var { url } = this.context
 		  , href = false
 
 		if(__BROWSER__) {
 			if(/iPad|iPhone|iPod/i.test(navigator.userAgent)) {
-				href = 'sms:&body='+encodeURIComponent(currentURL)
+				href = 'sms:&body='+encodeURIComponent(url)
 			} else if(/Mobile/i.test(navigator.userAgent)) {
-				href = 'sms:?body='+encodeURIComponent(currentURL)
+				href = 'sms:?body='+encodeURIComponent(url)
 			}
 		}
 
@@ -26,6 +26,10 @@ class TextMessageButton extends React.Component {
 			</Button>
 		)
 	}
+}
+
+TextMessageButton.contextTypes = {
+	url:React.PropTypes.string
 }
 
 module.exports = TextMessageButton

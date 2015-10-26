@@ -1,7 +1,6 @@
 var React = require('react')
   , Heading = require('../layout/heading')
   , Section = require('../layout/section')
-  , MediaQuery = require('react-responsive')
   , View = require('../core/view')
   , Text = require('../core/text')
   , Form = require('../core/form')
@@ -186,10 +185,10 @@ class EventChat extends React.Component {
 						<Text style={styles.messageStarterText}>Add them below.</Text>
 					</View>
 					{event.posts.map((message, i) => 
-						<Message event={event} user={user} message={message} key={message.id} />
+						<Message event={event} message={message} key={message.id} />
 					)}
 				</Section>
-				<MessageForm event={event} user={user} />
+				<MessageForm event={event} />
 			</View>
 		)
 	}
@@ -234,7 +233,8 @@ styles.messageText = {
 
 class Message extends React.Component {
 	render() {
-		var { message, user } = this.props
+		var { user } = this.context
+		  , { message } = this.props
 		  , isOwner = user && message.user.id == user.id
 
 		return (
@@ -252,6 +252,9 @@ class Message extends React.Component {
 			</View>
 		)
 	}
+}
+Message.contextTypes = {
+	user:React.PropTypes.object
 }
 
 styles.formContainer = {
@@ -330,14 +333,14 @@ class MessageForm extends React.Component {
 		e.preventDefault()
 	}
 	render() {
-		var { event, user, onFocus } = this.props
+		var { event } = this.props
 		  , { hasValue } = this.state
 
 		return (
 			<Section style={styles.formContainer}>
 				<Form style={styles.form} onSubmit={this.submitMessage.bind(this)} ref="form" action={'/event/'+event.id+'/post'}>
-					<Input onFocus={onFocus} type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
-					<UserActionButton ref="userActionButton" tag={FlatButton} onClick={this.refocus.bind(this)} actionName="Send" style={hasValue ? styles.messageButton : styles.messageButtonDisabled} type="submit" user={user}>
+					<Input type="textarea" ref="message" style={styles.messageInput} onKeyDown={this.handleEnter.bind(this)} name="message" placeholder="Say something..." />
+					<UserActionButton ref="userActionButton" tag={FlatButton} onClick={this.refocus.bind(this)} actionName="Send" style={hasValue ? styles.messageButton : styles.messageButtonDisabled} type="submit">
 						Send
 					</UserActionButton>
 				</Form>

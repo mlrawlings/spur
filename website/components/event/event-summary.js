@@ -1,6 +1,5 @@
 var React = require('react')
   , Section = require('../layout/section')
-  , MediaQuery = require('react-responsive')
   , View = require('../core/view')
   , Text = require('../core/text')
   , Link = require('../core/link')
@@ -144,24 +143,22 @@ class EventSummary extends React.Component {
 	}
 	render() {
 		var { event } = this.props
+		  , isSmall = '(max-width:500px), (max-height:500px)'
+		  , isLarge = '(min-width:501px) and (min-height:501px)'
 		return (
 			<View>
-				<MediaQuery query="(max-width:500px), (max-height:500px)">
-					<Section style={styles.summary}>
-						{this.renderTitle()}
-						{this.renderLocationButton()}
-					</Section>
-				</MediaQuery>
-				<MediaQuery query="(min-width:501px) and (min-height:501px)" >
-					<Section style={styles.summaryHorizontal}>
-						{this.renderTitle()}
-						<View style={styles.location}>
-							<Link href={"http://maps.google.com?daddr="+event.location.coords[0]+','+event.location.coords[1]}>
-								{this.renderLocationText(true)}
-							</Link>
-						</View>
-					</Section>
-				</MediaQuery>
+				<Section style={styles.summary} query={isSmall}>
+					{this.renderTitle()}
+					{this.renderLocationButton()}
+				</Section>
+				<Section style={styles.summaryHorizontal} query={isLarge}>
+					{this.renderTitle()}
+					<View style={styles.location}>
+						<Link href={"http://maps.google.com?daddr="+event.location.coords[0]+','+event.location.coords[1]}>
+							{this.renderLocationText(true)}
+						</Link>
+					</View>
+				</Section>
 			</View>
 		)
 	}

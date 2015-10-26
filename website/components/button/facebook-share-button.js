@@ -11,7 +11,7 @@ class FacebookShareButton extends React.Component {
 	onClick(e) {
 		FB.ui({
 			method: 'share',
-			href: this.props.currentURL
+			href: this.context.url
 		})
 		e.preventDefault()
 	}
@@ -22,6 +22,10 @@ class FacebookShareButton extends React.Component {
 			</Button>
 		)
 	}
+}
+
+FacebookShareButton.contextTypes = {
+	url:React.PropTypes.string
 }
 
 module.exports = FacebookShareButton

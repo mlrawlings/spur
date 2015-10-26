@@ -10,10 +10,10 @@ var React = require('react')
 class Home extends React.Component {
 	render() {
 		return (
-			<Layout user={this.props.user}>
+			<Layout {...this.props}>
 		    	<Hero />	
 				<AppLinks />		
-				<About user={this.props.user} />
+				<About />
 			</Layout>
 		)
 	}

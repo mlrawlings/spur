@@ -115,13 +115,13 @@ class NewEventForm extends React.Component {
 	}
 	render() {
 		var { location, time } = this.state
-		  , event = this.props.event
+		  , { event, device, user } = this.props
 		  , defaultEndTime = new Date(time)
 
 		defaultEndTime = this.state.hasEnd ? event.endTime : new Date(defaultEndTime.setHours(defaultEndTime.getHours()+1))
 		
 		return (
-			<Layout user={this.props.user}>
+			<Layout user={user} device={device}>
 				<Section>
 					<Form ref="form" onSubmit={this.submit.bind(this)} action={event ? '/event/'+event.id+'/edit' : '/create/event'}>
 						<View style={styles.field}>
@@ -185,7 +185,7 @@ class NewEventForm extends React.Component {
 						</View>
 
 						<View style={styles.actions}>
-							<UserActionButton ref="userActionButton" tag={Button} src="/images/create.png" type='submit' user={this.props.user} actionName={event ? 'Save Event' : 'Create Event'}>
+							<UserActionButton ref="userActionButton" tag={Button} src="/images/create.png" type='submit' actionName={event ? 'Save Event' : 'Create Event'}>
 								{event ? 'Save Event' : 'Create Event'}
 							</UserActionButton>
 						</View>
