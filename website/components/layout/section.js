@@ -10,7 +10,7 @@ styles.container = {
 
 styles.sizer = {
 	width:'100%',
-	flex:1,
+	flexGrow:1,
 	maxWidth:800,
 	paddingLeft:5,
 	paddingRight:5,
@@ -20,7 +20,8 @@ styles.sizer = {
 styles.wrapper = {
 	paddingLeft:'3%',
 	paddingRight:'3%',
-	flex:1
+	flexGrow:1,
+	maxWidth:'100%'
 }
 
 class Section extends React.Component {

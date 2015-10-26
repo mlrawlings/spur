@@ -33,7 +33,8 @@ styles.about = {
 	fontSize:20,
 	color:'#fff',
 	textAlign:'center',
-	marginTop:20
+	marginTop:20,
+	maxWidth:'100%'
 }
 
 class Hero extends React.Component {
