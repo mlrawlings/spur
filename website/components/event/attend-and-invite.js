@@ -7,6 +7,7 @@ var React = require('react')
   , FacebookLoginButton = require('../button/facebook-login-button')
   , ShareButton = require('../button/share-button')
   , UserActionButton = require('../button/user-action-button')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
 
@@ -105,6 +106,9 @@ class AttendAndInvite extends React.Component {
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
 		  , spotsRemaining = (event.max && event.max - event.attendees.length)
 		  , spotsReaminingText = spotsRemaining + (spotsRemaining == 1 ? ' spot' : ' spots') + ' remaining...'
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
+		  , isAttendeeMax = !!(event.max && event.attendees.length >= event.max)
+		  , componentsToReturn = []
 
 		var transformStyles = (styles) => {
 			if(isInline) {
@@ -115,33 +119,43 @@ class AttendAndInvite extends React.Component {
 			return styles
 		}
 
-		if(!event.cancelled) return [
-			attending ? (
-				<ButtonElement style={transformStyles(styles.bailButton)} href={'/event/'+event.id+'/bail'}>
-					<Text style={styles.buttonText}>Bail</Text>
-				</ButtonElement>
-			) : (
-				<UserActionButton tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
-					<Text style={styles.buttonText}>Count me in!</Text>
-					{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
-				</UserActionButton>
-			),
+		// Display Join
+		!event.cancelled && !eventIsOver && !attending && !isAttendeeMax && componentsToReturn.push(
+			<UserActionButton user={user} tag={ButtonElement} style={transformStyles(styles.joinButton)} action={'/event/'+event.id+'/join'} actionName="Go!">
+				<Text style={styles.buttonText}>Count me in!</Text>
+				{!isInline && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
+			</UserActionButton>
+		)
+
+		// Display Bail
+		!event.cancelled && !eventIsOver && attending && componentsToReturn.push(
+			<ButtonElement style={transformStyles(styles.bailButton)} href={'/event/'+event.id+'/bail'}>
+				<Text style={styles.buttonText}>Bail</Text>
+			</ButtonElement>
+		)
+
+		// Display Invite
+		!event.cancelled && !eventIsOver && !isAttendeeMax && componentsToReturn.push(
 			<ShareButton tag={ButtonElement} style={transformStyles(attending ? styles.inviteButtonLarge : styles.inviteButton)}>
 				<Text style={styles.buttonText}>{attending || isInline ? 'Invite Friends' : 'Invite'}</Text>
 				{!isInline && attending && spotsRemaining > 0 && <Text style={styles.buttonTextSmall}>{spotsReaminingText}</Text>}
 			</ShareButton>
-		]
+		)
 
-		return (
+		// Event was cancelled
+		event.cancelled && componentsToReturn.push(
 			<View style={styles.cancelBanner}>
 				<Text style={styles.buttonText}>This event was cancelled</Text>
 			</View>
 		)
+
+		return componentsToReturn
 	}
 	render() {
 		var { user } = this.context
 		  , { event } = this.props
 		  , attending = user && event.attendees.some(attendee => attendee.id == user.id)
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
 		  , isSmall = '(max-width:500px) and (max-height:750px), (max-height:500px) and (max-width:750px)'
 		  , isLarge = '(min-width:501px) and (min-height:501px), (min-width:751px), (min-height:751px)'
 
@@ -150,7 +164,7 @@ class AttendAndInvite extends React.Component {
 				<View query={isSmall} style={this.state.hide ? styles.buttonsFixedHidden : styles.buttonsFixed}>
 					{this.renderButtons(FlatButton, false)}
 				</View>
-				{!event.cancelled && <View query={isLarge} >
+				{!event.cancelled && !eventIsOver && <View query={isLarge} >
 					<Heading style={styles.heading}>{attending ? 'You\'re going!' : 'Want to go?'}</Heading>
 					<View style={styles.buttonsInline}>{this.renderButtons(Button, true)}</View>
 				</View>}

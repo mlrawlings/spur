@@ -9,6 +9,7 @@ var Profile = require('./components/profile')
   , router = kent()
   , config = require('../common/config')
   , locationUtil = require('./util/location')
+  , timeUtil = require('./util/time')
 
 router.use(function(next) {
 
@@ -129,9 +130,12 @@ router.on('/event/:id', function(next) {
 router.on('/event/:id/edit', function(next) {
 	var event = this.body
 
+	console.log(event)
+
 	if(!event || !event.name) {
 		return this.api.get('/events/'+this.params.id).then(event => {
-			if(event.time <= new Date()) return this.redirect('/event/'+this.params.id)
+			var eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
+			if(eventIsOver) return this.redirect('/event/'+this.params.id)
 			
 			this.document.title = event.name + ' | Spur'
 			

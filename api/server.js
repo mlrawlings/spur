@@ -17,7 +17,7 @@ app.use(function(req, res, next) {
 	} else {
 		res.set('Access-Control-Allow-Origin', req.get('origin'))
 	}
-	res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, DELETE')
+	res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, DELETE, PUT')
 	next()
 })
 

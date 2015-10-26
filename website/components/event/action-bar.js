@@ -5,7 +5,7 @@ var React = require('react')
   , Link = require('../core/link')
   , Text = require('../core/text')
   , View = require('../core/view')
-  , time = require('../../util/time')
+  , timeUtil = require('../../util/time')
 
 var styles = {}
 
@@ -53,12 +53,17 @@ styles.slash = {
 	color: '#fff'
 }
 
+styles.eventOver = {
+	color: '#fff'
+}
+
 class ActionBar extends React.Component {
 	render() {
 		var { user } = this.context
 		  , { event } = this.props
 		  , isOwner = user && user.id == event.owner
-		
+		  , eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()
+
 		styles.edit = { ...styles.edit, ...styles.action }
 		styles.cancel = { ...styles.cancel, ...styles.action }
 		styles.uncancel = { ...styles.uncancel, ...styles.action }
@@ -67,14 +72,15 @@ class ActionBar extends React.Component {
 			<Section style={styles.actionSection}>
 				<Text style={styles.text}>You created this event.</Text>
 				<View style={styles.actions}>
-					{!event.cancelled ? (
-						[<Link href={'/event/'+event.id+'/edit'} style={styles.edit}>Edit</Link>,
+					{!eventIsOver && (!event.cancelled ? ([
+						<Link href={'/event/'+event.id+'/edit'} style={styles.edit}>Edit</Link>,
 						<Text style={styles.slash}>/</Text>,
-						<Link href={'/event/'+event.id+'/cancel'} style={styles.cancel}>Cancel</Link>]
-					)
-					: (
+						<Link href={'/event/'+event.id+'/cancel'} style={styles.cancel}>Cancel</Link>
+					]) : (
 						<Link href={'/event/'+event.id+'/uncancel'} style={styles.uncancel}>UnCancel</Link>
-					)}
+					))}
+
+					{eventIsOver && <Text style={styles.eventOver}>This event has ended.</Text>}
 				</View>
 			</Section>
 		)
