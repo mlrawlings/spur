@@ -62,12 +62,13 @@ class Profile extends React.Component {
 		app.submit(React.findDOMNode(this.refs.form))
 	}
 	render() {
-		var { user, device, profileUser } = this.props
+		var { user } = this.context
+		  , { profileUser } = this.props
 		  , events = profileUser.events
 		  , isMe = user && profileUser.id == user.id
 		
 		return (
-			<Layout user={user} device={device}>
+			<Layout>
 				<Section style={styles.header}>
 					<Avatar style={styles.photo} user={profileUser} />
 					<Text style={styles.name}>{profileUser.name.full}</Text>
@@ -96,6 +97,10 @@ class Profile extends React.Component {
 			</Layout>
 		)
 	}
+}
+
+Profile.contextTypes = {
+	user:React.PropTypes.object
 }
 
 module.exports = Profile

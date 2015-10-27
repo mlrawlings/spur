@@ -10,7 +10,7 @@ var kent = require('kent/client')
 app.use(kentReact())
 
 app.use(function(next) {
-	this.props.user = window.user
+	this.context.user = window.user
 	this.props.location = JSON.parse(this.cookies.get('location'))
 	this.props.radius = parseFloat(this.cookies.get('radius'))
 
