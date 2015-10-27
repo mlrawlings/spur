@@ -87,7 +87,7 @@ class AttendAndInvite extends React.Component {
 				
 				if(window.scrollY < previousY) {
 					if(distanceFromBottom > 0) this.setState({ hide:false })
-				} else {
+				} else if(window.scrollY > 0) {
 					if(distanceFromBottom < 200) this.setState({ hide:true })
 				}
 
