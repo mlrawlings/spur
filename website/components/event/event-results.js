@@ -111,11 +111,11 @@ class EventResults extends React.Component {
 		React.findDOMNode(this.refs.radius).value = nextProps.radius
 	}
 	render() {
-		var { events, user, device, radius, location } = this.props
+		var { events, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
 
 		return (
-			<Layout user={user} device={device}>
+			<Layout>
 				<Section ref="section" style={styles.results}>
 					<Form style={styles.form} ref="form" action="/events" method="GET">
 						<Text style={styles.text}>
