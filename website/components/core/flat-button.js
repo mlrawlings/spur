@@ -19,6 +19,7 @@ styles.button = {
 	paddingLeft:20,
 	paddingRight:20,
 	backgroundColor:'#04beca',
+	flexDirection:'row'
 }
 
 styles.loadingImage = {
@@ -34,6 +35,11 @@ styles.loadingContainer = {
 	width: '100%',
 	justifyContent: 'center',
 	alignItems: 'center'
+}
+
+styles.text = {
+	width:'100%',
+	textAlign:'center'
 }
 
 class FlatButton extends React.Component {
