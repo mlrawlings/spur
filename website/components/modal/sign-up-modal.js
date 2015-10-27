@@ -89,11 +89,8 @@ class SignUpModal extends React.Component {
 
 		return (
 			<Modal {...props}>
-				<Modal.Header>
-					<Modal.Title>Have we met?</Modal.Title>
-				</Modal.Header>
 				<Modal.Body>
-					<Label required={true}>No. My first name is...</Label>
+					<Label required={true}>My first name is...</Label>
 					<View style={styles.nameContainer}>
 						<Input ref="name" name="name" onKeyDown={this.submitIfEnter.bind(this)} onChange={this.onInputChange.bind(this)} style={styles.name} type="text" value={this.state.value} />
 						<FlatButton onClick={this.submit.bind(this)} loading={this.state.loading} type="submit" disabled={this.state.disabled} style={styles.action}>
