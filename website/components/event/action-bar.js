@@ -11,32 +11,32 @@ var styles = {}
 
 styles.actionSection = {
 	flexDirection: 'row',
-	backgroundColor: '#444',
+	padding: 0,
 	paddingTop: 3,
-	paddingBottom: 3,
-	justifyContent: 'space-between'
+	paddingBottom: 3
 }
 
 styles.text = {
-	color: '#fff'
+	color: '#444'
 }
 
 styles.actions = {
 	flexDirection: 'row',
-	alignItems: 'flex-end',
-	justifyContent: 'flex-end'
+	padding: 0,
+	alignItems: 'flex-start',
+	justifyContent: 'flex-start'
 }
 
 styles.action = {
-	alignItems: 'flex-end',
-	justifyContent: 'flex-end',
+	alignItems: 'flex-start',
+	justifyContent: 'flex-start',
 	cursor: 'pointer',
 	fontWeight: 600,
 	textDecoration: 'underline'
 }
 
 styles.edit = {
-	color: '#fff',
+	color: '#444',
 	marginRight: 5
 }
 
@@ -46,15 +46,15 @@ styles.cancel = {
 }
 
 styles.uncancel = {
-	color: '#e92d2d'
+	color: 'rgb(4, 190, 202)'
 }
 
 styles.slash = {
-	color: '#fff'
+	color: '#444'
 }
 
 styles.eventOver = {
-	color: '#fff'
+	color: '#444'
 }
 
 class ActionBar extends React.Component {
@@ -69,20 +69,17 @@ class ActionBar extends React.Component {
 		styles.uncancel = { ...styles.uncancel, ...styles.action }
 		
 		return !!isOwner && (
-			<Section style={styles.actionSection}>
-				<Text style={styles.text}>You created this event.</Text>
-				<View style={styles.actions}>
-					{!eventIsOver && (!event.cancelled ? ([
-						<Link href={'/event/'+event.id+'/edit'} style={styles.edit}>Edit</Link>,
-						<Text style={styles.slash}>/</Text>,
-						<Link href={'/event/'+event.id+'/cancel'} style={styles.cancel}>Cancel</Link>
-					]) : (
-						<Link href={'/event/'+event.id+'/uncancel'} style={styles.uncancel}>UnCancel</Link>
-					))}
+			<View style={styles.actions}>
+				{!eventIsOver && (!event.cancelled ? ([
+					<Link href={'/event/'+event.id+'/edit'} style={styles.edit}>Edit</Link>,
+					<Text style={styles.slash}>/</Text>,
+					<Link href={'/event/'+event.id+'/cancel'} style={styles.cancel}>Cancel</Link>
+				]) : (
+					<Link href={'/event/'+event.id+'/uncancel'} style={styles.uncancel}>UnCancel</Link>
+				))}
 
-					{eventIsOver && <Text style={styles.eventOver}>This event has ended.</Text>}
-				</View>
-			</Section>
+				{eventIsOver && <Text style={styles.eventOver}>This event has ended.</Text>}
+			</View>
 		)
 	}
 }

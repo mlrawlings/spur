@@ -6,11 +6,12 @@ var React = require('react')
   , Image = require('../core/image')
   , timeUtil = require('../../util/time')
   , locationUtil = require('../../util/location')
+  , ActionBar = require('./action-bar')
 
 var styles = {}
 
 styles.summary = {
-	backgroundColor:'#f4f4f4',
+	backgroundColor:'#fff',
 	borderBottomWidth:1,
 	borderBottomColor:'#ddd',
 	paddingTop:20,
@@ -138,6 +139,7 @@ class EventSummary extends React.Component {
 				{diffTimeClassEndTime && <Text style={styles.endTime}>
 					{'until '+diffTimeClassEndTime}
 				</Text>}
+				<ActionBar event={event} />
 			</View>
 		)
 	}

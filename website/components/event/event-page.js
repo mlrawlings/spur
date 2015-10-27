@@ -24,24 +24,17 @@ styles.banner = {
 	justifyContent: 'space-between'
 }
 
-styles.details = {
-	backgroundColor: '#f4f4f4',
-	borderBottomWidth: 1,
-	borderBottomColor: '#ddd',
-	flexDirection:'row',
-	paddingTop:20,
-	paddingBottom:20
-}
-
 styles.detailsText = {
 	flexGrow: 1,
-	maxWidth: '100%'
+	maxWidth: '100%',
+	marginTop: 20
 }
 
 styles.content = {
 	paddingTop:20,
 	paddingBottom:20,
-	backgroundColor:'#fff'
+	backgroundColor: '#f4f4f4',
+	borderBottom: "1px solid #ddd"
 }
 
 styles.back = {
@@ -79,22 +72,17 @@ class EventPage extends React.Component {
 						<Text style={styles.categoryText}>{category.name}</Text>
 					</View>
 				</Section>
-				
-				<ActionBar event={event} />
 
 				<EventSummary event={event} location={location} />
 
 				<Section style={styles.content}>
 					<AttendAndInvite event={event} />
 					<Attendees style={styles.attendees} event={event} />
-				</Section>
-				
-				{event.details && <Section style={styles.details}>
-					<View style={styles.detailsText}>
+					{event.details && <View style={styles.detailsText}>
 						<Heading>Details</Heading>
 						<Text>{event.details}</Text>
-					</View>
-				</Section>}
+					</View>}
+				</Section>
 
 				<EventChat event={event} />
 			</Layout>
