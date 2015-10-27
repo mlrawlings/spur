@@ -26,7 +26,7 @@ styles.createLink = {
 
 class EventList extends React.Component {
 	render() {
-		var { location, events, user } = this.props
+		var { location, events, noEventsText } = this.props
 		  , previousTimeClass
 		
 		return (
@@ -45,9 +45,9 @@ class EventList extends React.Component {
 							<EventItem event={event} key={event.id} location={location} />
 						]
 					}
-				}) : (this.props.noEventsText ? (
+				}) : (noEventsText ? (
 						<Text style={styles.noEvents}>
-							{this.props.noEventsText}
+							{noEventsText}
 						</Text>
 					) :	(
 						<Text style={styles.noEvents}>

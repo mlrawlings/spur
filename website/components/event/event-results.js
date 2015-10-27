@@ -111,17 +111,17 @@ class EventResults extends React.Component {
 		React.findDOMNode(this.refs.radius).value = nextProps.radius
 	}
 	render() {
-		var { events, user, radius, location } = this.props
+		var { events, user, device, radius, location } = this.props
 		  , radii = [1, 3, 5, 10, 25, 50]
 
 		return (
-			<Layout user={user}>
+			<Layout user={user} device={device}>
 				<Section ref="section" style={styles.results}>
 					<Form style={styles.form} ref="form" action="/events" method="GET">
 						<Text style={styles.text}>
 							{(events.length || 'No') + (events.length == 1 ? ' event' : ' events') + ' found within' }
 						</Text>
-						<Input type="select" ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={this.props.radius}>
+						<Input type="select" ref="radius" style={styles.field} onChange={this.submitForm.bind(this)} name="radius" defaultValue={radius}>
 							{radii.map(r => <option key={r} value={r}>{r + ' ' + (r == 1 ? 'mile' : 'miles')}</option>)}
 						</Input>
 						<Text style={styles.text}>of</Text>
@@ -134,8 +134,8 @@ class EventResults extends React.Component {
 					</View>
 				</Section>
 
-				{this.props.location ? 
-					<EventList events={this.props.events} location={this.props.location} user={this.props.user} />
+				{location ? 
+					<EventList events={events} location={location} />
 					: <GetLocation onDetect={this.changeLocation.bind(this)} onEnter={this.focusPlaceInput.bind(this)} />
 				}
 			</Layout>

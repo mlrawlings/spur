@@ -64,13 +64,12 @@ class EventPage extends React.Component {
 		window.history.back()
 	}
 	render() {
-		var { event, user, location } = this.props
+		var { event, user, device, url, location } = this.props
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
-		  , isOwner = user && user.id == event.owner
 		
 		return (
-			<Layout noFooter={true} user={this.props.user}>
+			<Layout noFooter={true} user={user} device={device} url={url}>
 				
 				<EventMap event={event} />
 
@@ -81,12 +80,12 @@ class EventPage extends React.Component {
 					</View>
 				</Section>
 				
-				{isOwner && <ActionBar event={event} />}
+				<ActionBar event={event} />
 
 				<EventSummary event={event} location={location} />
 
 				<Section style={styles.content}>
-					<AttendAndInvite event={event} user={user} currentURL={this.props.currentURL} />
+					<AttendAndInvite event={event} />
 					<Attendees style={styles.attendees} event={event} />
 				</Section>
 				
@@ -97,7 +96,7 @@ class EventPage extends React.Component {
 					</View>
 				</Section>}
 
-				<EventChat event={event} user={user} />
+				<EventChat event={event} />
 			</Layout>
 		)
 	}

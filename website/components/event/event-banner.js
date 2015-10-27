@@ -66,10 +66,8 @@ styles.vertical.details = (backgroundColor) => ({
 
 class EventBanner extends React.Component {
 	render() {
-		var event = this.props.event
-		  , style = this.props.style
+		var { event, style, location } = this.props
 		  , category = categories[event.category || 'other']
-		  , location = this.props.location
 		  , color = category.color
 
 		return (

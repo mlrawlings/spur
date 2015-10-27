@@ -49,6 +49,8 @@ router.use(function(next) {
 		{ property:'og:type', content:'article' }
 	]
 
+	this.props.url = this.href
+
 	next()
 })
 
@@ -116,7 +118,7 @@ router.on('/event/:id', function(next) {
 		if(event.details)
 			this.document.meta.push({ property:'og:description', content:event.details })
 
-		this.render(EventPage, { event:event, currentURL:this.href })
+		this.render(EventPage, { event:event })
 	}).catch((e) => {
 		if(e.status == 404)
 			return this.render(Four0Four, {})

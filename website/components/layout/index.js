@@ -10,19 +10,29 @@ styles.container = {
 }
 
 class Layout extends React.Component {
+	getChildContext() {
+		var { user, device, url } = this.props
+		return { user, device, url }
+	}
 	componentDidMount() {
 		window.user = this.props.user
 	}
 	render() {
-		var { children, noFooter, ...props} = this.props
+		var { children, noFooter } = this.props
 		return (
 			<View style={styles.container}>
-				<PageHeader {...props} />
+				<PageHeader />
 				<View style={styles.container}>{children}</View>
 				{!noFooter && <PageFooter />}
 			</View>
 		)
 	}
+}
+
+Layout.childContextTypes = {
+	user:React.PropTypes.object,
+	device:React.PropTypes.object,
+	url:React.PropTypes.string
 }
 
 module.exports = Layout

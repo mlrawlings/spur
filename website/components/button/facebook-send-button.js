@@ -11,7 +11,7 @@ class FacebookSendButton extends React.Component {
 	onClick(e) {
 		FB.ui({
 			method: 'send',
-			link: this.props.currentURL
+			link: this.context.url
 		})
 		e.preventDefault()
 	}
@@ -28,6 +28,10 @@ class FacebookSendButton extends React.Component {
 			</Button>
 		)
 	}
+}
+
+FacebookSendButton.contextTypes = {
+	url:React.PropTypes.string
 }
 
 module.exports = FacebookSendButton

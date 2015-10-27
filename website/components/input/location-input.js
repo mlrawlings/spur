@@ -103,13 +103,13 @@ class LocationInput extends React.Component {
 	}
 	render() {
 		var { place, drug, error } = this.state
-		  , { name, required } = this.props
+		  , { name, required, noDetect, location } = this.props
 		  , address = place && place.full
 
 		return (
 			<View>
 				<View style={error ? styles.containerWithError : styles.container}>
-					<PlaceInput ref="placeInput" defaultValue={place} noDetect={this.props.noDetect} style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={this.props.location} />
+					<PlaceInput ref="placeInput" defaultValue={place} noDetect={noDetect} style={styles.addressInput} required={required} value={address} onError={this.onError.bind(this)} onChange={this.changePlace.bind(this)} location={location} />
 					{place && <View>
 						<GoogleMap center={place.coords} zoom={this.state.zoom}>
 							<GoogleMapMarker draggable={true} position={place.coords} onDragStart={this.hideDragMessage.bind(this)} onDragEnd={this.setCoords.bind(this)} />

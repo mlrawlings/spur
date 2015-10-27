@@ -28,7 +28,7 @@ app.serve(__dirname+'/public')
 
 app.connect(session)
 
-app.use(kentReact())
+app.use(kentReact({ detectDevice:true }))
 
 app.use(function(next) {
 	this.props.user = this.req.session.user

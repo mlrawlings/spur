@@ -1,17 +1,27 @@
 var React = require('react')
   , Touchable = require('./touchable')
+  , MediaQuery = require('react-responsive')
   , prefix = require('auto-prefixer')
 
 class View extends React.Component {
 	render() {
-		if(this.props.href) return <Touchable tag="a" {...this.props} />
-		if(this.props.onClick) return <Touchable tag="div" {...this.props} />
+		var { device } = this.context
+		  , { tag, style, query, ...props } = this.props
+		  , touchable = this.props.href || this.props.onClick
+		  , Tag = tag || (this.props.href ? 'a' : 'div')
 
-		var { tag, style, ...props } = this.props
-		  , Tag = tag || 'div'
-
-		return <Tag style={prefix(style)} {...props} />
+		return query ? (
+			<MediaQuery component={touchable ? Touchable : Tag} tag={Tag} query={query} values={device} style={prefix(style)} {...props} />
+		) : touchable ? (
+			<Touchable tag={Tag} style={prefix(style)} {...props} />
+		) : (
+			<Tag style={prefix(style)} {...props} />
+		)
 	}
+}
+
+View.contextTypes = {
+	device:React.PropTypes.object
 }
 
 module.exports = View

@@ -209,7 +209,7 @@ class PlaceInput extends React.Component {
 		React.findDOMNode(this.refs.input).focus()
 	}
 	render() {
-		var { value, style, onChange, ...props } = this.props
+		var { value, style, onChange, noDetect, ...props } = this.props
 		  , { padding, paddingLeft, paddingRight, paddingBottom, paddingTop, color, height, ...containerStyle} = style
 		  , inputStyle = {padding, paddingLeft, paddingRight, paddingBottom, paddingTop, color, height}
 		  , linkStyle = styles.currentLocationLink
@@ -220,7 +220,7 @@ class PlaceInput extends React.Component {
 		  		color:style.color || styles.currentLocationText.color
 		  	}
 
-		if(!this.props.noDetect) {
+		if(!noDetect) {
 			inputStyle.paddingLeft = 2
 			linkStyle.paddingLeft = paddingLeft || padding
 		}
@@ -232,7 +232,7 @@ class PlaceInput extends React.Component {
 		return (
 			<View>
 				<View style={{ ...styles.container, ...containerStyle}}>
-					{this.props.noDetect ? null : <Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
+					{noDetect ? null : <Link style={linkStyle} onMouseOver={this.currentAddressMouseOver.bind(this)} onMouseOut={this.currentAddressMouseOut.bind(this)} onClick={this.currentAddressClick.bind(this)}>
 						{
 							this.state.loading || this.state.detecting
 							? <Image style={styles.loadingImage} src={backgroundColor.light() ? "/images/black-tail-spin.svg" : "/images/white-tail-spin.svg"} />

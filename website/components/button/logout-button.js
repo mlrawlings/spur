@@ -20,9 +20,7 @@ class ShareButton extends React.Component {
 	}
 	logout() {
 		this.setState({ opener:false })
-		console.log('logout')
 		api.delete('/auth').then(res => {
-			console.log('test')
 			window.user = undefined
 			app.refresh()
 		})
