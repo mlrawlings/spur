@@ -1,4 +1,5 @@
-var Profile = require('./components/profile')
+var React = require('react')
+  , Profile = require('./components/profile')
   , Home = require('./components/home')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
@@ -10,6 +11,19 @@ var Profile = require('./components/profile')
   , config = require('../common/config')
   , locationUtil = require('./util/location')
   , timeUtil = require('./util/time')
+
+router.use(function(next) {
+	this.context.url = this.href
+
+	this.contextTypes = {
+		user:React.PropTypes.object,
+		device:React.PropTypes.object,
+		url:React.PropTypes.string,
+		timezoneOffset:React.PropTypes.number
+	}
+
+	next()
+})
 
 router.use(function(next) {
 
@@ -25,8 +39,8 @@ router.use(function(next) {
 		'/scripts/outdated-browser-init.js',
 		'/scripts/alertify.js-0.3.11/lib/alertify.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-dom.min.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react'+(process.env.NODE_ENV == 'development' ? '' : '.min')+'.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/react/'+require('react').version+'/react-dom'+(process.env.NODE_ENV == 'development' ? '' : '.min')+'.js',
 		{ src:'https://connect.facebook.net/en_US/sdk.js', async:true },
         'https://maps.google.com/maps/api/js?sensor=false&libraries=places',
 		'/dist/client.js'
@@ -49,15 +63,13 @@ router.use(function(next) {
 		{ property:'og:type', content:'article' }
 	]
 
-	this.props.url = this.href
-
 	next()
 })
 
 router.on('/profile/me', function(next) {
-	if(!this.props.user) return this.render(Four0Four, {})
+	if(!this.context.user) return this.render(Four0Four, {})
 
-	this.redirect('/profile/'+this.props.user.id)
+	this.redirect('/profile/'+this.context.user.id)
 })
 
 router.on('/profile/:id', function(next) {

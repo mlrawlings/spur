@@ -64,12 +64,12 @@ class EventPage extends React.Component {
 		window.history.back()
 	}
 	render() {
-		var { event, user, device, url, location } = this.props
+		var { event, location } = this.props
 		  , category = categories[event.category || 'other']
 		  , bannerStyles = { ...styles.banner, backgroundColor:category.color }
 		
 		return (
-			<Layout noFooter={true} user={user} device={device} url={url}>
+			<Layout noFooter={true}>
 				
 				<EventMap event={event} />
 

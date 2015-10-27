@@ -28,10 +28,18 @@ app.serve(__dirname+'/public')
 
 app.connect(session)
 
-app.use(kentReact({ detectDevice:true }))
+app.use(kentReact({ 
+	clientContext:`{
+		device:{
+			width:document.documentElement.clientWidth,
+			height:document.documentElement.clientHeight
+		},
+		timezoneOffset: new Date().getTimezoneOffset()
+	}`
+}))
 
 app.use(function(next) {
-	this.props.user = this.req.session.user
+	this.context.user = this.req.session.user
 	this.props.radius = parseFloat(this.cookies.get('radius')) || 10
 
 	if(this.cookies.get('location')) {
