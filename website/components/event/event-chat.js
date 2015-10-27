@@ -251,7 +251,7 @@ class Message extends React.Component {
 				<View style={isOwner ? styles.myMessageContent : styles.messageContent}>
 					<Text>
 						<Text style={styles.messageName}>{message.user.name.first}</Text> 
-						<Text style={styles.messageTime}>{timeUtil.format(message.time, device.timezoneOffset)}</Text>
+						<Text style={styles.messageTime}>{timeUtil.format(message.time)}</Text>
 					</Text>
 					<Text style={styles.messageText}>{message.message}</Text>
 				</View>
@@ -260,8 +260,7 @@ class Message extends React.Component {
 	}
 }
 Message.contextTypes = {
-	user:React.PropTypes.object,
-	device:React.PropTypes.object
+	user:React.PropTypes.object
 }
 
 styles.formContainer = {
