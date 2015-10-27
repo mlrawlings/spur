@@ -226,6 +226,8 @@ router.get('/events/:id', function(req, res, next) {
 function validateEvent(event) {
 	var now = new Date()
 
+	if(typeof event.time != 'object') event.time = new Date(event.time)
+
 	if(!event) throw new Error('No event object')
 	if(!event.name) throw new Error('name is required')
 	if(event.name.length > 64) throw new Error('name is too long (max 64 characters)')
@@ -236,7 +238,6 @@ function validateEvent(event) {
 	if(!event.location.coords) throw new Error('location.coords is required')
 	if(event.location.name && event.location.name.length > 48) throw new Error('location.name is too long (max 48 characters)')
 
-	if(event.time <= now) throw new Error('time cannot be in the past')
 	if(event.time > timeUtil.getEndOfTomorrow(now)) throw new Error('time cannot be after tomorrow')
 	
 	if(event.endTime && event.endTime < event.time) throw new Error('endTime cannot be before start time')

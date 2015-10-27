@@ -74,7 +74,7 @@ class LocationInput extends React.Component {
 	changeTime(e) {
 		try {
 			var time = timeUtil.parseTime(e.target.value, this.state.time)
-			  , isPast = time <= (this.props.startTime || new Date())
+			  , isPast = !this.props.allowPast && (time <= (this.props.startTime || new Date()))
 
 			this.setState({ time, isPast, badFormat:null })
 			this.props.onChange && this.props.onChange(time)
@@ -94,7 +94,7 @@ class LocationInput extends React.Component {
 		if(e.target.value == 'today')
 			time.setDate(time.getDate() - 1)
 
-		isPast = time <= (this.props.startTime || new Date())
+		isPast = !this.props.allowPast && (time <= (this.props.startTime || new Date()))
 		this.setState({ time, isPast })
 		this.props.onChange && this.props.onChange(time)
 		React.findDOMNode(this.refs.time).setCustomValidity(isPast ? this.props.err : '')
@@ -110,8 +110,9 @@ class LocationInput extends React.Component {
 
 		var time = hours + ':' + minutes
 		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
-		  , error = this.state.isPast ? this.props.err : this.state.badFormat && this.state.badFormat.message
+		  , error = (!this.props.allowPast && this.state.isPast) ? this.props.err : this.state.badFormat && this.state.badFormat.message
 
+		console.log(error)
 		return (
 			<View>
 
@@ -126,8 +127,13 @@ class LocationInput extends React.Component {
 					{error 
 						? <Text style={styles.error}>Error! {error}</Text>
 						: display == 'relative' 
-							? <Text><TimeUntil time={this.state.time} /> from now</Text>
-							: <Text>{timeUtil.getRelativeTimeString(this.state.time, this.props.startTime)} long</Text>}
+							? <Text><TimeUntil time={this.state.time} /></Text>
+							: <Text>{
+								timeUtil.getRelativeTimeString(this.state.time, {
+									relativeTo:this.props.startTime,
+									postfix:isPast => 'long'
+								})
+							}</Text>}
 				</Text>
 				{!error && <Input name={this.props.name} value={this.state.time && this.state.time.toJSON()} type="hidden" />}
 			</View>
