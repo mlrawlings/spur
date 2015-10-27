@@ -18,6 +18,8 @@ app.use(function(req, res, next) {
 		res.set('Access-Control-Allow-Origin', req.get('origin'))
 	}
 	res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, DELETE, PUT')
+	res.set('Cache-Control', 'must-revalidate, private')
+	res.set('Expires', '-1')
 	next()
 })
 
