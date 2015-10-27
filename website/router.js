@@ -1,4 +1,5 @@
-var Profile = require('./components/profile')
+var React = require('react')
+  , Profile = require('./components/profile')
   , Home = require('./components/home')
   , EventResults = require('./components/event/event-results')
   , EventPage = require('./components/event/event-page')
