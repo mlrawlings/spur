@@ -72,39 +72,49 @@ exports.isYesterday = function(time) {
 	return time.getFullYear() == yesterday.getFullYear() && time.getMonth() == yesterday.getMonth() && time.getDate() == yesterday.getDate()
 }
 
-exports.getRelativeTimeString = function(time, current) {
-	var now = current || new Date()
+exports.getRelativeTimeString = function(time, options) {
+	options = options || {}
+	options.postfix = options.postfix || (isPast => isPast ? 'ago' : 'from now')
+	
+	var now = options && options.relativeTo || new Date()
 	now.setSeconds(0)
 	now.setMilliseconds(0)
 	time.setSeconds(0)
 	time.setMilliseconds(0)
 
 	var diff = time.getTime() - now.getTime()
-	  , days = Math.floor(diff/(24*60*60*1000))
+	  , isPast = diff <= 0
+	  , endText = ' '+options.postfix(isPast).trim()
+
+	diff = Math.abs(diff)
+
+	var days = Math.floor(diff/(24*60*60*1000))
 	  , hours = Math.floor(diff/(60*60*1000)) - days*24
-	  , minutes = Math.floor(diff/(60*1000)) - days*24*60 - hours*60//time.getMinutes() - now.getMinutes()
+	  , minutes = Math.floor(diff/(60*1000)) - days*24*60 - hours*60
 
 	minutes = minutes < 0 ? minutes+60 : minutes
 
-	if(diff <= 0) {
-		return 'started'
+	if(isPast && options.futureOnly) {
+		return 'just now'
 	}
 
 	if(days) {
-		return days + ' day'
+		return days + ' day' + endText
 	}
 
 	if(hours && minutes) {
-		return hours + 'h ' + minutes + 'm'
+		return hours + 'h ' + minutes + 'm' + endText
 	}
 
 	if(hours) {
-		return hours + ' hr'
+		return hours + ' hr' + endText
 	}
 
 	if(minutes) {
-		return minutes + ' min'
+		return minutes + ' min' + endText
 	}
+
+	return 'just now'
 }
 
 exports.anHourFromNow = function(roundToNearest15) {

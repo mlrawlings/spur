@@ -130,8 +130,6 @@ router.on('/event/:id', function(next) {
 router.on('/event/:id/edit', function(next) {
 	var event = this.body
 
-	console.log(event)
-
 	if(!event || !event.name) {
 		return this.api.get('/events/'+this.params.id).then(event => {
 			var eventIsOver = (event.endTime ? event.endTime : timeUtil.sixHoursFrom(event.time)) < new Date()

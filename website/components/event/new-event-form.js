@@ -66,6 +66,14 @@ styles.link = {
 	cursor: 'pointer'
 }
 
+styles.startedTime = {
+	...Input.style,
+	backgroundColor: '#f5f5f5',
+	color: '#888',
+	cursor: 'not-allowed',
+	lineHeight: 1.5
+}
+
 class NewEventForm extends React.Component {
 	constructor(props) {
 		super(props)
@@ -117,9 +125,9 @@ class NewEventForm extends React.Component {
 		var { location, time } = this.state
 		  , { event, device, user } = this.props
 		  , defaultEndTime = new Date(time)
+		  , showStartTimeField = event ? (event && event.time > new Date()) : true
 
 		defaultEndTime = this.state.hasEnd ? event.endTime : new Date(defaultEndTime.setHours(defaultEndTime.getHours()+1))
-		
 		return (
 			<Layout user={user} device={device}>
 				<Section>
@@ -134,7 +142,12 @@ class NewEventForm extends React.Component {
 									{!this.state.showEndTime && 
 										<Text style={styles.toggleEndTime} onClick={this.addEndTime.bind(this)}>Need an End Time?</Text>}
 								</Label>
-								<TimeInput name="time" defaultValue={time} err="The start time cannot be in the past." display="relative" onChange={this.changeTime.bind(this)} onKeyDown={this.preventSubmit.bind(this)} required={true} />
+								{showStartTimeField ? <TimeInput name="time" defaultValue={time} err="The start time cannot be in the past." allowPast={true} display="relative" onChange={this.changeTime.bind(this)} onKeyDown={this.preventSubmit.bind(this)} required={true} />
+									:
+									[<View style={styles.startedTime}>{'Started ' + timeUtil.getRelativeTimeString(event.time, new Date(), true)}</View>,
+									<Input type="hidden" name="time" value={event && event.time} />
+									]
+								}
 							</View>
 							{this.state.showEndTime &&
 								[<Text style={styles.timesDivider}>to</Text>,
