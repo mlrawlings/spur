@@ -7,7 +7,7 @@ describe('time', () => {
 			var now = new Date()
 			  , timeFromNow = now
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('started')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('just now')
 		})
 		it('1 min', () => {
 			var now = new Date()
@@ -15,7 +15,7 @@ describe('time', () => {
 
 			timeFromNow.setMinutes(now.getMinutes()+1)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('1 min')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('1 min from now')
 		})
 		it('24 min', () => {
 			var now = new Date()
@@ -23,7 +23,7 @@ describe('time', () => {
 
 			timeFromNow.setMinutes(now.getMinutes()+24)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('24 min')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('24 min from now')
 		})
 		it('1 hr', () => {
 			var now = new Date()
@@ -31,7 +31,7 @@ describe('time', () => {
 
 			timeFromNow.setHours(now.getHours()+1)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('1 hr')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('1 hr from now')
 		})
 		it('1h 1m', () => {
 			var now = new Date()
@@ -40,7 +40,7 @@ describe('time', () => {
 			timeFromNow.setHours(now.getHours()+1)
 			timeFromNow.setMinutes(now.getMinutes()+1)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('1h 1m')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('1h 1m from now')
 		})
 		it('23h 59m', () => {
 			var now = new Date()
@@ -49,7 +49,7 @@ describe('time', () => {
 			timeFromNow.setHours(now.getHours()+23)
 			timeFromNow.setMinutes(now.getMinutes()+59)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('23h 59m')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('23h 59m from now')
 		})
 		it('1 day', () => {
 			var now = new Date()
@@ -57,7 +57,7 @@ describe('time', () => {
 
 			timeFromNow.setDate(now.getDate()+1)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('1 day')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('1 day from now')
 		})
 		it('1 day', () => {
 			var now = new Date()
@@ -66,7 +66,7 @@ describe('time', () => {
 			timeFromNow.setDate(now.getDate()+1)
 			timeFromNow.setHours(now.getHours()+23)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('1 day')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('1 day from now')
 		})
 		it('2 day', () => {
 			var now = new Date()
@@ -75,7 +75,7 @@ describe('time', () => {
 			timeFromNow.setDate(now.getDate()+2)
 			timeFromNow.setHours(now.getHours()+1)
 			
-			time.getRelativeTimeString(timeFromNow, now).should.be.eql('2 day')
+			time.getRelativeTimeString(timeFromNow, { relativeTo:now }).should.be.eql('2 day from now')
 		})
 
 
@@ -88,17 +88,28 @@ describe('time', () => {
 			timeFromThen.setSeconds(0)
 			timeFromThen.setMinutes(then.getMinutes()+1)
 			
-			time.getRelativeTimeString(timeFromThen, then).should.be.eql('1 min')
+			time.getRelativeTimeString(timeFromThen, { relativeTo:then }).should.be.eql('1 min from now')
 		})
 		it('clock says an hour from now even though it is slightly less than that', () => {
 			var then = new Date()
 			  , timeFromThen = new Date()
 
 			then.setSeconds(59)
+			then.setHours(10)
 			timeFromThen.setSeconds(0)
 			timeFromThen.setHours(then.getHours()+1)
 			
-			time.getRelativeTimeString(timeFromThen, then).should.be.eql('1 hr')
+			time.getRelativeTimeString(timeFromThen, { relativeTo:then }).should.be.eql('1 hr from now')
+		})
+		it('past time', () => {
+			var then = new Date()
+			  , timeFromThen = new Date()
+
+			then.setSeconds(59)
+			timeFromThen.setSeconds(0)
+			timeFromThen.setHours(then.getHours()-1)
+			
+			time.getRelativeTimeString(timeFromThen, { relativeTo:then }).should.be.eql('1 hr ago')
 		})
 	})
 

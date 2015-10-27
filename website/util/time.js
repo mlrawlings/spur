@@ -1,6 +1,8 @@
-exports.format = function(time) {
-	var hours = time.getHours()
-	  , minutes = time.getMinutes()
+exports.format = function(time, timezoneOffset) {
+	time = exports.getDateParts(time, timezoneOffset)
+
+	var hours = time.hours
+	  , minutes = time.minutes
 	  , ampm = hours < 12 ? 'am' : 'pm'
 
 	hours %= 12
@@ -11,15 +13,16 @@ exports.format = function(time) {
 	return hours+':'+minutes+' '+ampm
 }
 
-exports.getTimeClass = function(time) {
-	var hours = time.getHours()
+exports.getTimeClass = function(time, timezoneOffset) {
+	var timeParts = exports.getDateParts(time, timezoneOffset)
+	  , hours = timeParts.hours
 	  , monthNames = ["January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"
 		]
 
 	if(exports.isToday(time)) {
 		if(hours < 4) {
-			if(new Date().getHours() < 4) {
+			if(exports.getDateParts(new Date()).hours < 4) {
 				return 'Late Tonight/Early This Morning'
 			} else {
 				return 'Late Last Night/Early This Morning'
@@ -48,28 +51,38 @@ exports.getTimeClass = function(time) {
 	} else if(exports.isYesterday(time)) {
 		return 'Yesterday'
 	} else {
-		return monthNames[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
+		return monthNames[timeParts.month] + ' ' + timeParts.date + ', ' + timeParts.year
 	}
 }
 
-exports.isToday = function(time) {
-	var now = new Date()
+exports.isToday = function(time, timezoneOffset) {
+	var timeParts = exports.getDateParts(time, timezoneOffset)
 
-	return time.getFullYear() == now.getFullYear() && time.getMonth() == now.getMonth() && time.getDate() == now.getDate()
+	var now = exports.getDateParts(new Date(), timezoneOffset)
+
+	return timeParts.year == now.year && timeParts.month == now.month && timeParts.date == now.date
 }
 
-exports.isTomorrow = function(time) {
+exports.isTomorrow = function(time, timezoneOffset) {
+	var timeParts = exports.getDateParts(time, timezoneOffset)
+
 	var tomorrow = new Date()
 	tomorrow.setDate(tomorrow.getDate()+1)
 
-	return time.getFullYear() == tomorrow.getFullYear() && time.getMonth() == tomorrow.getMonth() && time.getDate() == tomorrow.getDate()
+	tomorrow = exports.getDateParts(tomorrow, timezoneOffset)
+
+	return timeParts.year == tomorrow.year && timeParts.month == tomorrow.month && timeParts.date == tomorrow.date
 }
 
-exports.isYesterday = function(time) {
+exports.isYesterday = function(time, timezoneOffset) {
+	var timeParts = exports.getDateParts(time, timezoneOffset)
+
 	var yesterday = new Date()
 	yesterday.setDate(yesterday.getDate()-1)
 
-	return time.getFullYear() == yesterday.getFullYear() && time.getMonth() == yesterday.getMonth() && time.getDate() == yesterday.getDate()
+	yesterday = exports.getDateParts(yesterday, timezoneOffset)
+
+	return timeParts.year == yesterday.year && timeParts.month == yesterday.month && timeParts.date == yesterday.date
 }
 
 exports.getRelativeTimeString = function(time, options) {
@@ -184,3 +197,21 @@ exports.sixHoursFrom = function(time) {
 
 	return time
 }
+
+exports.getDateParts = function(time, timezoneOffset) {
+	timezoneOffset = timezoneOffset || time.getTimezoneOffset()
+
+	var adjustedTime = new Date(time)
+	adjustedTime.setUTCMinutes(adjustedTime.getUTCMinutes() - timezoneOffset)
+	
+	return { 
+		year:adjustedTime.getUTCFullYear(), 
+		month:adjustedTime.getUTCMonth(), 
+		date:adjustedTime.getUTCDate(),
+		hours:adjustedTime.getUTCHours(),
+		minutes:adjustedTime.getUTCMinutes(),
+		seconds:adjustedTime.getUTCSeconds(),
+		timezoneOffset:timezoneOffset
+	}
+}
+
