@@ -95,7 +95,7 @@ exports.getRelativeTimeString = function(time, options) {
 	minutes = minutes < 0 ? minutes+60 : minutes
 
 	if(isPast && options.futureOnly) {
-		return 'started'
+		return 'just now'
 	}
 
 	if(days) {
@@ -114,7 +114,7 @@ exports.getRelativeTimeString = function(time, options) {
 		return minutes + ' min' + endText
 	}
 
-	return 'started'
+	return 'just now'
 }
 
 exports.anHourFromNow = function(roundToNearest15) {
