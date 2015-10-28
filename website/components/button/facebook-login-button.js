@@ -73,7 +73,7 @@ class FacebookLoginButton extends React.Component {
 	render() {
 		var { user } = this.context
 		  , { children } = this.props
-		  , action = user ? this.logout.bind(this) : this.login.bind(this)
+		  , action = (user && user.fbid) ? this.logout.bind(this) : this.login.bind(this)
 		  , text = children || 'Facebook'
 		
 		return (

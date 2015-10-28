@@ -15,11 +15,17 @@ var React = require('react')
 
 var styles = {}
 
-styles.nameContainer = {
-	flex: 1,
-	flexDirection: 'row',
-	paddingBottom: 30,
-	borderBottom: '1px solid #ccc'
+styles.facebookButtonContainer = {
+	paddingBottom: 20,
+	marginTop: 10,
+	borderBottom: '1px solid #ccc',
+	alignItems: 'center',
+	justifyContent: 'center'
+}
+
+styles.heading = {
+	textAlign: 'center',
+	color: '#444'
 }
 
 styles.name = {
@@ -40,21 +46,33 @@ styles.actionText = {
 }
 
 styles.loginOrSignUpTextContainer = {
-	alignItems: 'center'
+	alignItems: 'center',
+	marginBottom: 10
 }
 
 styles.loginOrSignUpText = {
 	backgroundColor: '#fff',
 	marginTop: -10,
 	fontSize: 12,
-	color: '#999',
+	color: '#444',
 	padding: '0px 10px'
 }
 
-styles.facebookButtonContainer = {
-	marginTop: 20,
-	alignItems: 'center',
-	justifyContent: 'center'
+styles.guestAccountText = {
+	backgroundColor: '#fff',
+	marginTop: -10,
+	fontSize: 12,
+	color: '#777',
+	padding: '0px 10px'
+}
+
+styles.nameContainer = {
+	flex: 1,
+	flexDirection: 'row'
+}
+
+styles.nameLabel = {
+	fontSize: 12
 }
 
 class SignUpModal extends React.Component {
@@ -90,18 +108,21 @@ class SignUpModal extends React.Component {
 		return (
 			<Modal {...props}>
 				<Modal.Body>
+					<View style={styles.heading}>
+						<View style={styles.loginOrSignUpText}>Login or sign up with</View>
+					</View>
+					<View style={styles.facebookButtonContainer}>
+						<FacebookLoginButton onLogin={this.props.onLogin} />
+					</View>
+					<View style={styles.loginOrSignUpTextContainer}>
+						<View style={styles.guestAccountText}>or make a guest account</View>
+					</View>
 					<Label required={true}>My first name is...</Label>
 					<View style={styles.nameContainer}>
 						<Input ref="name" name="name" onKeyDown={this.submitIfEnter.bind(this)} onChange={this.onInputChange.bind(this)} style={styles.name} type="text" value={this.state.value} />
 						<FlatButton onClick={this.submit.bind(this)} loading={this.state.loading} type="submit" disabled={this.state.disabled} style={styles.action}>
 							<Text style={styles.actionText}>{actionName}</Text>
 						</FlatButton>
-					</View>
-					<View style={styles.loginOrSignUpTextContainer}>
-						<View style={styles.loginOrSignUpText}>or login/sign up with</View>
-					</View>
-					<View style={styles.facebookButtonContainer}>
-						<FacebookLoginButton onLogin={this.props.onLogin} />
 					</View>
 				</Modal.Body>
 			</Modal>
