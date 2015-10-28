@@ -40,7 +40,7 @@ styles.error = {
 	fontWeight:600
 }
 
-class LocationInput extends React.Component {
+class TimeInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -69,7 +69,7 @@ class LocationInput extends React.Component {
 	}
 	reformatTime(e) {
 		if(this.noTimeInputSupport && !this.state.error)
-			e.target.value = timeUtil.format(this.state.time)
+			e.target.value = timeUtil.format(this.state.time, this.context.timezoneOffset)
 	}
 	changeTime(e) {
 		try {
@@ -109,10 +109,9 @@ class LocationInput extends React.Component {
 		if(minutes <= 9) minutes = '0' + minutes
 
 		var time = hours + ':' + minutes
-		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
+		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time, this.context.timezoneOffset) : time 
 		  , error = (!this.props.allowPast && this.state.isPast) ? this.props.err : this.state.badFormat && this.state.badFormat.message
 
-		console.log(error)
 		return (
 			<View>
 
@@ -141,4 +140,8 @@ class LocationInput extends React.Component {
 	}
 }
 
-module.exports = LocationInput
+TimeInput.contextTypes = {
+	timezoneOffset:React.PropTypes.number
+}
+
+module.exports = TimeInput
