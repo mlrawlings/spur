@@ -10,7 +10,7 @@ var React = require('react')
 class Home extends React.Component {
 	render() {
 		return (
-			<Layout {...this.props}>
+			<Layout>
 		    	<Hero />	
 				<AppLinks />		
 				<About />
