@@ -77,7 +77,7 @@ class ShareModal extends React.Component {
 				<Modal.Body>
 					<Label required={true}>Share this link...</Label>
 					<View style={styles.copy}>
-						<Input style={styles.copyInput} ref="input" type="text" value={url} readOnly={true} />
+						<Input style={styles.copyInput} ref="input" type="text" value={url+'/invite'} readOnly={true} />
 						<Link style={styles.copyButton} onClick={this.copyText.bind(this)}>{copied ? 'Copied!' : 'Copy Link'}</Link>
 					</View>
 					<Separator>or share with</Separator>
