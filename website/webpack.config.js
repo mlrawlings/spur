@@ -5,11 +5,11 @@ require('../environment')
 
 module.exports = {
 	entry: [
-		__dirname+'/client.js'
+		__dirname+'/app.js'
 	],
 	output: {
 		path: __dirname+'/dist',
-		filename: 'client.js',
+		filename: 'app.js',
 		publicPath: '/dist/'
 	},
 	module: {
