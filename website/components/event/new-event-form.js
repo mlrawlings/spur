@@ -123,13 +123,13 @@ class NewEventForm extends React.Component {
 	}
 	render() {
 		var { location, time } = this.state
-		  , { event, device, user } = this.props
+		  , { event } = this.props
 		  , defaultEndTime = new Date(time)
 		  , showStartTimeField = event ? (event && event.time > new Date()) : true
 
 		defaultEndTime = this.state.hasEnd ? event.endTime : new Date(defaultEndTime.setHours(defaultEndTime.getHours()+1))
 		return (
-			<Layout user={user} device={device}>
+			<Layout>
 				<Section>
 					<Form ref="form" onSubmit={this.submit.bind(this)} action={event ? '/event/'+event.id+'/edit' : '/create/event'}>
 						<View style={styles.field}>
