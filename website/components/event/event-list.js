@@ -26,13 +26,14 @@ styles.createLink = {
 
 class EventList extends React.Component {
 	render() {
-		var { location, events, noEventsText } = this.props
+		var { timezoneOffset } = this.context 
+		  , { location, events, noEventsText } = this.props
 		  , previousTimeClass
 		
 		return (
 			<Section>
 				{events.length ? events.map((event, index) => {
-					var timeClass = time.getTimeClass(event.time)
+					var timeClass = time.getTimeClass(event.time, timezoneOffset)
 
 					if(previousTimeClass == timeClass) {
 						return <EventItem event={event} key={event.id} location={location} />
@@ -58,6 +59,10 @@ class EventList extends React.Component {
 			</Section>
 		)
 	}
+}
+
+EventList.contextTypes = {
+	timezoneOffset:React.PropTypes.number
 }
 
 module.exports = EventList

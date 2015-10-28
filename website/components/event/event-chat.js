@@ -9,7 +9,7 @@ var React = require('react')
   , Input = require('../core/input')
   , FlatButton = require('../core/flat-button')
   , UserActionButton = require('../button/user-action-button')
-  , timeUtil = require('../../util/time')
+  , Time = require('../format/time')
 
 var styles = {}
 
@@ -251,7 +251,7 @@ class Message extends React.Component {
 				<View style={isOwner ? styles.myMessageContent : styles.messageContent}>
 					<Text>
 						<Text style={styles.messageName}>{message.user.name.first}</Text> 
-						<Text style={styles.messageTime}>{timeUtil.format(message.time)}</Text>
+						<Time style={styles.messageTime} time={message.time} />
 					</Text>
 					<Text style={styles.messageText}>{message.message}</Text>
 				</View>

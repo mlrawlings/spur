@@ -4,7 +4,7 @@ var React = require('react')
   , Link = require('../core/link')
   , View = require('../core/view')
   , Text = require('../core/text')
-  , timeUtil = require('../../util/time')
+  , Time = require('../format/time')
   , categories = require('../../data/categories')
 
 var styles = {}
@@ -71,7 +71,10 @@ class EventItem extends React.Component {
 					</Text>
 				) : (
 					<Text style={styles.details}>
-						{'@ ' + timeUtil.format(event.time) + ' - ' + (event.location.name || event.location.street)}
+						<Text>@ </Text>
+						<Time time={event.time} />
+						<Text> - </Text>
+						<Text>{(event.location.name || event.location.street)}</Text>
 					</Text>
 				)}
 			</View>
