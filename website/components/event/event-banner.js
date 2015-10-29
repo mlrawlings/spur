@@ -5,7 +5,6 @@ var React = require('react')
   , View = require('../core/view')
   , Text = require('../core/text')
   , Link = require('../core/link')
-  , timeUtil = require('../../util/time')
   , locationUtil = require('../../util/location')
   , categories = require('../../data/categories')
 

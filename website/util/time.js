@@ -20,7 +20,7 @@ exports.getTimeClass = function(time, timezoneOffset) {
 			"July", "August", "September", "October", "November", "December"
 		]
 
-	if(exports.isToday(time)) {
+	if(exports.isToday(time, timezoneOffset)) {
 		if(hours < 4) {
 			if(exports.getDateParts(new Date()).hours < 4) {
 				return 'Late Tonight/Early This Morning'
@@ -36,7 +36,7 @@ exports.getTimeClass = function(time, timezoneOffset) {
 		} else {
 			return 'Tonight'
 		}
-	} else if(exports.isTomorrow(time)) {
+	} else if(exports.isTomorrow(time, timezoneOffset)) {
 		if(hours < 4) {
 			return 'Late Tonight/Early Tomorrow Morning'
 		} else if(hours >= 4 && hours < 12) {
@@ -48,7 +48,7 @@ exports.getTimeClass = function(time, timezoneOffset) {
 		} else {
 			return 'Tomorrow Night'
 		}
-	} else if(exports.isYesterday(time)) {
+	} else if(exports.isYesterday(time, timezoneOffset)) {
 		return 'Yesterday'
 	} else {
 		return monthNames[timeParts.month] + ' ' + timeParts.date + ', ' + timeParts.year

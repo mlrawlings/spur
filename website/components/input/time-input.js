@@ -40,11 +40,11 @@ styles.error = {
 	fontWeight:600
 }
 
-class LocationInput extends React.Component {
+class TimeInput extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			time: props.defaultValue
+			time: props.defaultValue || new Date()
 		}
 	}
 	componentWillMount() {
@@ -69,7 +69,7 @@ class LocationInput extends React.Component {
 	}
 	reformatTime(e) {
 		if(this.noTimeInputSupport && !this.state.error)
-			e.target.value = timeUtil.format(this.state.time)
+			e.target.value = timeUtil.format(this.state.time, this.context.timezoneOffset)
 	}
 	changeTime(e) {
 		try {
@@ -100,19 +100,21 @@ class LocationInput extends React.Component {
 		React.findDOMNode(this.refs.time).setCustomValidity(isPast ? this.props.err : '')
 	}
 	render() {
-		var hours = this.state.time && this.state.time.getHours()
-		  , minutes = this.state.time && this.state.time.getMinutes()
-		  , day = this.state.time && this.state.time.getDate() == new Date().getDate() ? 'today' : 'tomorrow'
-		  , display = this.props.display
+		var { time, isPast } = this.state
+		  , { display, allowPast } = this.props
+		  , { timezoneOffset } = this.context
+		  , timeParts = timeUtil.getDateParts(time, timezoneOffset)
+		  , nowParts = timeUtil.getDateParts(new Date(), timezoneOffset)
+		  , hours = timeParts.hours
+		  , minutes = timeParts.minutes
+		  , day = time && timeParts.date == nowParts.date ? 'today' : 'tomorrow'
 
 		if(hours <= 9) hours = '0' + hours
 		if(minutes <= 9) minutes = '0' + minutes
 
-		var time = hours + ':' + minutes
-		  , timeString = this.noTimeInputSupport ? timeUtil.format(this.state.time) : time 
-		  , error = (!this.props.allowPast && this.state.isPast) ? this.props.err : this.state.badFormat && this.state.badFormat.message
+		var timeString = this.noTimeInputSupport ? timeUtil.format(time, timezoneOffset) : (hours + ':' + minutes)
+		  , error = (!allowPast && isPast) ? this.props.err : this.state.badFormat && this.state.badFormat.message
 
-		console.log(error)
 		return (
 			<View>
 
@@ -127,18 +129,22 @@ class LocationInput extends React.Component {
 					{error 
 						? <Text style={styles.error}>Error! {error}</Text>
 						: display == 'relative' 
-							? <Text><TimeUntil time={this.state.time} /></Text>
+							? <Text><TimeUntil time={time} /></Text>
 							: <Text>{
-								timeUtil.getRelativeTimeString(this.state.time, {
+								timeUtil.getRelativeTimeString(time, {
 									relativeTo:this.props.startTime,
 									postfix:isPast => 'long'
 								})
 							}</Text>}
 				</Text>
-				{!error && <Input name={this.props.name} value={this.state.time && this.state.time.toJSON()} type="hidden" />}
+				{!error && <Input name={this.props.name} value={time && time.toJSON()} type="hidden" />}
 			</View>
 		)
 	}
 }
 
-module.exports = LocationInput
+TimeInput.contextTypes = {
+	timezoneOffset:React.PropTypes.number
+}
+
+module.exports = TimeInput

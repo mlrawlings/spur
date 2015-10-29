@@ -4,7 +4,7 @@ var React = require('react')
   , Text = require('../core/text')
   , Link = require('../core/link')
   , Image = require('../core/image')
-  , timeUtil = require('../../util/time')
+  , TimeRange = require('../format/time-range')
   , locationUtil = require('../../util/location')
   , ActionBar = require('./action-bar')
 
@@ -120,25 +120,16 @@ class EventSummary extends React.Component {
 			<Text style={styles.distance}>{location && locationUtil.getDistanceBetween(event.location.coords, location.coords) + ' away'}</Text>
 		]
 	}
-	renderTitle(isHorizontal) {
+	renderTitle() {
 		var { event } = this.props
-		  , startTimeClass = timeUtil.getTimeClass(event.time)
-		  , endTimeClass = event.endTime && timeUtil.getTimeClass(event.endTime)
-		  , sameTimeClassEndTime = event.endTime && (startTimeClass == endTimeClass ? (' - '+timeUtil.format(event.endTime)) : '') || ''
-		  , diffTimeClassEndTime = event.endTime && (startTimeClass == endTimeClass ? '' : (timeUtil.format(event.endTime) + ' ' + endTimeClass)) || ''
-		
+
 		return (
 			<View style={styles.nameAndTime}>
 				<Text style={styles.title}>
 					{event.name}
 				</Text>
 				<Text>{event.invited}</Text>
-				<Text style={styles.time}>
-					{timeUtil.format(event.time) + sameTimeClassEndTime + ' ' + startTimeClass}
-				</Text>
-				{diffTimeClassEndTime && <Text style={styles.endTime}>
-					{'until '+diffTimeClassEndTime}
-				</Text>}
+				<TimeRange startTime={event.time} endTime={event.endTime} style={styles.time} styleEnd={styles.endTime} />
 				<ActionBar event={event} />
 			</View>
 		)
