@@ -220,6 +220,7 @@ styles.messageContent =
 styles.myMessageContent = {
 	flexGrow:1,
 	alignItems:'flex-start',
+	flex:1
 }
 
 styles.messageName = {
