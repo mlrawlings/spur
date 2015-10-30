@@ -2,6 +2,7 @@ var React = require('react')
   , Layout = require('../layout')
   , Section = require('../layout/section')
   , EventList = require('../event/event-list')
+  , NotificationList = require('./notification-list')
   , FacebookLoginButton = require('../button/facebook-login-button')
   , Avatar = require('../core/avatar')
   , Text = require('../core/text')
@@ -93,6 +94,7 @@ class Profile extends React.Component {
 					)}
 				</Section>
 
+				{isMe && <NotificationList user={profileUser} />}
 				<EventList events={events} location={this.props.location} noEventsText={(isMe) ? 'You have not gone to any events yet.' : (user && profileUser.id != user.id ? 'You and ' + profileUser.name.first + ' have not gone to any events together yet.' : ('Login to see events that you and '+profileUser.name.first+' have gone to together.'))} />
 			</Layout>
 		)

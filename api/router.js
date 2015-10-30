@@ -22,7 +22,8 @@ router.post('/auth/guest', jsonParser, function(req, res, next) {
 			full: req.body.name
 		},
 		isGuest: true,
-		events:[]
+		events:[],
+		notifications:[]
 	}
 
 	return r.table('users').insert(user).run(connection).then(function(result) {
@@ -55,7 +56,8 @@ router.post('/auth/facebook'/*, session*/, function(req, res, next) {
 			}
 			
 			if(!req.session.user) {
-				user.events = []
+				user.events = [],
+				user.notifications = []
 			}
 
 
@@ -265,7 +267,8 @@ router.put('/events/:id', jsonParser, function(req, res, next) {
 
 	r.table('events').get(req.params.id).update(function(oldEvent) {
 		return r.branch(oldEvent('owner').eq(req.session.user.id), event, {})
-	}).run(connection).then(function(event) {
+	}).run(connection).then(function() {
+		addEventNotification('EDIT', req.params.id, req.session.user)
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
@@ -349,6 +352,7 @@ router.post('/events/:id/cancel', function(req, res, next) {
 			cancelled: true
 		}, {})
 	}).run(connection).then(function(event) {
+		addEventNotification('CANCEL', req.params.id, req.session.user)
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
@@ -365,6 +369,7 @@ router.post('/events/:id/uncancel', function(req, res, next) {
 			cancelled: false
 		}, {})
 	}).run(connection).then(function(event) {
+		addEventNotification('UNCANCEL', req.params.id, req.session.user)
 		res.status(204).end()
 	}).catch(function(err) {
 		next(err)
@@ -385,8 +390,9 @@ router.post('/events/:id/posts', jsonParser, function(req, res, next) {
 	}
 
 	r.table('events').get(req.params.id).update({ 
-		posts:r.row('posts').append(post) 
+		posts:r.row('posts').append(post)
 	}).run(connection).then(function(event) {
+		addEventNotification('MESSAGE', req.params.id, req.session.user, req.body.message)
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
@@ -432,6 +438,7 @@ router.post('/events/:id/attendees'/*, session*/, function(req, res, next){
 			events:r.row('events').setInsert(req.params.id) 
 		}).run(connection)
 	]).then(function() {
+		addEventNotification('JOIN', req.params.id, req.session.user)
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
@@ -452,11 +459,63 @@ router.delete('/events/:id/attendees'/*, session*/, function(req, res, next){
 			events:r.row('events').setDifference([req.params.id]) 
 		}).run(connection)
 	]).then(function(event) {
+		addEventNotification('BAIL', req.params.id, req.session.user)
 		res.status(204).end()
 	}).catch(function(err) {
 		console.error(err)
 		next(err)
 	})
 })
+
+function addEventNotification(action, eventId, user, message) {
+	return r.table('events').get(eventId).run(connection).then(function(event) {
+		var users = getUsersToNotify(event, user)
+		  , notification = {
+				title: event.name,
+				url: '/event/'+event.id,
+				time: new Date(),
+				user: user
+			}
+
+		if(action == 'EDIT') {
+			notification.body = user.name.first + ' changed the info'
+		} else if(action == 'JOIN') {
+			notification.body = user.name.first + ' is going'
+		} else if(action == 'BAIL') {
+			notification.body = user.name.first + ' bailed'
+		} else if(action == 'CANCEL') {
+			notification.body = user.name.first + ' cancelled the event'
+		} else if(action == 'UNCANCEL') {
+			notification.body = user.name.first + ' uncancelled the event'
+		} else if(action == 'MESSAGE') {
+			notification.body = user.name.first + ' said, "'+message+'"'
+		}
+
+		return addNotification(users, notification)
+	})
+}
+
+function getUsersToNotify(event, user) {
+	var users = [].concat(event.attendees)
+
+	event.posts.forEach(function(post) {
+		if(users.indexOf(post.user) == -1)
+			users.push(post.user)
+	})
+
+	var userIndex = users.indexOf(user.id)
+	if(userIndex > -1)
+		users.splice(userIndex, 1)
+
+	return users
+}
+
+function addNotification(users, notification) {
+	if(!users.length) return Promise.resolve()
+
+	return r.table('users').getAll(r.args(users)).update({
+		notifications:r.row('notifications').prepend(notification)
+	}).run(connection)
+}
 
 module.exports = router
